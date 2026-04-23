@@ -1,3 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+:root {
+  /* Couleurs principales */
+  --primary: #0073CF;
+  --primary-light: #4FA9FF;
+
+  /* Couleurs secondaires */
+  --secondary: #FF8C00;
+  --secondary-light: #FFA500;
+
+  /* Layout */
+  --background: #F8F9FA;
+
+  /* Texte */
+  --text: #0D1B2A;
+  --white: #FFFFFF;
+
+  /* Bordures */
+  --border: #D1D5DB;
+
+  /* États */
+  --success: #28A745;
+  --error: #DC3545;
+  --warning: #FFC107;
+  
+ 
+}

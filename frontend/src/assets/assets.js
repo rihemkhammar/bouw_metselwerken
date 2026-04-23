@@ -6,6 +6,9 @@ import right_arrow from './images/right_arrow.svg'
 import header_img from './images/header_img.png'
 import  background2 from './images/background2.jpg'
 import  background3 from './images/background3.jpeg'
+import  interiorHouse from './images/interior-house.jpg'
+import  restaurantInterior from './images/restaurant-interior.jpg'
+
 
 
 
@@ -17,5 +20,7 @@ export const assets = {
     right_arrow,
     header_img,
     background2,
-     background3,
+    background3,
+    interiorHouse,
+    restaurantInterior
 }

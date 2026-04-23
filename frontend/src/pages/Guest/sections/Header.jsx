@@ -4,8 +4,8 @@ import Navbar from '../../../components/layout/Navbar'
 
 const images = [
   assets.header_img,
-  assets.background2,
-  assets.background3,
+  assets.interiorHouse,
+  assets.restaurantInterior,
 ]
 
 const Header = () => {

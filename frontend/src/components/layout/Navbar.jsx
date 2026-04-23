@@ -1,5 +1,6 @@
 import { assets } from '../../assets/assets'
 import { Phone } from "lucide-react"
+
 const Navbar = () => { 
 
   return (

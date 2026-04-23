@@ -9,6 +9,9 @@ theme: {
     animation: {
       scroll: "scroll 20s linear infinite",
     },
+    colors: {
+    
+    },
     keyframes: {
    scroll: {
   "0%": { transform: "translateX(0)" },
