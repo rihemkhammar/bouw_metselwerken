@@ -1,18 +1,26 @@
 export const COLORS = {
-  primary: "#2563eb",
-  primaryLight: "#3b82f6",
+  // Le bleu principal de  logo
+  primary: "#0073CF", 
+  // Un bleu plus clair pour les survols (hover) ou les icônes
+  primaryLight: "#4FA9FF",
 
-  secondary: "#10b981",
-  secondaryLight: "#34d399",
+  // Orange vif pour les boutons importants (Contraste maximal avec le bleu)
+  secondary: "#FF8C00", 
+  // Orange plus clair pour les effets de survol
+  secondaryLight: "#FFA500",
 
-  background: "#f9fafb",
+  // Fond de page très clair (presque blanc) pour le confort visuel
+  background: "#F8F9FA",
 
-  text: "#111827",
-  white: "#ffffff",
+  // Bleu très foncé (presque noir) de votre logo pour le texte
+  text: "#0D1B2A",
+  white: "#FFFFFF",
 
-  border: "#e5e7eb",
+  // Gris discret pour les lignes de séparation et bordures d'inputs
+  border: "#D1D5DB",
 
-  success: "#22c55e",
-  error: "#ef4444",
-  warning: "#f59e0b",
+  // Couleurs d'état standards
+  success: "#28A745",
+  error: "#DC3545",
+  warning: "#FFC107",
 };
