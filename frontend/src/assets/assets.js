@@ -14,12 +14,15 @@ import  background3 from './images/background3.jpeg'
 import  interiorHouse from './images/interior-house.jpg'
 import  restaurantInterior from './images/restaurant-interior.jpg'
 import  workers from './images/workers.mp4'
+import  repairTools from './images/repair-tools.jpg'
+import  about from './images/blue-print-with-build-kit-laptop.jpg'
 
 
 
 
 export const assets = {
     logo,
+    about,
     cross_icon,
     menu_icon2,
      menuall,
@@ -33,5 +36,6 @@ export const assets = {
     background3,
     interiorHouse,
     restaurantInterior,
-    workers
+    workers,
+    repairTools
 }

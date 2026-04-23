@@ -1,10 +1,10 @@
 import './App.css'
-import Header from './pages/Guest/sections/Header'
+import GuestPage from './pages/Guest/GuestDashboard'
 
 function App() {
   return (
     <>
-     <Header/>
+     <GuestPage/>
     </>
   )
 }
