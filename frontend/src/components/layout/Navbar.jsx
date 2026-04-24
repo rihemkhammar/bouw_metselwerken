@@ -6,9 +6,9 @@ const Navbar = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   useEffect(() => {
     if (showMobileMenu) {
-      document.body.style.overflow = "hidden"; //prevent from scrolling
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "auto"; //allow scrolling
+      document.body.style.overflow = "auto"; 
     }
     return () => {
       document.body.style.overflow = "auto";
@@ -28,7 +28,7 @@ const Navbar = () => {
         </div>
 
         {/* CENTER: MENU */}
-        <ul className="hidden md:flex gap-8 text-gray-700 font-medium">
+        <ul className="hidden md:flex gap-6 lg:gap-8 text-gray-700 font-medium">
           <a
             href="#Header"
             className="relative text-gray-700 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-[#0073CF] hover:after:w-full after:transition-all"
@@ -66,9 +66,9 @@ const Navbar = () => {
         </ul>
 
         {/* RIGHT: CTA */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-7">
           <a
-            href="tel:+19164120162"
+            href="tel:+19164120162" 
             className="text-[#111184] font-bold flex items-center gap-2 hover:text-[#0073CF]"
           >
             <Phone size={18} />
@@ -77,9 +77,9 @@ const Navbar = () => {
 
           <a
             href="#contact"
-            className="bg-[#f16c13] text-white 	font-bold px-5 py-2 rounded-full hover:opacity-90"
+            className="bg-[#f16c13] text-white font-semibold px-5 py-2 rounded-full opacity-90 hover:opacity-90 transition"
           >
-             Demander un Compte
+             Activer Votre Compte
           </a>
         </div>
         {/* MOBILE MENU ICON */}

@@ -39,13 +39,13 @@ const Header = () => {
         </div>
 
         {/* RIGHT: Contact Form */}
-        <div className="hidden md:block  md:h-screen">
+        <div className="hidden md:flex h-full items-center">
         <div className="pt-10  md:pt-10 md:self-start">
-        <div className=" bg-white/70 h-screen  md:p-10  md:w-[370px] md:pt-40 rounded-l-lg md:rounded-r-none shadow-xl">
+        <div className=" bg-white/70 h-screen  md:p-10  md:w-[380px] md:pt-40 rounded-l-lg md:rounded-r-none shadow-xl gap-4 ">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">
             Démarrons Votre Projet
           </h2>
-          <form className="flex flex-col gap-4">
+          <form className="flex flex-col gap-5">
             <input
               type="text"
               placeholder="Nom"
@@ -74,7 +74,7 @@ const Header = () => {
             </select>
             <textarea
               placeholder="Message"
-              className="border p-3 rounded h-24 focus:outline-none focus:ring-2 focus:ring-[#0073CF] focus:border-[#FF8C00] transition"
+              className="border p-3 rounded h-24 focus:outline-none focus:ring-2 focus:ring-[#0073CF] focus:border-[#0073CF] transition"
             ></textarea>
             <button
               type="submit"

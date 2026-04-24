@@ -1,7 +1,7 @@
 import React from "react";
 import { assets } from "../../../assets/assets";
 
-import { motion } from "framer-motion";
+
 
 const About = () => {
   return (
@@ -10,7 +10,7 @@ const About = () => {
         {/* LEFT IMAGE */}
         <div className="relative">
           <img
-            src={assets.about}
+            src={assets.background3}
             alt="About our construction company"
             className="rounded-lg shadow-lg object-cover w-full h-[350px]"
           />
@@ -38,12 +38,7 @@ const About = () => {
             exceptional attention to detail.
           </p>
 
-          <a
-            href="#contact"
-            className="inline-block bg-[#f16c13] text-white font-semibold px-6 py-3 rounded-full hover:opacity-90 transition"
-          >
-            Learn More
-          </a>
+
         </div>
       </div>
     </div>
