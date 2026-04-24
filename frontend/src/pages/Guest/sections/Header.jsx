@@ -3,7 +3,7 @@ import { assets } from "../../../assets/assets";
 
 const Header = () => {
   return (
-    <div className="relative h-[55vh] md:h-[85vh] w-full overflow-hidden" id="Header">
+    <div className="relative h-[55vh] md:h-screen w-full overflow-hidden" id="Header">
       <Navbar />
 
       <video
@@ -39,9 +39,9 @@ const Header = () => {
         </div>
 
         {/* RIGHT: Contact Form */}
-        <div className="hidden md:block">
-        <div className="pt-10 md:pt-10 md:self-start">
-        <div className=" bg-white/70  md:p-10  md:w-[400px] md:pt-20 rounded-l-lg md:rounded-r-none shadow-xl">
+        <div className="hidden md:block  md:h-screen">
+        <div className="pt-10  md:pt-10 md:self-start">
+        <div className=" bg-white/70 h-screen  md:p-10  md:w-[370px] md:pt-40 rounded-l-lg md:rounded-r-none shadow-xl">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">
             Démarrons Votre Projet
           </h2>
@@ -63,19 +63,22 @@ const Header = () => {
             />
             <select className="border p-3 rounded focus:outline-none focus:ring-2 focus:ring-[#0073CF] focus:border-[#0073CF] transition">
               <option value="">Service souhaité</option>
-              <option value="Kitchens">Cuisines</option>
-              <option value="Bathrooms">Salles de bain</option>
-              <option value="Addition">Extension</option>
-              <option value="Concrete">Béton</option>
+              <option value="Kitchens">Maçonnerie</option>
+              <option value="Bathrooms">Rénovation</option>
+              <option value="Addition">Restauration</option>
+              <option value="Concrete">Travaux de construction générale</option>
+              <option value="Concrete">Rejointoiement rustique</option>
+              <option value="Concrete">Traitement hydrofuge</option>
+              <option value="Concrete">Démoussage</option> 
               <option value="Other">Autre service</option>
             </select>
             <textarea
               placeholder="Message"
-              className="border p-3 rounded h-24 focus:outline-none focus:ring-2 focus:ring-[#0073CF] focus:border-[#0073CF] transition"
+              className="border p-3 rounded h-24 focus:outline-none focus:ring-2 focus:ring-[#0073CF] focus:border-[#FF8C00] transition"
             ></textarea>
             <button
               type="submit"
-              className="bg-[#f16c13] text-white font-semibold px-6 py-3 rounded-full hover:opacity-90 transition"
+              className="bg-[#f16c13] text-white font-semibold px-5 py-2 rounded-full hover:opacity-90 transition"
             >
               Envoyer
             </button>
