@@ -3,10 +3,9 @@ import { assets } from "../../../assets/assets";
 
 const Header = () => {
   return (
-    <div className="relative h-[85vh] w-full overflow-hidden" id="Header">
+    <div className="relative h-[55vh] md:h-[85vh] w-full overflow-hidden" id="Header">
       <Navbar />
 
-      {/* VIDEO BACKGROUND */}
       <video
         className="absolute inset-0 w-full h-full object-cover"
         src={assets.workers}
@@ -15,46 +14,74 @@ const Header = () => {
         muted
         playsInline
       />
-
-      {/* MOBILE FALLBACK IMAGE */}
-      <img
-        src={assets.header_img}
-        alt="Construction"
-        className="absolute inset-0 w-full h-full object-cover md:hidden"
-      />
-
-      {/* DARK OVERLAY */}
       <div className="absolute inset-0 bg-black/40" />
 
-      {/* HERO CONTENT */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 z-10">
-        <h1 className="text-white text-4xl md:text-6xl font-bold leading-tight drop-shadow-lg">
-          Construire l’Avenir,
-          <br /> Un Projet à la Fois
-        </h1>
+      {/* Content */}
+      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between h-full pt-40 md:pt-0 px-6 md:pl-20 md:pr-0 ">
+        {/* LEFT: Hero Text */}
+        <div className="text-white max-w-xl md:w-1/2 text-center md:text-left">
+          <h1 className="text-4xl md:text-6xl font-bold leading-tight drop-shadow-lg">
+            Construire l’Avenir,
+            <br /> Un Projet à la Fois
+          </h1>
+          <p className="text-lg md:text-2xl mt-4 drop-shadow-md">
+            Des solutions de construction fiables, durables et réalisées avec un
+            savoir‑faire d’excellence.
+          </p>
+          <div className="flex gap-4 mt-8 justify-center md:justify-start">
+            <a
+              href="/login"
+              className="border-2 border-white text-white font-semibold px-6 py-3 rounded-full text-lg hover:bg-[#0073CF] hover:text-white transition shadow-lg"
+            >
+              Se Connecter
+            </a>
+          </div>
+        </div>
 
-        <p className="text-white text-lg md:text-2xl mt-4 max-w-2xl drop-shadow-md">
-          Des solutions de construction fiables, durables et réalisées avec un
-          savoir‑faire d’excellence.
-        </p>
-
-         <div className="flex flex-col md:flex-row gap-4 mt-8  max-w-xs md:max-w-none">
-          
-          {/* Login Button */}
-          <a
-            href="/login"
-            className="border-2 border-white text-white font-semibold px-6 py-3 rounded-full text-lg hover:bg-[#0073CF] hover:text-white transition shadow-lg"
-          >
-            Se Connecter
-          </a>
-
-          {/* Sign Up Button (Client Only) */}
-          <a
-            href="/signup"
-            className="bg-[#f16c13] text-white font-semibold px-6 py-3 rounded-full text-lg hover:opacity-90 transition"
-          >
-            Demander un Compte
-          </a>
+        {/* RIGHT: Contact Form */}
+        <div className="hidden md:block">
+        <div className="pt-10 md:pt-10 md:self-start">
+        <div className=" bg-white/70  md:p-10  md:w-[400px] md:pt-20 rounded-l-lg md:rounded-r-none shadow-xl">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+            Démarrons Votre Projet
+          </h2>
+          <form className="flex flex-col gap-4">
+            <input
+              type="text"
+              placeholder="Nom"
+              className="border p-3 rounded focus:outline-none focus:ring-2 focus:ring-[#0073CF] focus:border-[#0073CF] transition"
+            />
+            <input
+              type="text"
+              placeholder="Téléphone"
+              className="border p-3 rounded focus:outline-none focus:ring-2 focus:ring-[#0073CF] focus:border-[#0073CF] transition"
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              className="border p-3 rounded focus:outline-none focus:ring-2 focus:ring-[#0073CF] focus:border-[#0073CF] transition"
+            />
+            <select className="border p-3 rounded focus:outline-none focus:ring-2 focus:ring-[#0073CF] focus:border-[#0073CF] transition">
+              <option value="">Service souhaité</option>
+              <option value="Kitchens">Cuisines</option>
+              <option value="Bathrooms">Salles de bain</option>
+              <option value="Addition">Extension</option>
+              <option value="Concrete">Béton</option>
+              <option value="Other">Autre service</option>
+            </select>
+            <textarea
+              placeholder="Message"
+              className="border p-3 rounded h-24 focus:outline-none focus:ring-2 focus:ring-[#0073CF] focus:border-[#0073CF] transition"
+            ></textarea>
+            <button
+              type="submit"
+              className="bg-[#f16c13] text-white font-semibold px-6 py-3 rounded-full hover:opacity-90 transition"
+            >
+              Envoyer
+            </button>
+          </form>
+        </div>
+        </div>
         </div>
       </div>
     </div>
