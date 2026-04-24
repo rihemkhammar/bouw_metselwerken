@@ -1,123 +1,346 @@
+/* ========== VARIABLES & RESET ========== */
 .footer {
-  background: var(--primary);
-  color: var(--text);
-  padding: 3rem 1rem 1.5rem;
+  background: linear-gradient(135deg, var(--primary-dark, #1a1a2e), var(--primary, #16213e));
+  color: var(--text, #f8f9fa);
+  padding: 4rem 1.5rem 2rem;
+  position: relative;
+  overflow: hidden;
 }
 
-/* container */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--secondary), var(--secondary, #0f3460));
+}
+
+/* ========== CONTAINER ========== */
 .container {
-  max-width: 1200px;
-  margin: auto;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
 }
 
-/* GRID RESPONSIVE PRO */
+/* ========== GRID LAYOUT ========== */
 .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem;
+  gap: 2.5rem;
+  padding-bottom: 2rem;
 }
 
-/* Desktop */
-@media (min-width: 768px) {
+@media (min-width: 576px) {
   .grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* COLUMN */
+@media (min-width: 992px) {
+  .grid {
+    grid-template-columns: 1.2fr 1fr 1fr 1.3fr;
+    gap: 2rem;
+  }
+}
+
+/* ========== COLUMN ========== */
 .column {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
-  color: var(--standard-off-white);
-  
+  gap: 1.2rem; /* ↑ espace augmenté pour aérer avec les grosses polices */
 }
 
-/* LOGO */
+.brand {
+  gap: 5rem;
+}
+
+/* ========== LOGO ========== */
 .logo {
-  
-  width: 300px;   /* augmente ici */
+  width: 300px; /* ↑ légèrement plus grand */
+  height: 200px;
+  max-width: 100%;
   height: auto;
-
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  transition: transform 0.3s ease;
 }
 
-/* TITLES */
+.logo:hover {
+  transform: scale(1.03);
+}
+
+
+
+/* ========== TITRES ========== */
 .heading {
-  font-size: clamp(1rem, 2vw, 1.2rem);
-  color: var(--standard-off-white);
+  font-size: 1.5rem; /* ↑ de 1.25rem à 1.5rem */
+  font-weight: 600;
+  color: var(--standard-off-white, #ffffff);
+  position: relative;
+  padding-bottom: 0.85rem;
+  margin-bottom: 0.75rem;
 }
 
-/* LINKS */
+.heading::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px; /* ↑ barre décorative plus longue */
+  height: 3px;  /* ↑ plus épaisse */
+  background: var(--secondary);
+  border-radius: 2px;
+}
+
+/* ========== LIENS ========== */
 .link {
-  color: var(--secondary-text);
+  display: block;
+  color: var(--standard-off-white, #adb5bd);
   text-decoration: none;
-  transition: 0.2s;
+  font-size: 1.5rem; /* ↑ de 0.95rem à 1.1rem */
+  padding: 0.5rem 0; /* ↑ espace vertical augmenté */
+  transition: all 0.25s ease;
+  position: relative;
+  padding-left: 1.3rem;
+}
+
+.link::before {
+  content: '▹';
+  position: absolute;
+  left: 0;
+  color: var(--secondary);
+  opacity: 0;
+  transform: translateX(-5px);
+  transition: all 0.25s ease;
+  font-size: 1.5rem;
 }
 
 .link:hover {
-  color: var(--whit);
-  transform: translateX(4px);
+  color: var(--primary, #ffffff);
+  padding-left: 1.6rem;
 }
 
-/* CONTACT */
+.link:hover::before {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ========== CONTACT ========== */
+.contactList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem; /* ↑ espace entre contacts */
+  font-style: normal;
+  
+}
+
 .contactItem {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  align-items: flex-start;
+  gap: 0.9rem; /* ↑ espace icône/texte */
 }
 
 .icon {
-  color: var(--secondary-text);
-}
-
-.text {
-  font-size: 0.9rem;
-  color: var(--secondary-text);
-  text-decoration: none;
-}
-.email{
-   font-size: 0.9rem;
-  color: var(--secondary-text);
-  text-decoration: underline;
-}
-.email:hover{
-   font-size: 0.9rem;
   color: var(--standard-off-white);
+  font-size: 1.5rem; /* ↑ icônes plus grandes */
+  min-width: 24px;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.contactText,
+.contactLink {
+  font-size: 1.5rem; /* ↑ de 0.95rem à 1.05rem */
+  color: var(--standard-off-white, #adb5bd);
+  text-decoration: none;
+  line-height: 1.6;
+  transition: color 0.2s ease;
+  font-weight: 400;
+}
+
+.contactLink:hover {
+  color: var( --primary, #ffffff);
   text-decoration: underline;
 }
 
-/* SOCIAL */
+/* ========== SOCIAL ICONS ========== */
 .social {
   display: flex;
-  gap: 0.8rem;
-  margin-top: 0.1rem;
-  margin-left: 0.1rem;
-  justify-content: center;
+  gap: 0.9rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .socialIcon {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--secondary-text);
+  width: 48px; /* ↑ de 42px à 48px */
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--standard-off-white);
-  transition: 0.2s;
+  color: var(--standard-off-white, #ffffff);
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+}
+
+.socialIcon svg {
+  width: 22px; /* ↑ icônes SVG plus grandes */
+  height: 22px;
 }
 
 .socialIcon:hover {
-  background: var( --standard-off-white);
-  color: var(--secondary-text);
-  transform: translateY(-3px);
+  background: var(--hover-color, var(--secondary));
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* BOTTOM */
+/* ========== BOTTOM BAR ========== */
 .bottom {
-  margin-top: 0.5rem;
-  border-top: 1px solid var(--secondary-text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.15); /* ↑ bordure plus visible */
   text-align: center;
-  padding-top: 0.2rem;
-  color: var(--secondary-text);
+}
+
+@media (min-width: 768px) {
+  .bottom {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+}
+
+.bottom p {
+  font-size: 1rem; /* ↑ de 0.9rem à 1rem */
+  color: var(--standard-off-white, #adb5bd);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.bottom strong {
+  color: var(--standard-off-white, #ffffff);
+  font-weight: 600;
+}
+
+/* ========== SCROLL TO TOP BUTTON ========== */
+.scrollTop {
+  width: 46px; /* ↑ légèrement plus grand */
+  height: 46px;
+  border-radius: 50%;
+  background: var(--secondary);
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(233, 69, 96, 0.4);
+}
+
+.scrollTop svg {
+  width: 18px;
+  height: 18px;
+}
+
+.scrollTop:hover {
+  background: var(--accent-hover, #c73e54);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(233, 69, 96, 0.6);
+}
+
+.scrollTop:active {
+  transform: translateY(-1px);
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.column {
+  animation: fadeInUp 0.5s ease forwards;
+  animation-delay: calc(var(--i, 0) * 0.1s);
+}
+
+/* ========== RESPONSIVE TYPOGRAPHY - MOBILE ========== */
+@media (max-width: 575px) {
+  .heading {
+    font-size: 1.5rem; /* ↑ pour mobile aussi */
+  }
+  
+  .link,
+  .contactText,
+  .contactLink,
+  .description {
+    font-size: 1rem; /* ↑ lisible sur petit écran */
+  }
+  
+  .logo {
+    width: 170px;
+  }
+  
+  .socialIcon {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .bottom p {
+    font-size: 0.95rem;
+  }
+}
+
+/* ========== TABLETTE ========== */
+@media (min-width: 576px) and (max-width: 991px) {
+  .heading {
+    font-size: 1.4rem;
+  }
+  
+  .link,
+  .contactText,
+  .contactLink {
+    font-size: 1.05rem;
+  }
+}
+
+/* ========== ACCESSIBILITY ========== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.socialIcon:focus-visible,
+.link:focus-visible,
+.scrollTop:focus-visible {
+  outline: 2px solid var(--secondary);
+  outline-offset: 2px;
+}
+
+/* ========== HIGH DPI SCREENS ========== */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .logo {
+    image-rendering: -webkit-optimize-contrast;
+  }
 }
