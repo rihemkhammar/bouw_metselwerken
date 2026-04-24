@@ -1,91 +1,422 @@
 .container {
-  background: var(--standard-off-white);
+  background: var(--white);
   color: var(--text);
-  padding: 2rem 1rem;
+  padding: 2rem;
   width: 100%;
   box-sizing: border-box;
+  min-height: 70vh;
 }
 
 .wrapper {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  /* Élargit la description (~42% de la largeur totale) */
+  grid-template-columns: 1.2fr 1fr; 
   gap: 2rem;
-  align-items: flex-start;
-  justify-content: flex-start; 
-  max-width: 1200px;
-  margin: 0 auto; 
+  max-width: 1600px;
+  margin: 0 auto;
+  /* C'est la clé : force les deux colonnes à avoir la même hauteur */
+  
 }
 
-.map-container {
-  flex: 1 1 500px; 
-  min-width: 280px;
+
+/* Map Container - Design moderne */
+.mapContainer {
+  position: relative;
   background: var(--standard-off-white);
-  border-radius: 8px;
-  padding: 12px;
-  box-sizing: border-box;
+  border-radius: 24px;
+  width: 40vw; /* Prend 100% de la largeur du viewport */
+  margin-top: 100px;
+  margin-left: calc(-35vw + 70%);
+  padding: 0.5rem;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 10px 40px -10px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+   height: 75%;
 }
 
-.description-container {
-  flex: 1 1 300px;
-  min-width: 280px;
-  background: var(--standard-off-white);
-  padding: 1.5rem;
-  box-sizing: border-box;
-  border-radius: 8px;
+
+.mapContainer:hover {
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 20px 50px -12px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 .map {
+  margin-top: 10px;
   width: 100%;
+  height: 100%;
   height: auto;
   display: block;
-  background-color: var(--standard-off-white);
+  /* Remplacez toute la ligne background par : */
+  background: var(--standard-off-white);
+  border-radius: 16px;
 }
 
-.map-background {
-  fill: var(--standard-off-white);
+/* Zoom Controls - Style moderne */
+.zoomControls {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 0.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
+.zoomBtn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zoomBtn:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 115, 207, 0.2);
+}
+
+.zoomBtn:active {
+  transform: translateY(0);
+}
+
+/* Description Container - Card design moderne */
+.description-container {
+  background: var(--standard-off-white);
+  border-radius: 24px;
+   height: 100%;
+  padding: 2.5rem;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 10px 40px -10px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 2rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+}
+
+.description-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary), var(--primary-light));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.description-container:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 25px 60px -15px rgba(0, 115, 207, 0.2);
+}
+
+.description-container:hover::before {
+  opacity: 1;
+}
+
+/* Header de la description */
+.description-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--white);
+}
+
+.description-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.description-header .subtitle {
+  font-size: 0.875rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+/* Paragraphes */
+.description-container p {
+  margin: 0 0 1.25rem 0;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  position: relative;
+  padding-left: 1.25rem;
+}
+
+.description-container p::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+  font-weight: bold;
+  font-size: 1.2rem;
+  line-height: 1.4;
+}
+
+.description-container p:last-child {
+  margin-bottom: 0;
+}
+
+/* Premier paragraphe mis en valeur */
+.description-container p:first-of-type {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-dark);
+  background: linear-gradient(135deg, var(--white), transparent);
+  padding: 1rem 1rem 1rem 2.25rem;
+  border-radius: 12px;
+  border-left: 4px solid var(--primary);
+}
+
+.description-container p:first-of-type::before {
+  content: '✦';
+  color: var(--secondary);
+}
+
+/* Stats ou badges optionnels */
+.description-stats {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var( --secondary);
+}
+
+.stat-item {
+  flex: 1;
+  text-align: center;
+  padding: 1rem;
+  background: var(--white);
+  margin-top: 20px;
+  border-radius: 12px;
+  transition: transform 0.2s ease;
+}
+
+.stat-item:hover {
+  transform: translateY(-2px);
+  background: var( --secondary);
+}
+
+.stat-number {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Tooltip amélioré */
+.tooltip {
+  position: fixed;
+  z-index: 1000;
+  background: rgba(13, 27, 42, 0.95);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  pointer-events: none;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transform: translate(-50%, -100%) translateY(-10px);
+  opacity: 0;
+  animation: tooltipAppear 0.2s ease forwards;
+  max-width: 250px;
+  line-height: 1.5;
+}
+
+@keyframes tooltipAppear {
+  to {
+    opacity: 1;
+    transform: translate(-50%, -100%) translateY(0);
+  }
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  background: var(--standard-off-white);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+/* Countries styling amélioré */
 .country {
   fill: #dbeafe;
-  stroke: var(--primary-light);
-  stroke-width: 1;
-  transition: fill 0.2s ease;
+  /* Changez ces 2 lignes : */
+  stroke: var(--primary);  /* ou #3b82f6 pour du bleu standard */
+  stroke-width: 2;         /* augmente l'épaisseur (était 0.5) */
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 1px 2px var(--standard-off-white));
+}
+/* Fond de la carte (Le rectangle interne) */
+.mapBackground {
+  fill: var(--standard-off-white) !important;
 }
 
 .country:hover {
-  fill: #bfdbfe;
+  fill: #93c5fd;
+  stroke: var(--primary);
+  stroke-width: 1.5;
+  filter: drop-shadow(0 4px 8px rgba(0, 115, 207, 0.3));
+  transform-origin: center;
+}
+
+/* Bubbles améliorées */
+.bubble {
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bubble:hover {
+  transform: scale(1.2);
 }
 
 .glow {
   fill: var(--warning);
   opacity: 0.4;
+  filter: blur(4px);
+  
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.1); }
 }
 
 .circle {
   fill: var(--secondary-light);
-  opacity: 0.7;
+  opacity: 0.8;
+  stroke: white;
+  stroke-width: 2;
 }
 
 .dot {
   fill: var(--secondary);
+  stroke: white;
+  stroke-width: 1.5;
 }
 
-/* 📱 Mobile : empilement vertical (comportement inchangé) */
-@media (max-width: 768px) {
+/* Responsive Design */
+@media (max-width: 1200px) {
   .wrapper {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     gap: 1.5rem;
-    justify-content: center; /* Optionnel : recentre le tout en vertical */
   }
   
-  .map-container,
   .description-container {
-    flex: 1 1 100%;
+    position: relative;
+    top: 0;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .mapContainer {
+    margin-left: 0;
     width: 100%;
-    min-width: unset;
+    max-width: 420px; /* ⬇️ Garde la map compacte sur tablette */
+    height: 40vh;
+    max-height: 400px;
   }
+}
 
-  .container {
-    padding: 1.5rem 0.5rem;
+@media (max-width: 768px) {
+  .container { padding: 1rem; }
+  
+  .mapContainer,
+  .description-container {
+    border-radius: 16px;
+    padding: 1.25rem;
   }
+  
+  .mapContainer {
+    height: 30vh; /* ⬇️ Encore plus petit sur mobile */
+    min-height: 220px;
+    max-width: 100%;
+    margin-top: 0;
+  }
+  
+  .description-container p {
+    font-size: 0.875rem;
+    padding-left: 1rem;
+  }
+  
+  .zoomControls {
+    top: 1rem;
+    right: 1rem;
+  }
+  
+  .description-stats {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+/* Animation d'entrée */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mapContainer,
+.description-container {
+  animation: slideIn 0.6s ease-out;
+}
+
+.description-container {
+  animation-delay: 0.1s;
 }
