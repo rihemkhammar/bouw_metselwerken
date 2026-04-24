@@ -1,5 +1,6 @@
 import React from "react";
 import Footer from "../../components/layout/Footer/Footer";
+import GeoMap from "../../components/layout/map/map";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -14,8 +15,9 @@ const GuestDashboard = () => {
   });
   return (
     <>
-     
+      <GeoMap/>
       <Footer />
+      
     </>
   );
 };

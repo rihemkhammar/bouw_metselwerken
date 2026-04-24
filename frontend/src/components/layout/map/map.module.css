@@ -1,0 +1,91 @@
+.container {
+  background: var(--standard-off-white);
+  color: var(--text);
+  padding: 2rem 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: flex-start;
+  justify-content: flex-start; 
+  max-width: 1200px;
+  margin: 0 auto; 
+}
+
+.map-container {
+  flex: 1 1 500px; 
+  min-width: 280px;
+  background: var(--standard-off-white);
+  border-radius: 8px;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+.description-container {
+  flex: 1 1 300px;
+  min-width: 280px;
+  background: var(--standard-off-white);
+  padding: 1.5rem;
+  box-sizing: border-box;
+  border-radius: 8px;
+}
+
+.map {
+  width: 100%;
+  height: auto;
+  display: block;
+  background-color: var(--standard-off-white);
+}
+
+.map-background {
+  fill: var(--standard-off-white);
+}
+
+.country {
+  fill: #dbeafe;
+  stroke: var(--primary-light);
+  stroke-width: 1;
+  transition: fill 0.2s ease;
+}
+
+.country:hover {
+  fill: #bfdbfe;
+}
+
+.glow {
+  fill: var(--warning);
+  opacity: 0.4;
+}
+
+.circle {
+  fill: var(--secondary-light);
+  opacity: 0.7;
+}
+
+.dot {
+  fill: var(--secondary);
+}
+
+/* 📱 Mobile : empilement vertical (comportement inchangé) */
+@media (max-width: 768px) {
+  .wrapper {
+    flex-direction: column;
+    gap: 1.5rem;
+    justify-content: center; /* Optionnel : recentre le tout en vertical */
+  }
+  
+  .map-container,
+  .description-container {
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: unset;
+  }
+
+  .container {
+    padding: 1.5rem 0.5rem;
+  }
+}
