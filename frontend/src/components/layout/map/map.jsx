@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo, useCallback } from "react"
 import * as d3 from "d3";
 import { feature } from "topojson-client";
 import world from "world-atlas/countries-110m.json";
-import { MapPin, Globe, Award, Users } from "lucide-react"; // Ou vos icônes préférées
+import { MapPin, Globe, Award, Users } from "lucide-react"; 
 
 import styles from "./map.module.css";
 import points from "./data/bubble_map.json";

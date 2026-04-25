@@ -1,0 +1,132 @@
+/* project.module.css */
+
+.container {
+  width: 100%;
+  background-color: var(--standard-off-white);
+}
+
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 5rem 1.5rem;
+}
+
+.projectsSection {
+  text-align: center;
+}
+
+.projectsSection h2 {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 3rem;
+  position: relative;
+  display: inline-block;
+  letter-spacing: -0.02em;
+}
+
+/* Ligne d'accent utilisant votre dégradé primary */
+.projectsSection h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  margin: 0.8rem auto 0;
+  border-radius: 999px;
+}
+
+.projetsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  align-items: stretch;
+}
+
+.projetCard {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(13, 27, 42, 0.04); /* Ombre harmonisée avec --text */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.projetCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(13, 27, 42, 0.1);
+  border-color: var(--primary-light);
+}
+
+.projetCard img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid var(--border);
+  transition: transform 0.4s ease;
+}
+
+.projetCard:hover img {
+  transform: scale(1.03);
+}
+
+.projetCard h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 1.25rem 1.25rem 0.5rem;
+  line-height: 1.3;
+}
+
+.projetCard p {
+  font-size: 0.95rem;
+  color: var(--secondary-text);
+  line-height: 1.6;
+  margin: 0 1.25rem;
+  flex-grow: 1; /* Garde les boutons alignés même si les textes varient */
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.25rem 1.25rem 1.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--primary);
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.btn:hover {
+  /* Astuce pro : utiliser votre couleur secondaire au survol crée un CTA dynamique */
+  background: var(--secondary); 
+  box-shadow: 0 6px 16px rgba(255, 140, 0, 0.25);
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 3rem 1rem;
+  }
+
+  .projetsGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .projetCard img {
+    height: 180px;
+  }
+}

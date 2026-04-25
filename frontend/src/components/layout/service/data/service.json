@@ -1,0 +1,9 @@
+[
+  { "id": 1, "name": "Maçonnerie", "description": "Construction et rénovation de structures en béton, brique et pierre", "iconName": "GiCrane", "color": "#FF8C00" },
+  { "id": 2, "name": "Rénovation", "description": "Transformation et modernisation de vos espaces intérieurs et extérieurs", "iconName": "FaHammer", "color": "#FF8C00" },
+  { "id": 3, "name": "Restauration", "description": "Préservation et remise en état du patrimoine bâti", "iconName": "FaLandmark", "color": "#FF8C00" },
+  { "id": 4, "name": "Travaux de construction générale", "description": "Prise en charge complète de vos projets de construction", "iconName": "FaHardHat", "color": "#FF8C00" },
+  { "id": 5, "name": "Rejointoiement rustique", "description": "Finitions authentiques pour un cachet traditionnel", "iconName": "GiBrickWall", "color": "#FF8C00" },
+  { "id": 6, "name": "Traitement hydrofuge", "description": "Protection durable contre l'humidité et les infiltrations", "iconName": "IoIosWater", "color": "#FF8C00" },
+  { "id": 7, "name": "Démoussage", "description": "Nettoyage et traitement des toitures et façades", "iconName": "GiBroom", "color": "#FF8C00" }
+]

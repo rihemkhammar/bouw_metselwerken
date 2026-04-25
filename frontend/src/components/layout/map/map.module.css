@@ -9,22 +9,21 @@
 
 .wrapper {
   display: grid;
-  /* Élargit la description (~42% de la largeur totale) */
+  
   grid-template-columns: 1.2fr 1fr; 
   gap: 2rem;
   max-width: 1600px;
   margin: 0 auto;
-  /* C'est la clé : force les deux colonnes à avoir la même hauteur */
   
 }
 
 
-/* Map Container - Design moderne */
+
 .mapContainer {
   position: relative;
   background: var(--standard-off-white);
   border-radius: 24px;
-  width: 40vw; /* Prend 100% de la largeur du viewport */
+  width: 40vw; 
   margin-top: 100px;
   margin-left: calc(-35vw + 70%);
   padding: 0.5rem;
@@ -51,12 +50,12 @@
   height: 100%;
   height: auto;
   display: block;
-  /* Remplacez toute la ligne background par : */
+  
   background: var(--standard-off-white);
   border-radius: 16px;
 }
 
-/* Zoom Controls - Style moderne */
+
 .zoomControls {
   position: absolute;
   top: 2rem;
@@ -100,7 +99,7 @@
   transform: translateY(0);
 }
 
-/* Description Container - Card design moderne */
+
 .description-container {
   background: var(--standard-off-white);
   border-radius: 24px;
@@ -139,7 +138,8 @@
   opacity: 1;
 }
 
-/* Header de la description */
+
+
 .description-header {
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
@@ -163,7 +163,7 @@
   font-weight: 500;
 }
 
-/* Paragraphes */
+
 .description-container p {
   margin: 0 0 1.25rem 0;
   font-size: 0.95rem;
@@ -189,7 +189,7 @@
   margin-bottom: 0;
 }
 
-/* Premier paragraphe mis en valeur */
+
 .description-container p:first-of-type {
   font-weight: 600;
   font-size: 1rem;
@@ -205,7 +205,7 @@
   color: var(--secondary);
 }
 
-/* Stats ou badges optionnels */
+
 .description-stats {
   display: flex;
   gap: 1rem;
@@ -246,7 +246,7 @@
   letter-spacing: 0.05em;
 }
 
-/* Tooltip amélioré */
+
 .tooltip {
   position: fixed;
   z-index: 1000;
@@ -287,17 +287,16 @@
   transform: translateX(-50%) rotate(45deg);
 }
 
-/* Countries styling amélioré */
+
 .country {
   fill: #dbeafe;
-  /* Changez ces 2 lignes : */
-  stroke: var(--primary);  /* ou #3b82f6 pour du bleu standard */
-  stroke-width: 2;         /* augmente l'épaisseur (était 0.5) */
-  cursor: pointer;
+  
+  stroke: var(--primary);  
+  stroke-width: 2;         
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   filter: drop-shadow(0 1px 2px var(--standard-off-white));
 }
-/* Fond de la carte (Le rectangle interne) */
+
 .mapBackground {
   fill: var(--standard-off-white) !important;
 }
@@ -310,7 +309,7 @@
   transform-origin: center;
 }
 
-/* Bubbles améliorées */
+
 .bubble {
   cursor: pointer;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -345,7 +344,7 @@
   stroke-width: 1.5;
 }
 
-/* Responsive Design */
+
 @media (max-width: 1200px) {
   .wrapper {
     grid-template-columns: 1fr;
@@ -362,7 +361,7 @@
   .mapContainer {
     margin-left: 0;
     width: 100%;
-    max-width: 420px; /* ⬇️ Garde la map compacte sur tablette */
+    max-width: 420px; 
     height: 40vh;
     max-height: 400px;
   }
@@ -378,7 +377,7 @@
   }
   
   .mapContainer {
-    height: 30vh; /* ⬇️ Encore plus petit sur mobile */
+    height: 30vh; 
     min-height: 220px;
     max-width: 100%;
     margin-top: 0;
@@ -400,7 +399,7 @@
   }
 }
 
-/* Animation d'entrée */
+
 @keyframes slideIn {
   from {
     opacity: 0;
