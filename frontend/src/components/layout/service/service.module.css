@@ -1,0 +1,184 @@
+.servicesSection {
+  padding: 5rem 1.5rem;
+
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  overflow: hidden;
+  background-color: var(--white);
+}
+
+.servicesHeader {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 4rem;
+}
+
+.servicesTitle {
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 1rem;
+  position: relative;
+  display: inline-block;
+}
+
+.servicesTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  border-radius: 2px;
+}
+
+.servicesSubtitle {
+  font-size: 1.125rem;
+  color: #475569;
+  line-height: 1.6;
+  margin-top: 1.5rem;
+}
+
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.serviceCard {
+  background: var(--standard-off-white);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 2.5rem 1.75rem;
+  text-align: center;
+  border: 1px solid rgba(226, 232, 240, 0.6);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(40px);
+  animation: cardEnter 0.7s ease forwards;
+  animation-delay: var(--stagger-delay, 0s);
+}
+
+.serviceCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--card-color);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.serviceCard:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.1);
+  border-color: var(--card-color);
+}
+
+.serviceCard:hover::before {
+  transform: scaleX(1);
+}
+
+.serviceIconWrapper {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.75rem;
+  background: color-mix(in srgb, var(--card-color) 12%, #ffffff);
+  position: relative;
+  transition: all 0.4s ease;
+}
+
+.serviceIconWrapper::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px dashed var(--card-color);
+  opacity: 0;
+  transform: scale(0.85) rotate(0deg);
+  transition: all 0.5s ease;
+}
+
+.serviceCard:hover .serviceIconWrapper {
+  transform: scale(1.1);
+  box-shadow: 0 8px 24px -4px color-mix(in srgb, var(--card-color) 40%, transparent);
+}
+
+.serviceCard:hover .serviceIconWrapper::after {
+  opacity: 0.6;
+  transform: scale(1.15) rotate(180deg);
+}
+
+.serviceIcon {
+  font-size: 2.25rem;
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+  color: var(--card-color);
+  transition: transform 0.4s ease;
+}
+
+.serviceCard:hover .serviceIcon {
+  transform: scale(1.15) rotate(-8deg);
+}
+
+.serviceName {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.75rem;
+  transition: color 0.3s ease;
+}
+
+.serviceCard:hover .serviceName {
+  color: var(--card-color);
+}
+
+.serviceDescription {
+  font-size: 0.95rem;
+  color: #64748b;
+  line-height: 1.65;
+  margin: 0;
+}
+
+@keyframes cardEnter {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .servicesSection { padding: 3.5rem 1.25rem; }
+  .servicesGrid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+  .serviceCard { padding: 2rem 1.5rem; }
+  .serviceIconWrapper { width: 76px; height: 76px; }
+  .serviceIcon { font-size: 2rem; }
+}
+
+@media (max-width: 480px) {
+  .servicesSection { padding: 2.5rem 1rem; }
+  .servicesHeader { margin-bottom: 2.5rem; }
+  .servicesTitle { font-size: 1.85rem; }
+  .servicesSubtitle { font-size: 1rem; }
+  .servicesGrid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .serviceCard { animation: none; opacity: 1; transform: none; }
+  .serviceCard:hover { transform: none; }
+  .serviceIconWrapper::after, .serviceIcon, .serviceCard::before { transition: none; }
+}
