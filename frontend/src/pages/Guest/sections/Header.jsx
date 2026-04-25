@@ -43,7 +43,7 @@ const Header = () => {
         {/* RIGHT: Contact Form */}
         <div className="hidden md:flex h-full items-center">
           <div className="pt-10  md:pt-10 md:self-start">
-            <div className=" bg-white/70 h-screen  md:p-10  md:w-[380px] md:pt-40 rounded-l-lg md:rounded-r-none shadow-xl gap-4 ">
+            <div className="relative z-20 bg-white/70 h-screen  md:p-10  md:w-[380px] md:pt-40 rounded-l-lg md:rounded-r-none shadow-xl gap-4 ">
               <h2 className="text-2xl font-bold text-gray-800 mb-4">
                 Démarrons Votre Projet
               </h2>
