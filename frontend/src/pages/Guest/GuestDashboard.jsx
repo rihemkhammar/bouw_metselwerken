@@ -24,10 +24,12 @@ const GuestPage = () => {
     <div>
   <Header/>
   <About/>
+
   <Service/>
     <Project/>
       <GeoMap/>
       <Footer />
+
   </div>
     
       
