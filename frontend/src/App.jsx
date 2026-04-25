@@ -1,5 +1,6 @@
+
 import React from "react";
-import GuestDashboard from "./pages/Guest/GuestDashboard"
+import GuestPage from "./pages/Guest/GuestDashboard"
 import AOS from "aos";
 import "aos/dist/aos.css";
 const App = () => {
@@ -14,7 +15,11 @@ const App = () => {
   return (
     <>
       
-      <GuestDashboard/>
+      
+
+    
+     <GuestPage/>
+
     </>
   );
 };
