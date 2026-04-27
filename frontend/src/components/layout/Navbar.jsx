@@ -104,13 +104,13 @@ const Navbar = () => {
           ></img>
         </div>
         <ul className="flex flex-col items-center gap-4 mt-5 px-5 text-lg font-medium text-gray-700">
-          <a
+          <Link
             onClick={() => setShowMobileMenu(false)}
-            href="#Header"
+            to="/"
             className="px-4 py-2 w-full text-center"
           >
             Home
-          </a>
+          </Link>
 
           <a
             onClick={() => setShowMobileMenu(false)}
@@ -136,13 +136,13 @@ const Navbar = () => {
             Work Gallery
           </a>
 
-          <a
+          <Link
             onClick={() => setShowMobileMenu(false)}
-            href="#Testimonials"
+            to="/contact"
             className="px-4 py-2 w-full text-center"
           >
             Contact
-          </a>
+          </Link>
         </ul>
       </div>
     </div>
