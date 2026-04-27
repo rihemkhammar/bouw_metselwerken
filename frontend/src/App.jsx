@@ -1,12 +1,15 @@
 import './App.css'
-import GuestPage from './pages/Guest/GuestDashboard'
+import { BrowserRouter as Router } from "react-router-dom";
+import GuestPage from './pages/Guest/GuestDashboard';
+import AppRoutes from './routes';
+
 
 function App() {
   return (
-    <>
-     <GuestPage/>
-    </>
-  )
+    <Router>
+     <AppRoutes />
+    </Router>
+  );
 }
 
 export default App

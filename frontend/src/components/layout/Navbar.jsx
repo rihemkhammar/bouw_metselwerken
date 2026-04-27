@@ -1,6 +1,7 @@
 import { assets } from "../../assets/assets";
 import { Phone } from "lucide-react";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -29,12 +30,12 @@ const Navbar = () => {
 
         {/* CENTER: MENU */}
         <ul className="hidden md:flex gap-6 lg:gap-8 text-gray-700 font-medium">
-          <a
-            href="#Header"
+          <Link
+            to= "/"
             className="relative text-gray-700 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-[#0073CF] hover:after:w-full after:transition-all"
           >
             Accueil
-          </a>
+          </Link>
 
           <a
             href="#About"
@@ -57,12 +58,12 @@ const Navbar = () => {
             Galerie
           </a>
 
-          <a
-            href="#Contact"
+          <Link
+            to="/contact"
             className="relative text-gray-700 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-[#0073CF] hover:after:w-full after:transition-all"
           >
             Contact
-          </a>
+          </Link>
         </ul>
 
         {/* RIGHT: CTA */}
