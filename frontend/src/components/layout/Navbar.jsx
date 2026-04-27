@@ -18,7 +18,7 @@ const Navbar = () => {
 
   return (
     <div className="fixed top-0 left-0  w-full z-50 bg-white shadow-md border-b-4 border-[#0073CF]">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-20 py-4">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-12 lg:px-20 py-4">
         {/* LEFT: LOGO */}
         <div className="flex items-center">
           <img
@@ -29,7 +29,7 @@ const Navbar = () => {
         </div>
 
         {/* CENTER: MENU */}
-        <ul className="hidden md:flex gap-6 lg:gap-8 text-gray-700 font-medium">
+        <ul className="hidden lg:flex gap-6 lg:gap-8 text-gray-700 font-medium">
           <Link
             to= "/"
             className="relative text-gray-700 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-[#0073CF] hover:after:w-full after:transition-all"
@@ -87,12 +87,12 @@ const Navbar = () => {
         <img
           onClick={() => setShowMobileMenu(true)}
           src={assets.menuall}
-          className="md:hidden w-7 cursor-pointer"
+          className="lg:hidden w-7 cursor-pointer"
         ></img>
       </div>
       {/*---------mobile-menu-----*/}
       <div
-        className={`md:hidden ${showMobileMenu ? "fixed w-full" : "h-0 w-0"}
+        className={`lg:hidden ${showMobileMenu ? "fixed w-full" : "h-0 w-0"}
      right-0 top-0 bottom-0 overflow-hidden bg-white transition-all`}
       >
         <div className="flex justify-end p-7 cursor-pointer">
