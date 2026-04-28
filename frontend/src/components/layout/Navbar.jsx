@@ -73,15 +73,15 @@ const Navbar = () => {
             className="text-[#111184] font-bold flex items-center gap-2 hover:text-[#0073CF]"
           >
             <Phone size={18} />
-            (916) 412-0162
+            (+32) 465 51 361 
           </a>
 
-          <a
-            href="#contact"
+          <Link
+            
             className="bg-[#f16c13] text-white font-semibold px-5 py-2 rounded-full opacity-90 hover:opacity-90 transition"
           >
              Activer Votre Compte
-          </a>
+          </Link>
         </div>
         {/* MOBILE MENU ICON */}
         <img

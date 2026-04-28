@@ -14,7 +14,7 @@ import {
   FaLeaf,
   FaBrush,
 } from "react-icons/fa";
-
+import { Link } from "react-router-dom";
 const services = [
   { value: "", label: "Service souhaité", icon: null, disabled: true },
   {
@@ -121,12 +121,12 @@ const Header = () => {
             parfaitement maîtrisées.
           </p>
           <div className="flex gap-4 mt-8 justify-center md:justify-start">
-            <a
-              href="/login"
+            <Link
+              to = "/login"
               className="border-2 border-white text-white font-semibold px-6 py-3 rounded-full text-lg hover:bg-[#0073CF] hover:text-white transition shadow-lg"
             >
               Se Connecter
-            </a>
+            </Link>
           </div>
         </div>
 
