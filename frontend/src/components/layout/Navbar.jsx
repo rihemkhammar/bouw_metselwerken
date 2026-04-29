@@ -44,14 +44,14 @@ const Navbar = () => {
           </a>
 
           <a
-            href="#Projects"
+            href="#services"
             className="relative text-gray-700 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-[#0073CF] hover:after:w-full after:transition-all"
           >
             Services
           </a>
 
           <a
-            href="#Testimonials"
+            href="#Projects"
             className="relative text-gray-700 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-[#0073CF] hover:after:w-full after:transition-all"
           >
             Galerie
@@ -68,11 +68,11 @@ const Navbar = () => {
         {/* RIGHT: CTA */}
         <div className="hidden md:flex items-center gap-7">
           <a
-            href="tel:+19164120162" 
+            href="tel:+3246551361" 
             className="text-[#111184] font-bold flex items-center gap-2 hover:text-[#0073CF]"
           >
             <Phone size={18} />
-            (916) 412-0162
+            (32) 465 51 36 1
           </a>
 
           <a
