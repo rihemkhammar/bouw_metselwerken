@@ -16,21 +16,22 @@ const Footer = () => {
 
   const navLinks = [
     { label: "Accueil", href: "/" },
-    { label: "Services", href: "/services" },
-    { label: "Portfolio", href: "/portfolio" },
-    { label: "À propos", href: "/about" },
+    { label: "À propos", href: "#About" },
+    { label: "Services", href: "#services" },
+    { label: "Projets", href: "#Projects" },
+    
   ];
 
   const resourceLinks = [
-    { label: "Blog", href: "/blog" },
-    { label: "Documentation", href: "/docs" },
-    { label: "FAQ", href: "/faq" },
-    { label: "Support", href: "/support" },
+    { label: "Activer Votre Compte", href: "/blog" },
+    { label: "Démarrons Votre Projet", href: "/docs" },
+    { label: "Se Connecter", href: "/faq" },
+    
   ];
 
   const socialLinks = [
     { name: "Instagram", href: "#", icon: <FaInstagram size={20} />, color: "#E4405F" },
-    { name: "Facebook", href: "#", icon: <FaFacebook size={20} />, color: "#1877F2" },
+    { name: "Facebook", href: "https://www.facebook.com/share/1LMf3Tppwx/", icon: <FaFacebook size={20} />, color: "#1877F2" },
     { name: "LinkedIn", href: "#", icon: <FaLinkedin size={20} />, color: "#0A66C2" },
     { name: "Twitter", href: "#", icon: <FaTwitter size={20} />, color: "#1DA1F2" },
   ];
@@ -38,19 +39,19 @@ const Footer = () => {
   const contacts = [
     {
       icon: <FaMapMarkerAlt />,
-      text: "123 Rue de l'Innovation, Tunis",
+      text: "Kortrijstraat Ingelmunster, Belgique",
       type: "text"
     },
     {
       icon: <BsFillTelephoneFill />,
-      text: "+216 79 123 456",
-      link: "tel:+21679123456",
+      text: "+32 465 51 36 1",
+      link: "tel:+3246551361",
       type: "phone"
     },
     {
       icon: <HiMail />,
-      text: "contact@bouwmetselwerken.com",
-      link: "mailto:contact@bouwmetselwerken.com",
+      text: "gharredam@gmail.com",
+      link: "mailto:gharredam@gmail.com",
       type: "email"
     },
     {
@@ -114,7 +115,7 @@ const Footer = () => {
 
           {/* Ressources */}
           <div className={styles.column}>
-            <h3 className={styles.heading}>Ressources</h3>
+            <h3 className={styles.heading}>Contact</h3>
             <nav aria-label="Ressources">
               {resourceLinks.map((link) => (
                 <a 
@@ -154,7 +155,7 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className={styles.bottom}>
-          <p>&copy; {currentYear} <strong>BOUW METSELWERKEN</strong>. Tous droits réservés.</p>
+          <p>&copy; {currentYear} <strong> A&M  Gharred</strong>. Tous droits réservés.</p>
           <button 
             onClick={scrollToTop} 
             className={styles.scrollTop}

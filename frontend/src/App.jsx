@@ -1,6 +1,10 @@
 
+import './App.css'
+import { BrowserRouter as Router } from "react-router-dom";
+import GuestPage from './pages/Guest/GuestDashboard';
+import AppRoutes from './routes';
+
 import React from "react";
-import GuestPage from "./pages/Guest/GuestDashboard"
 import AOS from "aos";
 import "aos/dist/aos.css";
 const App = () => {
@@ -13,12 +17,19 @@ const App = () => {
     });
   });
   return (
+
     <>
       
       
 
+    <Router>
+     <AppRoutes />
+    </Router>
+  
+
+
     
-     <GuestPage/>
+     
 
     </>
   );

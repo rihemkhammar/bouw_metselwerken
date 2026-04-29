@@ -4,7 +4,7 @@ import projectsData from './data/projectsData';
 
 const ProjectsSection = () => {
   return (
-        <div className={styles.container}>
+        <div className={styles.container} id="Projects">
     
     <div className={styles.wrapper}>
     <section id="nos-projets" className={styles.projectsSection}>
@@ -30,7 +30,8 @@ const ProjectsSection = () => {
       ))}
     </div>
     </section>
-    </div></div>
+    </div>
+    </div>
   );
 };
 

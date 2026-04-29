@@ -1,6 +1,7 @@
 import { assets } from "../../assets/assets";
 import { Phone } from "lucide-react";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -17,7 +18,7 @@ const Navbar = () => {
 
   return (
     <div className="fixed top-0 left-0  w-full z-50 bg-white shadow-md border-b-4 border-[#0073CF]">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-20 py-4">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-12 lg:px-20 py-4">
         {/* LEFT: LOGO */}
         <div className="flex items-center">
           <img
@@ -28,13 +29,13 @@ const Navbar = () => {
         </div>
 
         {/* CENTER: MENU */}
-        <ul className="hidden md:flex gap-6 lg:gap-8 text-gray-700 font-medium">
-          <a
-            href="#Header"
+        <ul className="hidden lg:flex gap-6 lg:gap-8 text-gray-700 font-medium">
+          <Link
+            to= "/"
             className="relative text-gray-700 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-[#0073CF] hover:after:w-full after:transition-all"
           >
             Accueil
-          </a>
+          </Link>
 
           <a
             href="#About"
@@ -44,54 +45,54 @@ const Navbar = () => {
           </a>
 
           <a
-            href="#services"
+            href="#Projects"
             className="relative text-gray-700 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-[#0073CF] hover:after:w-full after:transition-all"
           >
             Services
           </a>
 
           <a
-            href="#Projects"
+            href="#Testimonials"
             className="relative text-gray-700 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-[#0073CF] hover:after:w-full after:transition-all"
           >
             Galerie
           </a>
 
-          <a
-            href="#Contact"
+          <Link
+            to="/contact"
             className="relative text-gray-700 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-[#0073CF] hover:after:w-full after:transition-all"
           >
             Contact
-          </a>
+          </Link>
         </ul>
 
         {/* RIGHT: CTA */}
         <div className="hidden md:flex items-center gap-7">
           <a
-            href="tel:+3246551361" 
+            href="tel:+19164120162" 
             className="text-[#111184] font-bold flex items-center gap-2 hover:text-[#0073CF]"
           >
             <Phone size={18} />
-            (32) 465 51 36 1
+            (+32) 465 51 361 
           </a>
 
-          <a
-            href="#contact"
+          <Link
+            to= "/Activer_Compte"
             className="bg-[#f16c13] text-white font-semibold px-5 py-2 rounded-full opacity-90 hover:opacity-90 transition"
           >
              Activer Votre Compte
-          </a>
+          </Link>
         </div>
         {/* MOBILE MENU ICON */}
         <img
           onClick={() => setShowMobileMenu(true)}
           src={assets.menuall}
-          className="md:hidden w-7 cursor-pointer"
+          className="lg:hidden w-7 cursor-pointer"
         ></img>
       </div>
       {/*---------mobile-menu-----*/}
       <div
-        className={`md:hidden ${showMobileMenu ? "fixed w-full" : "h-0 w-0"}
+        className={`lg:hidden ${showMobileMenu ? "fixed w-full" : "h-0 w-0"}
      right-0 top-0 bottom-0 overflow-hidden bg-white transition-all`}
       >
         <div className="flex justify-end p-7 cursor-pointer">
@@ -103,13 +104,13 @@ const Navbar = () => {
           ></img>
         </div>
         <ul className="flex flex-col items-center gap-4 mt-5 px-5 text-lg font-medium text-gray-700">
-          <a
+          <Link
             onClick={() => setShowMobileMenu(false)}
-            href="#Header"
+            to="/"
             className="px-4 py-2 w-full text-center"
           >
             Home
-          </a>
+          </Link>
 
           <a
             onClick={() => setShowMobileMenu(false)}
@@ -135,13 +136,13 @@ const Navbar = () => {
             Work Gallery
           </a>
 
-          <a
+          <Link
             onClick={() => setShowMobileMenu(false)}
-            href="#Testimonials"
+            to="/contact"
             className="px-4 py-2 w-full text-center"
           >
             Contact
-          </a>
+          </Link>
         </ul>
       </div>
     </div>
