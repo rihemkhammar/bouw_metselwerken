@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { 
   FaLock, FaUser, FaHashtag, FaInfoCircle, FaCheckCircle, 
   FaExclamationCircle, FaShieldAlt, FaBook, FaPhone, FaEnvelope,
-  FaChevronRight
+  FaChevronRight,FaUserPlus 
 } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import styles from "./activer_compte.module.css";
 
 const CompteForm = () => {
@@ -56,30 +57,12 @@ const CompteForm = () => {
     }
   };
 
-  const helpInfo = [
-    { 
-      icon: FaHashtag, 
-      title: "Matricule fiscal", 
-      desc: "Identifiant unique de 12 ou 13 chiffres. Consultez votre avis d'imposition ou attestation de régularité.",
-      iconColor: "var(--primary)"
-    },
-    { 
-      icon: FaLock, 
-      title: "Mot de passe", 
-      desc: "Minimum 8 caractères. En cas d'oubli, utilisez la procédure de réinitialisation sécurisée.",
-      iconColor: "var(--secondary)"
-    },
-    { 
-      icon: FaShieldAlt, 
-      title: "Sécurité", 
-      desc: "Connexion chiffrée TLS 1.3. Ne partagez jamais vos identifiants. Déconnectez-vous après chaque session.",
-      iconColor: "var(--success)"
-    }
-  ];
+  
+ 
 
   const contactSupport = [
-    { icon: FaPhone, label: "Support technique", value: "+216 71 123 456", href: "tel:+21671123456" },
-    { icon: FaEnvelope, label: "Assistance", value: "support@impots.tn", href: "mailto:support@impots.tn" }
+    { icon: FaPhone, label: "Support technique", value: "(+32) 465 51 361", href: "tel:+3246551361" },
+    { icon: FaEnvelope, label: "Assistance", value: "gharredam@gmail.com", href: "mailto:gharredam@gmail.com" }
   ];
 
   return (
@@ -225,8 +208,8 @@ const CompteForm = () => {
             </button>
 
             <p className={styles.formFooter}>
-              🔒 Connexion sécurisée • Conforme RGPD & ANSSI • 
-              <a href="/mot-de-passe-oublie">Mot de passe oublié ?</a>
+              🔒 Connexion sécurisée •Vos données sont confidentielles• 
+              <a href="/ForgotPassword">Mot de passe oublié ?</a>
             </p>
           </form>
         </div>
@@ -237,27 +220,21 @@ const CompteForm = () => {
           {/* Carte Guide */}
           <div className={styles.guideCard}>
             <h2 className={styles.guideTitle}>
-              <span className={styles.guideIcon} aria-hidden="true"><FaBook size={18} /></span>
-              Guide de connexion
+              <span className={styles.guideIcon} aria-hidden="true"><FaUserPlus  size={18} /></span>
+              Votre espace projet client
             </h2>
-            
-            <ul className={styles.guideList}>
-              {helpInfo.map((item, index) => (
-                <li key={index} className={styles.guideItem}>
-                  <span 
-                    className={styles.guideItemIcon} 
-                    style={{ color: item.iconColor }}
-                    aria-hidden="true"
-                  >
-                    <item.icon size={18} />
-                  </span>
-                  <div>
-                    <p className={styles.guideItemTitle}>{item.title}</p>
-                    <p className={styles.guideItemDesc}>{item.desc}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
+           <p className={styles.text}>Pour accéder à votre espace client, suivre l’avancement de votre projet ainsi que consulter l’évaluation des travaux réalisés, vous devez disposer d’un compte.
+           </p>
+<p className={styles.text}>Si vous êtes déjà client chez nous, veuillez effectuer une demande en remplissant le formulaire de création de compte.</p>
+
+<p className={styles.text}>Merci de renseigner toutes les informations demandées afin de nous permettre de traiter votre demande dans les meilleurs délais.</p>
+
+<p className={styles.text}>Une fois votre demande validée, vous recevrez un e-mail contenant les informations nécessaires pour accéder à votre compte.</p>
+
+<p className={styles.text}>Vous pouvez également cliquer sur le bouton ci-dessous pour envoyer votre demande.</p>
+  <Link to="/contact" className={styles.guideButton}>
+    Demander la création 
+  </Link>
           </div>
 
           {/* Carte Support */}
@@ -287,16 +264,7 @@ const CompteForm = () => {
             </p>
           </div>
 
-          {/* Badge Sécurité */}
-          <div className={styles.securityBadge}>
-            <span className={styles.securityIcon} aria-hidden="true">
-              <FaShieldAlt size={20} />
-            </span>
-            <div>
-              <p className={styles.securityTitle}>Connexion certifiée</p>
-              <p className={styles.securityDesc}>Chiffrement TLS 1.3 • Aucune donnée stockée localement</p>
-            </div>
-          </div>
+         
 
         </div>
       </div>

@@ -23,9 +23,9 @@ const Footer = () => {
   ];
 
   const resourceLinks = [
-    { label: "Activer Votre Compte", href: "/blog" },
-    { label: "Démarrons Votre Projet", href: "/docs" },
-    { label: "Se Connecter", href: "/faq" },
+    { label: "Activer Votre Compte", href: "/Activer_Compte" },
+    { label: "Démarrons Votre Projet", href: "/contact" },
+    { label: "Se Connecter", href: "/login" },
     
   ];
 
@@ -112,7 +112,7 @@ const Footer = () => {
               ))}
             </nav>
           </div>
-
+           
           {/* Ressources */}
           <div className={styles.column}>
             <h3 className={styles.heading}>Contact</h3>
