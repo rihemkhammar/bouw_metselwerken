@@ -1,13 +1,76 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
-generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
-}
-
 datasource db {
   provider = "postgresql"
 }
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+model User {
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
+  password  String
+  role      Role
+  status    UserStatus @default(PENDING) // active, blocked, pending
+  requests  Request[]
+  projects  Project[] // for clients: projects assigned
+  managed   Project[] @relation("ChefProjects") // for chefs: projects they manage
+}
+model Request {
+  id        String   @id @default(uuid())
+  status    RequestStatus @default(PENDING)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  approvedBy String? // admin who approved
+}
+model Project {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  budget      Float?
+  status      ProjectStatus @default(PLANNED)
+  clientId    String
+  client      User     @relation(fields: [clientId], references: [id])
+  chefId      String
+  chef        User     @relation("ChefProjects", fields: [chefId], references: [id])
+  updates     ProjectUpdate[]
+}
+model ProjectUpdate {
+  id        String   @id @default(uuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id])
+  updateType String  // state change, budget update, info added
+  details   String
+  updatedBy String
+  timestamp DateTime @default(now())
+}
+enum Role {
+  ADMIN
+  CHEF
+  CLIENT
+  GUEST
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  DECLINED
+  BLOCKED
+}
+
+enum ProjectStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum UserStatus {
+  PENDING
+  ACTIVE
+  BLOCKED
+}
+
+
