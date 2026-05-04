@@ -3,7 +3,7 @@ import adminRoutes from "./app/routes/adminRoutes.js";
 import clientRoutes from "./app/routes/clientRoutes.js";
 import chefRoutes from "./app/routes/chefRoutes.js";
 
-const express = require("express");
+//const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
