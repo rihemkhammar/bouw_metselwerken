@@ -1,62 +1,63 @@
-datasource db {
-  provider = "postgresql"
-  
-}
-
 generator client {
   provider = "prisma-client-js"
 }
 
+datasource db {
+  provider = "postgresql"
+}
 
 model User {
-  id        String    @id @default(uuid())
-  name      String
-  email     String    @unique
-  password  String
-  role      Role
-  status    UserStatus @default(PENDING) // active, blocked, pending
-  requests  Request[]
-  projects  Project[] // for clients: projects assigned
-  managed   Project[] @relation("ChefProjects") // for chefs: projects they manage
-  services  Service[] 
-  phone     String?
-  matricule String?
+  id          String     @id @default(uuid())
+  name        String
+  email       String     @unique
+  password    String
+  role        Role
+  status      UserStatus @default(PENDING)
+  address     String?
   companyName String?
-  address      String?
+  matricule   String?
+  phone       String?
+  services    Service[]
+  managed     Project[]  @relation("ChefProjects")
+  projects    Project[]
+  requests    Request[]
 }
+
 model Request {
-  id        String   @id @default(uuid())
-  status    RequestStatus @default(PENDING)
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
-  approvedBy String? // admin who approved
-  description String? 
+  id          String        @id @default(uuid())
+  status      RequestStatus @default(PENDING)
+  userId      String
+  createdAt   DateTime      @default(now())
+  approvedBy  String?
+  description String?
+  user        User          @relation(fields: [userId], references: [id])
 }
+
 model Project {
-  id          String   @id @default(uuid())
+  id          String          @id @default(uuid())
   title       String
   description String
   budget      Float?
-  status      ProjectStatus @default(PLANNED)
+  status      ProjectStatus   @default(PLANNED)
   clientId    String
-  client      User     @relation(fields: [clientId], references: [id])
   chefId      String
   services    Service
-  chef        User     @relation("ChefProjects", fields: [chefId], references: [id])
+  chef        User            @relation("ChefProjects", fields: [chefId], references: [id])
+  client      User            @relation(fields: [clientId], references: [id])
   updates     ProjectUpdate[]
+}
 
-}
 model ProjectUpdate {
-  id        String   @id @default(uuid())
-  projectId String
-  project   Project  @relation(fields: [projectId], references: [id])
-  updateType String  // state change, budget update, info added
-  details   String
-  updatedBy String
-  services    Service
-  timestamp DateTime @default(now())
+  id         String   @id @default(uuid())
+  projectId  String
+  updateType String
+  details    String
+  updatedBy  String
+  timestamp  DateTime @default(now())
+  services   Service
+  project    Project  @relation(fields: [projectId], references: [id])
 }
+
 enum Role {
   ADMIN
   CHEF
@@ -82,6 +83,7 @@ enum UserStatus {
   ACTIVE
   BLOCKED
 }
+
 enum Service {
   MACONNERIE
   RENOVATION
