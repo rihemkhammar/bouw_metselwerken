@@ -1,67 +1,32 @@
 import React from "react";
-import {
-  FaUser,
-  FaChartLine,
-  FaTasks,
-  FaBell,
-  FaCog
-} from "react-icons/fa";
-import Sidebar from "../components/client/sidebar"
+import Sidebar from "../components/client/sidebar";
+import projects from "../pages/data/projects.json";
+import ProjectCard from "../components/client/ProjectCard";
 
 const Dashboard = () => {
   return (
-    <>
-    <Sidebar/>
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen">
+      {/* Ta Sidebar doit rester en position fixed/absolute à gauche */}
+      <Sidebar />
 
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-        <FaBell className="text-gray-600 text-xl cursor-pointer" />
-      </div>
+      {/* Zone principale : prend tout l'espace à droite de la sidebar */}
+      <main className="ml-64 p-6"> {/* ⚠️ Adapte `ml-64` à la largeur réelle de ta sidebar */}
+        
+        {projects.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 text-[var(--gris)]">
+            <span className="text-4xl mb-3">📂</span>
+            <p className="text-lg">Aucun projet disponible</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {projects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </div>
+        )}
 
-      {/* Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-
-        <div className="bg-white p-4 rounded-lg shadow">
-          <FaUser className="text-blue-500 text-2xl mb-2" />
-          <h2 className="font-semibold">Utilisateurs</h2>
-          <p className="text-gray-500">120 inscrits</p>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg shadow">
-          <FaChartLine className="text-green-500 text-2xl mb-2" />
-          <h2 className="font-semibold">Statistiques</h2>
-          <p className="text-gray-500">+15% ce mois</p>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg shadow">
-          <FaTasks className="text-purple-500 text-2xl mb-2" />
-          <h2 className="font-semibold">Tâches</h2>
-          <p className="text-gray-500">8 en cours</p>
-        </div>
-
-      </div>
-
-      {/* Section activité */}
-      <div className="mt-6 bg-white p-4 rounded-lg shadow">
-        <h2 className="font-semibold mb-3">Activité récente</h2>
-        <ul className="space-y-2 text-gray-600">
-          <li>✔ Utilisateur ajouté</li>
-          <li>✔ Rapport généré</li>
-          <li>✔ Mise à jour système</li>
-        </ul>
-      </div>
-
-      {/* Settings button */}
-      <div className="mt-6 flex justify-end">
-        <button className="flex items-center gap-2 bg-gray-800 text-white px-4 py-2 rounded">
-          <FaCog /> Paramètres
-        </button>
-      </div>
-
+      </main>
     </div>
-    </>
   );
 };
 

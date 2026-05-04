@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import {
-  LayoutDashboard, Users, Settings, LogOut, ChevronLeft, ChevronRight
+  LayoutDashboard, Users, Settings, LogOut, ChevronLeft, ChevronRight,
+  Briefcase, Info, Mail
 } from 'lucide-react';
 
 const defaultMenuItems = [
   { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={20} />, link: '/dashboard' },
   { id: 'clients', label: 'Clients', icon: <Users size={20} />, link: '/clients' },
+  
+  { id: 'services', label: 'Services', icon: <Briefcase size={20} />, link: '/services' },
+  { id: 'about', label: 'À propos', icon: <Info size={20} />, link: '/about' },
+  { id: 'contact', label: 'Nos contacts', icon: <Mail size={20} />, link: '/contact' },
+  
   { id: 'settings', label: 'Paramètres', icon: <Settings size={20} />, link: '/settings' },
 ];
-
 export default function Sidebar({ menuItems = defaultMenuItems, onToggle }) {
-  // Initialisation sécurisée pour le SSR
+  
   const [isOpen, setIsOpen] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('sidebar-state');
@@ -21,7 +26,6 @@ export default function Sidebar({ menuItems = defaultMenuItems, onToggle }) {
 
   const [activePath, setActivePath] = useState('');
 
-  // Persistance & callback
   useEffect(() => {
     localStorage.setItem('sidebar-state', JSON.stringify(isOpen));
     if (onToggle) onToggle(isOpen);

@@ -1,4 +1,4 @@
-/* ========== VARIABLES & RESET ========== */
+
 .footer {
   background: linear-gradient(135deg, var(--primary-dark, #1a1a2e), var(--primary, #16213e));
   color: var(--text, #f8f9fa);
@@ -17,14 +17,12 @@
   background: linear-gradient(90deg, var(--secondary), var(--secondary, #0f3460));
 }
 
-/* ========== CONTAINER ========== */
 .container {
   max-width: 1400px;
   margin: 0 auto;
   width: 100%;
 }
 
-/* ========== GRID LAYOUT ========== */
 .grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -45,7 +43,6 @@
   }
 }
 
-/* ========== COLUMN ========== */
 .column {
   display: flex;
   flex-direction: column;
@@ -57,7 +54,6 @@
   gap: 5rem;
 }
 
-/* ========== LOGO ========== */
 .logo {
   width: 300px; 
   height: 200px;
@@ -74,7 +70,7 @@
 
 
 
-/* ========== TITRES ========== */
+
 .heading {
   font-size: 1.5rem; 
   font-weight: 600;
@@ -95,7 +91,7 @@
   border-radius: 2px;
 }
 
-/* ========== LIENS ========== */
+
 .link {
   display: block;
   color: var(--standard-off-white, #adb5bd);
@@ -128,7 +124,7 @@
   transform: translateX(0);
 }
 
-/* ========== CONTACT ========== */
+
 .contactList {
   display: flex;
   flex-direction: column;
@@ -167,7 +163,6 @@
   text-decoration: underline;
 }
 
-/* ========== SOCIAL ICONS ========== */
 .social {
   display: flex;
   gap: 0.9rem;
@@ -201,7 +196,6 @@
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* ========== BOTTOM BAR ========== */
 .bottom {
   display: flex;
   flex-direction: column;
@@ -233,7 +227,6 @@
   font-weight: 600;
 }
 
-/* ========== SCROLL TO TOP BUTTON ========== */
 .scrollTop {
   width: 46px; 
   height: 46px;
@@ -264,7 +257,6 @@
   transform: translateY(-1px);
 }
 
-/* ========== ANIMATIONS ========== */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -281,7 +273,6 @@
   animation-delay: calc(var(--i, 0) * 0.1s);
 }
 
-/* ========== RESPONSIVE TYPOGRAPHY - MOBILE ========== */
 @media (max-width: 575px) {
   .heading {
     font-size: 1.5rem; 
@@ -308,7 +299,6 @@
   }
 }
 
-/* ========== TABLETTE ========== */
 @media (min-width: 576px) and (max-width: 991px) {
   .heading {
     font-size: 1.4rem;
@@ -321,7 +311,6 @@
   }
 }
 
-/* ========== ACCESSIBILITY ========== */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -339,7 +328,6 @@
   outline-offset: 2px;
 }
 
-/* ========== HIGH DPI SCREENS ========== */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .logo {
     image-rendering: -webkit-optimize-contrast;

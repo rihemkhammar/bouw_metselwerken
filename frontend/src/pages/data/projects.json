@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "Site Web E-commerce",
+    "client": "Société ABC",
+    "progress": 70,
+    "budget": 3500,
+    "deadline": "2026-06-15",
+    "status": "en_cours"
+  },
+  {
+    "id": 2,
+    "name": "Application Mobile",
+    "client": "Startup XYZ",
+    "progress": 40,
+    "budget": 5000,
+    "deadline": "2026-07-10",
+    "status": "en_pause"
+  },
+  {
+    "id": 3,
+    "name": "Dashboard Admin",
+    "client": "Entreprise 123",
+    "progress": 100,
+    "budget": 2800,
+    "deadline": "2026-05-01",
+    "status": "termine"
+  },
+  {
+    "id": 4,
+    "name": "Refonte UI/UX",
+    "client": "Client Freelance",
+    "progress": 20,
+    "budget": 1500,
+    "deadline": "2026-08-20",
+    "status": "en_cours"
+  }
+]
