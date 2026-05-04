@@ -1,4 +1,4 @@
-import prisma from "../../../prisma/client.js";
+import prisma from "../../configs/prisma.js";
 import bcrypt from "bcryptjs";
 
 export const signupService = {

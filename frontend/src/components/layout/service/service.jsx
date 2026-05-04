@@ -18,7 +18,7 @@ const iconMap = {
 
 export default function Service() {
   return (
-    <section className={styles.servicesSection} id="services">
+    <section className={styles.servicesSection}>
       <div className={styles.servicesHeader}>
         <h2 className={styles.servicesTitle}>Nos Services</h2>
         <p className={styles.servicesSubtitle}>

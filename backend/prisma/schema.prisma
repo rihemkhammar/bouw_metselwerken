@@ -18,7 +18,7 @@ model User {
   requests  Request[]
   projects  Project[] // for clients: projects assigned
   managed   Project[] @relation("ChefProjects") // for chefs: projects they manage
-  services Service[]
+  services  Service[] 
   phone     String?
   matricule String?
   companyName String?

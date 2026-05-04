@@ -1,4 +1,4 @@
-
+/* project.module.css */
 
 .container {
   width: 100%;
@@ -25,6 +25,7 @@
   letter-spacing: -0.02em;
 }
 
+/* Ligne d'accent utilisant votre dégradé primary */
 .projectsSection h2::after {
   content: '';
   display: block;
@@ -85,7 +86,7 @@
   color: var(--secondary-text);
   line-height: 1.6;
   margin: 0 1.25rem;
-  flex-grow: 1; 
+  flex-grow: 1; /* Garde les boutons alignés même si les textes varient */
 }
 
 .btn {
@@ -108,13 +109,13 @@
 }
 
 .btn:hover {
-  
+  /* Astuce pro : utiliser votre couleur secondaire au survol crée un CTA dynamique */
   background: var(--secondary); 
   box-shadow: 0 6px 16px rgba(255, 140, 0, 0.25);
   transform: translateY(-2px);
 }
 
-
+/* Responsive */
 @media (max-width: 768px) {
   .wrapper {
     padding: 3rem 1rem;

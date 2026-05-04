@@ -1,19 +1,24 @@
 import express from "express";
-import adminRoutes from "./app/routes/adminRoutes.js";
+import cors from "cors";
+import dotenv from "dotenv";
+//import adminRoutes from "./app/routes/adminRoutes.js";
 import clientRoutes from "./app/routes/clientRoutes.js";
-import chefRoutes from "./app/routes/chefRoutes.js";
+//import chefRoutes from "./app/routes/chefRoutes.js";
+import loginRoutes from "./app/routes/login.js";
 
 //const express = require("express");
-const cors = require("cors");
-require("dotenv").config();
+//const cors = require("cors");
+dotenv.config();
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.use("/admin", adminRoutes);
+//app.use("/admin", adminRoutes);
 app.use("/client", clientRoutes);
-app.use("/chef", chefRoutes);
+//app.use("/chef", chefRoutes);
+app.use(cors({ origin: "http://localhost:5173" }));
+app.use("/login" , loginRoutes)
 
 app.listen(5000, () => console.log("Server running"))
