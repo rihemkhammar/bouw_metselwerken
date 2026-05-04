@@ -4,7 +4,9 @@ import { motion } from "framer-motion";
 
 const About = () => {
   return (
+
     <div id="About" className="w-full bg-white py-20 px-6 md:px-20 overflow-hidden">
+
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
         
         {/* LEFT IMAGE */}
@@ -48,7 +50,12 @@ const About = () => {
           </div>
 
           <p className="text-gray-600 leading-relaxed">
-            Forts de plus de dix ans d'expertise terrain, nous offrons des services de maçonnerie de précision et de construction complète. Du travail traditionnel de la brique aux structures modernes, nos artisans allient savoir-faire éprouvé et ingénierie contemporaine pour créer des espaces durables et esthétiques.
+            Notre entreprise s’engage à construire avec qualité, intégrité et précision, en transformant vos idées en réalisations concrètes grâce à un savoir-faire solide et une grande rigueur.
+
+          </p>
+          <p className="text-gray-600 leading-relaxed">
+            
+Notre entreprise accorde une attention particulière à chaque étape de vos projets afin de garantir des travaux fiables, soignés et conformes à vos attentes, tout en respectant pleinement ses engagements.
           </p>
 
           <ul className="space-y-3">

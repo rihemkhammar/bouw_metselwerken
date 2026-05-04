@@ -77,7 +77,7 @@ const Navbar = () => {
           </a>
 
           <Link
-            
+            to= "/Activer_Compte"
             className="bg-[#f16c13] text-white font-semibold px-5 py-2 rounded-full opacity-90 hover:opacity-90 transition"
           >
              Activer Votre Compte

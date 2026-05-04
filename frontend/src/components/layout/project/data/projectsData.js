@@ -1,7 +1,7 @@
 import maconnerie from '../../../../assets/maconnerie.jpeg';
-import  restauration  from '../../../../assets/renovation.jpg';
-import renovation from '../../../../assets/restauration.jpeg';
-import travaux from '../../../../assets/Travaux.jpg';
+import  renovation from '../../../../assets/renovation.jpg';
+import  restauration   from '../../../../assets/images/projects/project2.jpeg';
+import travaux from '../../../../assets/images/projects/project1.jpeg';
 import demoussage from '../../../../assets/Démoussage.jpeg';
 
 const projectsData = [
@@ -19,14 +19,14 @@ const projectsData = [
   },
   {
     id: 3,
-    title: "Patrimoine Renaissance",
-    description: "Remise en état de bâtiments anciens ou historiques en respectant leur authenticité, tout en renforçant leur structure et leur valeur architecturale.",
+    title: "Rénovation complète d’une maison",
+    description: "Renouvellement de l’espace intérieur avec nouveau sol, plafond moderne et éclairage intégré pour un style contemporain.",
     image: restauration
   },
   {
     id: 4,
-    title: "Pierre & Joint Authentique",
-    description: "Réfection des joints de maçonnerie avec une finition rustique, pour préserver le charme traditionnel des murs en pierre tout en assurant leur solidité.",
+    title: "Transformation d’un espace brut en douche moderne",
+    description: "Réalisation d’une douche complète à partir d’une structure en briques, avec carrelage, banc intégré et installation sanitaire pour un espace compact et fonctionnel.",
     image: travaux
   },
   {

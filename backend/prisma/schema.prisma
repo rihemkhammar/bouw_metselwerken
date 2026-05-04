@@ -1,5 +1,6 @@
 datasource db {
   provider = "postgresql"
+  
 }
 
 generator client {
@@ -17,6 +18,11 @@ model User {
   requests  Request[]
   projects  Project[] // for clients: projects assigned
   managed   Project[] @relation("ChefProjects") // for chefs: projects they manage
+  services  Service[] 
+  phone     String?
+  matricule String?
+  companyName String?
+  address      String?
 }
 model Request {
   id        String   @id @default(uuid())
@@ -25,6 +31,7 @@ model Request {
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   approvedBy String? // admin who approved
+  description String? 
 }
 model Project {
   id          String   @id @default(uuid())
@@ -35,8 +42,10 @@ model Project {
   clientId    String
   client      User     @relation(fields: [clientId], references: [id])
   chefId      String
+  services    Service
   chef        User     @relation("ChefProjects", fields: [chefId], references: [id])
   updates     ProjectUpdate[]
+
 }
 model ProjectUpdate {
   id        String   @id @default(uuid())
@@ -45,6 +54,7 @@ model ProjectUpdate {
   updateType String  // state change, budget update, info added
   details   String
   updatedBy String
+  services    Service
   timestamp DateTime @default(now())
 }
 enum Role {
@@ -72,5 +82,12 @@ enum UserStatus {
   ACTIVE
   BLOCKED
 }
-
-
+enum Service {
+  MACONNERIE
+  RENOVATION
+  RESTAURATION
+  CONSTRUCTION_GENERALE
+  REJOINTOIEMENT_RUSTIQUE
+  TRAITEMENT_HYDROFUGE
+  DEMOUSSAGE
+}
