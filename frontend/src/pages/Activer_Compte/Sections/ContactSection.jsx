@@ -1,14 +1,22 @@
 import React, { useState } from "react";
 import { 
-  FaLock, FaUser, FaHashtag, FaInfoCircle, FaCheckCircle, 
-  FaExclamationCircle, FaShieldAlt, FaBook, FaPhone, FaEnvelope,
-  FaChevronRight,FaUserPlus 
+  FaUser, FaBuilding, FaEnvelope, FaPhone, FaInfoCircle, 
+  FaCheckCircle, FaExclamationCircle, FaChevronRight, FaUserPlus 
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { requestAccountCreation } from "../../../services/api"; // ✅ Import corrigé
 import styles from "./activer_compte.module.css";
 
 const CompteForm = () => {
-  const [form, setForm] = useState({ login: '', matricule: '', password: '' });
+  // ✅ Champs alignés avec le backend
+  const [form, setForm] = useState({
+    name: '',              // ✅ Nom complet (requis)
+    email: '',             // ✅ Email (requis)
+    phone: '',             // ✅ Optionnel
+    companyName: '',       // ✅ Optionnel
+    description: ''        // ✅ Optionnel (message complémentaire)
+  });
+  
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState('');
@@ -17,23 +25,26 @@ const CompteForm = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm(prev => ({ ...prev, [name]: value }));
-    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
+    // Clear error on change
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
     setServerError('');
     setShowSuccess(false);
   };
 
+  // ✅ Validation minimale (cohérente avec le backend)
   const validate = () => {
     const errs = {};
-    if (!form.login.trim()) errs.login = "L'identifiant est requis";
-    if (!/^\d{12,13}$/.test(form.matricule.trim())) errs.matricule = "Format invalide (12 ou 13 chiffres)";
-    if (!form.password) errs.password = "Le mot de passe est requis";
+    if (!form.name.trim()) errs.name = "Le nom complet est requis";
+    if (!/^\S+@\S+\.\S+$/.test(form.email)) errs.email = "Email invalide";
     return errs;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const validationErrors = validate();
-    
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
@@ -41,25 +52,33 @@ const CompteForm = () => {
 
     setLoading(true);
     setServerError('');
-    
+
     try {
-      // ⚠️ Remplacez par votre appel API réel
-      await new Promise(res => setTimeout(res, 1200));
-      
+      // ✅ Appel API compatible backend
+      const res = await requestAccountCreation({
+        name: form.name.trim(),
+        email: form.email.trim().toLowerCase(),
+        phone: form.phone.trim() || undefined,
+        companyName: form.companyName.trim() || undefined,
+        description: form.description.trim() || undefined,
+      });
+
+      console.log("✅ Signup réussi:", res);
       setShowSuccess(true);
-      console.log('✅ Authentification réussie:', form);
-      // window.location.href = '/espace-contribuable';
-      
-    } catch {
-      setServerError('Identifiants incorrects ou problème de connexion.');
+
+      // ✅ Redirection après succès
+      setTimeout(() => {
+        window.location.href = "/account-request-confirmation";
+      }, 2000);
+
+    } catch (err) {
+      console.error("❌ Signup error:", err);
+      setServerError(err.message || "Une erreur est survenue lors de l'envoi");
     } finally {
       setLoading(false);
     }
   };
-
-  
  
-
   const contactSupport = [
     { icon: FaPhone, label: "Support technique", value: "(+32) 465 51 361", href: "tel:+3246551361" },
     { icon: FaEnvelope, label: "Assistance", value: "gharredam@gmail.com", href: "mailto:gharredam@gmail.com" }
@@ -74,11 +93,11 @@ const CompteForm = () => {
           
           <header className={styles.header}>
             <div className={styles.headerIcon} aria-hidden="true">
-              <FaLock size={24} />
+              <FaUserPlus size={24} />
             </div>
             <div>
-              <h1 className={styles.headerTitle}>Espace Contribuable</h1>
-              <p className={styles.headerSubtitle}>Portail sécurisé de gestion fiscale</p>
+              <h1 className={styles.headerTitle}>Demande de Compte Client</h1>
+              <p className={styles.headerSubtitle}>Créez votre espace professionnel sécurisé</p>
             </div>
           </header>
 
@@ -87,8 +106,8 @@ const CompteForm = () => {
             <div className={`${styles.statusMessage} ${styles.statusSuccess}`} role="alert">
               <FaCheckCircle size={20} className="flex-shrink-0 mt-0.5" />
               <div>
-                <p>Connexion réussie ! ✓</p>
-                <p>Redirection vers votre espace personnel...</p>
+                <p>Demande envoyée avec succès ! ✓</p>
+                <p>Vous recevrez un email de confirmation sous 24h...</p>
               </div>
             </div>
           )}
@@ -97,7 +116,7 @@ const CompteForm = () => {
             <div className={`${styles.statusMessage} ${styles.statusError}`} role="alert">
               <FaExclamationCircle size={20} className="flex-shrink-0 mt-0.5" />
               <div>
-                <p>Échec de connexion</p>
+                <p>Erreur lors de l'envoi</p>
                 <p>{serverError}</p>
               </div>
             </div>
@@ -105,90 +124,117 @@ const CompteForm = () => {
 
           <form onSubmit={handleSubmit} className={styles.form} noValidate>
             
-            {/* Login */}
+            {/* ✅ Nom complet (name) */}
             <div className={styles.fieldGroup}>
-              <label htmlFor="login" className={`${styles.label} ${styles.labelRequired}`}>
-                Identifiant / Login
+              <label htmlFor="name" className={`${styles.label} ${styles.labelRequired}`}>
+                Nom complet du responsable *
               </label>
               <div className={styles.inputWrapper}>
                 <span className={styles.inputIcon}><FaUser size={16} /></span>
                 <input
-                  id="login"
-                  name="login"
+                  id="name"
+                  name="name"
                   type="text"
-                  value={form.login}
+                  value={form.name}
                   onChange={handleChange}
-                  placeholder="ex : contribuable_84"
-                  autoComplete="username"
-                  className={`${styles.input} ${errors.login ? styles.inputError : ''}`}
-                  aria-invalid={!!errors.login}
-                  aria-describedby={errors.login ? "login-error" : undefined}
+                  placeholder="ex : Jean Dupont"
+                  autoComplete="name"
+                  className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
+                  aria-invalid={!!errors.name}
+                  aria-describedby={errors.name ? "name-error" : undefined}
                 />
               </div>
-              {errors.login && (
-                <p id="login-error" className={styles.errorMessage} role="alert">
-                  <FaExclamationCircle size={12} /> {errors.login}
+              {errors.name && (
+                <p id="name-error" className={styles.errorMessage} role="alert">
+                  <FaExclamationCircle size={12} /> {errors.name}
                 </p>
               )}
             </div>
 
-            {/* Matricule Fiscal */}
+            {/* ✅ Email */}
             <div className={styles.fieldGroup}>
-              <label htmlFor="matricule" className={`${styles.label} ${styles.labelRequired}`}>
-                Matricule Fiscal
+              <label htmlFor="email" className={`${styles.label} ${styles.labelRequired}`}>
+                Email professionnel *
               </label>
               <div className={styles.inputWrapper}>
-                <span className={styles.inputIcon}><FaHashtag size={16} /></span>
+                <span className={styles.inputIcon}><FaEnvelope size={16} /></span>
                 <input
-                  id="matricule"
-                  name="matricule"
-                  type="text"
-                  inputMode="numeric"
-                  pattern="\d{12,13}"
-                  value={form.matricule}
+                  id="email"
+                  name="email"
+                  type="email"
+                  value={form.email}
                   onChange={handleChange}
-                  placeholder="12 ou 13 chiffres"
-                  autoComplete="off"
-                  className={`${styles.input} ${errors.matricule ? styles.inputError : ''}`}
-                  aria-invalid={!!errors.matricule}
-                  aria-describedby={errors.matricule ? "matricule-error" : undefined}
+                  placeholder="contact@entreprise.be"
+                  autoComplete="email"
+                  className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
+                  aria-invalid={!!errors.email}
+                  aria-describedby={errors.email ? "email-error" : undefined}
                 />
               </div>
-              {errors.matricule && (
-                <p id="matricule-error" className={styles.errorMessage} role="alert">
-                  <FaExclamationCircle size={12} /> {errors.matricule}
+              {errors.email && (
+                <p id="email-error" className={styles.errorMessage} role="alert">
+                  <FaExclamationCircle size={12} /> {errors.email}
                 </p>
               )}
             </div>
 
-            {/* Mot de passe */}
+            {/* ✅ Téléphone (optionnel) */}
             <div className={styles.fieldGroup}>
-              <label htmlFor="password" className={`${styles.label} ${styles.labelRequired}`}>
-                Mot de passe
+              <label htmlFor="phone" className={styles.label}>
+                Téléphone de contact
               </label>
               <div className={styles.inputWrapper}>
-                <span className={styles.inputIcon}><FaLock size={16} /></span>
+                <span className={styles.inputIcon}><FaPhone size={16} /></span>
                 <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  value={form.password}
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  value={form.phone}
                   onChange={handleChange}
-                  placeholder="••••••••"
-                  autoComplete="current-password"
-                  className={`${styles.input} ${errors.password ? styles.inputError : ''}`}
-                  aria-invalid={!!errors.password}
-                  aria-describedby={errors.password ? "password-error" : undefined}
+                  placeholder="+32 4XX XX XX XX"
+                  autoComplete="tel"
+                  className={styles.input}
                 />
               </div>
-              {errors.password && (
-                <p id="password-error" className={styles.errorMessage} role="alert">
-                  <FaExclamationCircle size={12} /> {errors.password}
-                </p>
-              )}
             </div>
 
-            {/* Bouton de connexion */}
+            {/* ✅ Nom entreprise (optionnel) */}
+            <div className={styles.fieldGroup}>
+              <label htmlFor="companyName" className={styles.label}>
+                Raison sociale de l'entreprise
+              </label>
+              <div className={styles.inputWrapper}>
+                <span className={styles.inputIcon}><FaBuilding size={16} /></span>
+                <input
+                  id="companyName"
+                  name="companyName"
+                  type="text"
+                  value={form.companyName}
+                  onChange={handleChange}
+                  placeholder="ex : Société ABC SPRL"
+                  autoComplete="organization"
+                  className={styles.input}
+                />
+              </div>
+            </div>
+
+            {/* ✅ Description / Message (optionnel) */}
+            <div className={styles.fieldGroup}>
+              <label htmlFor="description" className={styles.label}>
+                Message complémentaire (optionnel)
+              </label>
+              <textarea
+                id="description"
+                name="description"
+                value={form.description}
+                onChange={handleChange}
+                placeholder="Précisez vos besoins ou questions..."
+                rows={3}
+                className={styles.textarea}
+              />
+            </div>
+
+            {/* ✅ Bouton d'envoi */}
             <button
               type="submit"
               disabled={loading}
@@ -197,44 +243,60 @@ const CompteForm = () => {
               {loading ? (
                 <>
                   <span className={styles.spinner} aria-hidden="true"></span>
-                  <span className="srOnly">Connexion en cours...</span>
-                  <span aria-hidden="true">Connexion en cours...</span>
+                  <span className="srOnly">Envoi en cours...</span>
+                  <span aria-hidden="true">Envoi en cours...</span>
                 </>
               ) : (
                 <>
-                  Accéder à mon espace <FaChevronRight size={16} aria-hidden="true" />
+                  Envoyer ma demande <FaChevronRight size={16} aria-hidden="true" />
                 </>
               )}
             </button>
 
             <p className={styles.formFooter}>
-              🔒 Connexion sécurisée •Vos données sont confidentielles• 
-              <a href="/ForgotPassword">Mot de passe oublié ?</a>
+              🔒 Vos données sont sécurisées • Traitement sous 24h • 
+              <a href="/privacy">Politique de confidentialité</a>
             </p>
           </form>
         </div>
 
-        {/* 📘 COLONNE DROITE : Guide & Informations */}
+        {/* 📘 COLONNE DROITE : Guide */}
         <div className={styles.infoColumn}>
-          
-          {/* Carte Guide */}
           <div className={styles.guideCard}>
             <h2 className={styles.guideTitle}>
-              <span className={styles.guideIcon} aria-hidden="true"><FaUserPlus  size={18} /></span>
-              Votre espace projet client
+              <span className={styles.guideIcon} aria-hidden="true"><FaInfoCircle size={18} /></span>
+              Comment ça marche ?
             </h2>
-           <p className={styles.text}>Pour accéder à votre espace client, suivre l’avancement de votre projet ainsi que consulter l’évaluation des travaux réalisés, vous devez disposer d’un compte.
-           </p>
-<p className={styles.text}>Si vous êtes déjà client chez nous, veuillez effectuer une demande en remplissant le formulaire de création de compte.</p>
+            
+            <ol className={styles.stepsList}>
+              <li>Remplissez ce formulaire avec vos informations professionnelles</li>
+              <li>Notre équipe vérifie votre demande sous 24h ouvrées</li>
+              <li>Vous recevez un email avec vos identifiants d'accès</li>
+              <li>Connectez-vous à votre espace client sécurisé</li>
+            </ol>
+            
+            <p className={styles.text}>
+              <strong>Avantages de votre espace client :</strong>
+            </p>
+            <ul className={styles.benefitsList}>
+              <li>✓ Suivi en temps réel de vos projets</li>
+              <li>✓ Accès aux documents et factures</li>
+              <li>✓ Messagerie directe avec votre conseiller</li>
+              <li>✓ Historique complet de vos interventions</li>
+            </ul>
 
-<p className={styles.text}>Merci de renseigner toutes les informations demandées afin de nous permettre de traiter votre demande dans les meilleurs délais.</p>
-
-<p className={styles.text}>Une fois votre demande validée, vous recevrez un e-mail contenant les informations nécessaires pour accéder à votre compte.</p>
-
-<p className={styles.text}>Vous pouvez également cliquer sur le bouton ci-dessous pour envoyer votre demande.</p>
-  <Link to="/contact" className={styles.guideButton}>
-    Demander la création 
-  </Link>
+            <div className={styles.existingClientBox}>
+              <FaCheckCircle size={18} className={styles.existingClientIcon} aria-hidden="true" />
+              <div>
+                <p className={styles.existingClientText}>
+                  <strong>Vous avez déjà un compte ?</strong><br />
+                  Accédez directement à votre espace personnel.
+                </p>
+                <Link to="/login" className={styles.loginLink}>
+                  Se connecter <FaChevronRight size={14} />
+                </Link>
+              </div>
+            </div>
           </div>
 
           {/* Carte Support */}
@@ -263,9 +325,6 @@ const CompteForm = () => {
               🕒 Lun-Ven : 8h00 - 17h00 • Réponse sous 24h
             </p>
           </div>
-
-         
-
         </div>
       </div>
     </section>

@@ -3,7 +3,7 @@ import { signupService } from "./client/signupService.js";
 
 export const clientService = {
   // Expose la méthode signup depuis signupService
-  registerClient: signupService.createPendingClient,
+    registerClient: signupService.registerClient,
 
   // Autres méthodes client à ajouter plus tard :
   // getClientById, updateClientProfile, deleteClient, etc.

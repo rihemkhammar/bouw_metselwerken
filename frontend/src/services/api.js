@@ -18,3 +18,24 @@ export const login = async (email, password) => {
   });
   return handleResponse(res);
 };
+
+export const requestAccountCreation = async ({ 
+  name, 
+  email, 
+  phone, 
+  companyName, 
+  description 
+}) => {
+  const res = await fetch(`${API_URL}/client/signup`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: name?.trim(),
+      email: email?.trim().toLowerCase(),
+      phone: phone?.trim() || null,
+      companyName: companyName?.trim() || null,
+      description: description?.trim() || null,
+    }),
+  });
+  return handleResponse(res);
+};
