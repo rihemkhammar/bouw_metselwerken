@@ -461,48 +461,6 @@
   color: var(--success);
   flex-shrink: 0;
 }
-/* Wrapper input avec toggle */
-.inputWrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-/* Input avec espace pour le bouton toggle */
-.inputWithToggle {
-  padding-right: 40px !important; /* Espace pour l'icône œil */
-}
-
-/* Bouton toggle password */
-.togglePassword {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: #6b7280; /* gray-500 */
-  cursor: pointer;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.2s ease;
-  z-index: 2;
-}
-
-.togglePassword:hover {
-  color: var(--primary); /* blue-500 */
-}
-
-
-
-/* Désactiver le hover sur mobile */
-@media (hover: none) {
-  .togglePassword:hover {
-    color: #6b7280;
-  }
-}
 
 .securityTitle {
   font-weight: 600;

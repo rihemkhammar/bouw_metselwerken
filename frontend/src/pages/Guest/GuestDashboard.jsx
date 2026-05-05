@@ -1,15 +1,26 @@
 import React from "react";
+
+
 import Footer from "../../components/layout/Footer/Footer";
 import GeoMap from "../../components/layout/map/map";
 import Project from "../../components/layout/project/project";
 import Service from "../../components/layout/service/service";
 
+import About from "./sections/About";
+import Header from "./sections/Header";
+
 import AOS from "aos";
 import "aos/dist/aos.css";
-import Header from "./sections/Header";
-import About from "./sections/About";
 
-const GuestDashboard = () => {
+import "aos/dist/aos.css";
+
+
+const GuestPage = () => {
+
+
+
+
+
   React.useEffect(() => {
     AOS.init({
       offset: 200,
@@ -20,15 +31,19 @@ const GuestDashboard = () => {
   });
   return (
     <>
+
     <Header/>
     <About/>
     <Service/>
     <Project/>
     <GeoMap/>
     <Footer />
+
       
     </>
   );
 };
 
-export default GuestDashboard;
+
+export default GuestPage;
+

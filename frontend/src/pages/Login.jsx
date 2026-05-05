@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer/Footer";
 import Header from "./Guest/sections/Header";
+import { login } from "../services/api";
+
 import { assets } from "../assets/assets";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
@@ -11,11 +13,25 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = () => {
-    console.log("Email:", email);
-    console.log("Password:", password);
-  };
+    const handleLogin = async () => {
+    try {
+      const data = await login(email, password);
+      localStorage.setItem("token", data.token);
 
+      if (data.user.role === "ADMIN") {
+        window.location.href = "/admin/dashboard";
+      } else if (data.user.role === "CHEF") {
+        window.location.href = "/chef/dashboard";
+      } else if (data.user.role === "CLIENT") {
+        window.location.href = "/client/dashboard";
+      }
+       else {
+      window.location.href = "/"; // fallback
+       }
+    } catch (err) {
+      alert(err.message);
+    }
+  };
   return (
     <div>
       <Navbar />

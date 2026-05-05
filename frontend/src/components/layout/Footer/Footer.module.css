@@ -49,7 +49,8 @@
 .column {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem; /* ↑ espace augmenté pour aérer avec les grosses polices */
+  gap: 1.2rem; 
+  margin-left: 15px;
 }
 
 .brand {
@@ -58,7 +59,7 @@
 
 /* ========== LOGO ========== */
 .logo {
-  width: 300px; /* ↑ légèrement plus grand */
+  width: 300px; 
   height: 200px;
   max-width: 100%;
   height: auto;
@@ -75,7 +76,7 @@
 
 /* ========== TITRES ========== */
 .heading {
-  font-size: 1.5rem; /* ↑ de 1.25rem à 1.5rem */
+  font-size: 1.5rem; 
   font-weight: 600;
   color: var(--standard-off-white, #ffffff);
   position: relative;
@@ -88,8 +89,8 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 50px; /* ↑ barre décorative plus longue */
-  height: 3px;  /* ↑ plus épaisse */
+  width: 50px; 
+  height: 3px;  
   background: var(--secondary);
   border-radius: 2px;
 }
@@ -99,8 +100,8 @@
   display: block;
   color: var(--standard-off-white, #adb5bd);
   text-decoration: none;
-  font-size: 1.5rem; /* ↑ de 0.95rem à 1.1rem */
-  padding: 0.5rem 0; /* ↑ espace vertical augmenté */
+  font-size: 1.5rem; 
+  padding: 0.5rem 0; 
   transition: all 0.25s ease;
   position: relative;
   padding-left: 1.3rem;
@@ -131,7 +132,7 @@
 .contactList {
   display: flex;
   flex-direction: column;
-  gap: 1.1rem; /* ↑ espace entre contacts */
+  gap: 1.1rem; 
   font-style: normal;
   
 }
@@ -139,12 +140,12 @@
 .contactItem {
   display: flex;
   align-items: flex-start;
-  gap: 0.9rem; /* ↑ espace icône/texte */
+  gap: 0.9rem; 
 }
 
 .icon {
   color: var(--standard-off-white);
-  font-size: 1.5rem; /* ↑ icônes plus grandes */
+  font-size: 1.5rem; 
   min-width: 24px;
   margin-top: 4px;
   display: flex;
@@ -153,7 +154,7 @@
 
 .contactText,
 .contactLink {
-  font-size: 1.5rem; /* ↑ de 0.95rem à 1.05rem */
+  font-size: 1.5rem; 
   color: var(--standard-off-white, #adb5bd);
   text-decoration: none;
   line-height: 1.6;
@@ -175,7 +176,7 @@
 }
 
 .socialIcon {
-  width: 48px; /* ↑ de 42px à 48px */
+  width: 48px;
   height: 48px;
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.1);
@@ -189,7 +190,7 @@
 }
 
 .socialIcon svg {
-  width: 22px; /* ↑ icônes SVG plus grandes */
+  width: 22px;
   height: 22px;
 }
 
@@ -208,7 +209,7 @@
   justify-content: center;
   gap: 1.2rem;
   padding-top: 1.75rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.15); /* ↑ bordure plus visible */
+  border-top: 1px solid rgba(255, 255, 255, 0.15); 
   text-align: center;
 }
 
@@ -221,7 +222,7 @@
 }
 
 .bottom p {
-  font-size: 1rem; /* ↑ de 0.9rem à 1rem */
+  font-size: 1rem;
   color: var(--standard-off-white, #adb5bd);
   margin: 0;
   line-height: 1.5;
@@ -234,7 +235,7 @@
 
 /* ========== SCROLL TO TOP BUTTON ========== */
 .scrollTop {
-  width: 46px; /* ↑ légèrement plus grand */
+  width: 46px; 
   height: 46px;
   border-radius: 50%;
   background: var(--secondary);
@@ -283,14 +284,14 @@
 /* ========== RESPONSIVE TYPOGRAPHY - MOBILE ========== */
 @media (max-width: 575px) {
   .heading {
-    font-size: 1.5rem; /* ↑ pour mobile aussi */
+    font-size: 1.5rem; 
   }
   
   .link,
   .contactText,
   .contactLink,
   .description {
-    font-size: 1rem; /* ↑ lisible sur petit écran */
+    font-size: 1rem; 
   }
   
   .logo {

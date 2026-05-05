@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import { 
   FaLock, FaUser, FaHashtag, FaInfoCircle, FaCheckCircle, 
   FaExclamationCircle, FaShieldAlt, FaBook, FaPhone, FaEnvelope,
-  FaChevronRight, FaUserPlus, FaEye, FaEyeSlash  // ← AJOUT : Icônes pour voir/masquer
+  FaChevronRight,FaUserPlus 
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import styles from "./activer_compte.module.css";
-import { login } from "../../../services/authClientService";
 
 const CompteForm = () => {
   const [form, setForm] = useState({ login: '', matricule: '', password: '' });
@@ -14,7 +13,6 @@ const CompteForm = () => {
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // ← NOUVEAU : Toggle visibilité password
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,9 +32,8 @@ const CompteForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const validationErrors = validate();
-
+    
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
@@ -44,28 +41,25 @@ const CompteForm = () => {
 
     setLoading(true);
     setServerError('');
-
+    
     try {
-      const res = await login(
-        form.login,
-        form.matricule,
-        form.password
-      );
-
-      console.log("✅ Success:", res);
+      // ⚠️ Remplacez par votre appel API réel
+      await new Promise(res => setTimeout(res, 1200));
+      
       setShowSuccess(true);
-
-      setTimeout(() => {
-        window.location.href = "/client_dashboard";
-      }, 1000);
-
-    } catch (err) {
-      setServerError(err.message);
+      console.log('✅ Authentification réussie:', form);
+      // window.location.href = '/espace-contribuable';
+      
+    } catch {
+      setServerError('Identifiants incorrects ou problème de connexion.');
     } finally {
       setLoading(false);
     }
   };
+
+  
  
+
   const contactSupport = [
     { icon: FaPhone, label: "Support technique", value: "(+32) 465 51 361", href: "tel:+3246551361" },
     { icon: FaEnvelope, label: "Assistance", value: "gharredam@gmail.com", href: "mailto:gharredam@gmail.com" }
@@ -177,26 +171,15 @@ const CompteForm = () => {
                 <input
                   id="password"
                   name="password"
-                  type={showPassword ? "text" : "password"}  // ← CHANGÉ : type dynamique
+                  type="password"
                   value={form.password}
                   onChange={handleChange}
                   placeholder="••••••••"
                   autoComplete="current-password"
-                  className={`${styles.input} ${styles.inputWithToggle} ${errors.password ? styles.inputError : ''}`}
+                  className={`${styles.input} ${errors.password ? styles.inputError : ''}`}
                   aria-invalid={!!errors.password}
                   aria-describedby={errors.password ? "password-error" : undefined}
                 />
-                
-                {/* 👁️ BOUTON TOGGLE VISIBILITÉ */}
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(prev => !prev)}
-                  className={styles.togglePassword}
-                  aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
-                  tabIndex={-1}
-                >
-                  {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
-                </button>
               </div>
               {errors.password && (
                 <p id="password-error" className={styles.errorMessage} role="alert">
@@ -225,7 +208,7 @@ const CompteForm = () => {
             </button>
 
             <p className={styles.formFooter}>
-              🔒 Connexion sécurisée • Vos données sont confidentielles • 
+              🔒 Connexion sécurisée •Vos données sont confidentielles• 
               <a href="/ForgotPassword">Mot de passe oublié ?</a>
             </p>
           </form>
@@ -237,10 +220,10 @@ const CompteForm = () => {
           {/* Carte Guide */}
           <div className={styles.guideCard}>
             <h2 className={styles.guideTitle}>
-              <span className={styles.guideIcon} aria-hidden="true"><FaUserPlus size={18} /></span>
+              <span className={styles.guideIcon} aria-hidden="true"><FaUserPlus  size={18} /></span>
               Votre espace projet client
             </h2>
-           <p className={styles.text}>Pour accéder à votre espace client, suivre l'avancement de votre projet ainsi que consulter l'évaluation des travaux réalisés, vous devez disposer d'un compte.
+           <p className={styles.text}>Pour accéder à votre espace client, suivre l’avancement de votre projet ainsi que consulter l’évaluation des travaux réalisés, vous devez disposer d’un compte.
            </p>
 <p className={styles.text}>Si vous êtes déjà client chez nous, veuillez effectuer une demande en remplissant le formulaire de création de compte.</p>
 
@@ -280,6 +263,8 @@ const CompteForm = () => {
               🕒 Lun-Ven : 8h00 - 17h00 • Réponse sous 24h
             </p>
           </div>
+
+         
 
         </div>
       </div>

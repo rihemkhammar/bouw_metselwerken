@@ -5,7 +5,6 @@ import Contact from "./pages/Contact/Contact";
 import  Login  from "./pages/Login";
 import Compte from "./pages/Activer_Compte/activer_compte";
 import ForgotPassword from "./pages/Activer_Compte/mp_oublie";
-import Dashboard from "./pages/clientdashboard";
 
 export default function AppRoutes() {
   return (
@@ -15,8 +14,6 @@ export default function AppRoutes() {
        <Route path="/login" element={<Login />} />
         <Route path="/Activer_Compte" element={<Compte />} />
         <Route path="/ForgotPassword" element={<ForgotPassword/>}/>
-         <Route path="/client_dashboard" element={<Dashboard/>}/>
-        
     </Routes>
   );
 }
