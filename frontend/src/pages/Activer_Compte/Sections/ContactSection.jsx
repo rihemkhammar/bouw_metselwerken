@@ -4,17 +4,16 @@ import {
   FaCheckCircle, FaExclamationCircle, FaChevronRight, FaUserPlus 
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { requestAccountCreation } from "../../../services/api"; // ✅ Import corrigé
+import { requestAccountCreation } from "../../../services/api"; 
 import styles from "./activer_compte.module.css";
 
 const CompteForm = () => {
-  // ✅ Champs alignés avec le backend
   const [form, setForm] = useState({
-    name: '',              // ✅ Nom complet (requis)
-    email: '',             // ✅ Email (requis)
-    phone: '',             // ✅ Optionnel
-    companyName: '',       // ✅ Optionnel
-    description: ''        // ✅ Optionnel (message complémentaire)
+    name: '',              
+    email: '',             
+    phone: '',             
+    companyName: '',       
+    description: ''        
   });
   
   const [errors, setErrors] = useState({});
@@ -33,7 +32,7 @@ const CompteForm = () => {
     setShowSuccess(false);
   };
 
-  // ✅ Validation minimale (cohérente avec le backend)
+ 
   const validate = () => {
     const errs = {};
     if (!form.name.trim()) errs.name = "Le nom complet est requis";
@@ -66,10 +65,10 @@ const CompteForm = () => {
       console.log("✅ Signup réussi:", res);
       setShowSuccess(true);
 
-      // ✅ Redirection après succès
-      setTimeout(() => {
+     
+      /*setTimeout(() => {
         window.location.href = "/account-request-confirmation";
-      }, 2000);
+      }, 2000);*/
 
     } catch (err) {
       console.error("❌ Signup error:", err);
@@ -88,7 +87,7 @@ const CompteForm = () => {
     <section className={styles.wrapper}>
       <div className={styles.container}>
         
-        {/* 🔐 COLONNE GAUCHE : Formulaire */}
+        {/* COLONNE GAUCHE : Formulaire */}
         <div className={styles.formCard}>
           
           <header className={styles.header}>
@@ -124,10 +123,10 @@ const CompteForm = () => {
 
           <form onSubmit={handleSubmit} className={styles.form} noValidate>
             
-            {/* ✅ Nom complet (name) */}
+            {/*  Nom complet (name) */}
             <div className={styles.fieldGroup}>
               <label htmlFor="name" className={`${styles.label} ${styles.labelRequired}`}>
-                Nom complet du responsable *
+                Nom complet du responsable 
               </label>
               <div className={styles.inputWrapper}>
                 <span className={styles.inputIcon}><FaUser size={16} /></span>
@@ -151,10 +150,10 @@ const CompteForm = () => {
               )}
             </div>
 
-            {/* ✅ Email */}
+            {/* Email */}
             <div className={styles.fieldGroup}>
               <label htmlFor="email" className={`${styles.label} ${styles.labelRequired}`}>
-                Email professionnel *
+                Email professionnel 
               </label>
               <div className={styles.inputWrapper}>
                 <span className={styles.inputIcon}><FaEnvelope size={16} /></span>
@@ -178,7 +177,7 @@ const CompteForm = () => {
               )}
             </div>
 
-            {/* ✅ Téléphone (optionnel) */}
+            {/* Téléphone (optionnel) */}
             <div className={styles.fieldGroup}>
               <label htmlFor="phone" className={styles.label}>
                 Téléphone de contact
@@ -198,7 +197,7 @@ const CompteForm = () => {
               </div>
             </div>
 
-            {/* ✅ Nom entreprise (optionnel) */}
+            {/* Nom entreprise (optionnel) */}
             <div className={styles.fieldGroup}>
               <label htmlFor="companyName" className={styles.label}>
                 Raison sociale de l'entreprise
@@ -218,7 +217,7 @@ const CompteForm = () => {
               </div>
             </div>
 
-            {/* ✅ Description / Message (optionnel) */}
+            {/* Description / Message (optionnel) */}
             <div className={styles.fieldGroup}>
               <label htmlFor="description" className={styles.label}>
                 Message complémentaire (optionnel)
@@ -234,7 +233,7 @@ const CompteForm = () => {
               />
             </div>
 
-            {/* ✅ Bouton d'envoi */}
+            {/* Bouton d'envoi */}
             <button
               type="submit"
               disabled={loading}
@@ -260,7 +259,7 @@ const CompteForm = () => {
           </form>
         </div>
 
-        {/* 📘 COLONNE DROITE : Guide */}
+        {/*  COLONNE DROITE : Guide */}
         <div className={styles.infoColumn}>
           <div className={styles.guideCard}>
             <h2 className={styles.guideTitle}>
@@ -268,12 +267,12 @@ const CompteForm = () => {
               Comment ça marche ?
             </h2>
             
-            <ol className={styles.stepsList}>
+            <ul className={styles.stepsList}>
               <li>Remplissez ce formulaire avec vos informations professionnelles</li>
               <li>Notre équipe vérifie votre demande sous 24h ouvrées</li>
               <li>Vous recevez un email avec vos identifiants d'accès</li>
               <li>Connectez-vous à votre espace client sécurisé</li>
-            </ol>
+            </ul>
             
             <p className={styles.text}>
               <strong>Avantages de votre espace client :</strong>

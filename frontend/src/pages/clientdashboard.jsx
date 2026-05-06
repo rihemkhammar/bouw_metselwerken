@@ -8,11 +8,11 @@ import {
 } from "react-icons/fa";
 import Sidebar from "../components/client/sidebar"
 
-const Dashboard = () => {
+const ClientDashboard = () => {
   return (
     <>
     <Sidebar/>
-    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="min-h-screen bg-gray-100 p-6">
 
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
@@ -65,4 +65,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default ClientDashboard;

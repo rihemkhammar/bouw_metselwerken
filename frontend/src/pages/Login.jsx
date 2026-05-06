@@ -23,7 +23,7 @@ const Login = () => {
       } else if (data.user.role === "CHEF") {
         window.location.href = "/chef/dashboard";
       } else if (data.user.role === "CLIENT") {
-        window.location.href = "/client/dashboard";
+        window.location.href = "/client_dashboard";
       }
        else {
       window.location.href = "/"; // fallback

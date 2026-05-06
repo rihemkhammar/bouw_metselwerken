@@ -24,3 +24,30 @@ export const login = (login, matricule, password) => {
     }, 1000); 
   });
 };
+export const requestAccountCreation = async ({ 
+  name, 
+  email, 
+  phone, 
+  companyName, 
+  description 
+}) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (!name || !email) {
+        reject({ error: "Name and email are required" });
+      } else {
+        resolve({
+          message: "Account request sent successfully (static)",
+          data: {
+            name,
+            email,
+            phone,
+            companyName,
+            description,
+            status: "PENDING"
+          }
+        });
+      }
+    }, 1000); // simulate delay
+  });
+};
