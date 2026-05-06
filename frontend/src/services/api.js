@@ -19,3 +19,12 @@ export const login = async (email, password) => {
   return handleResponse(res);
 };
 
+// create chef 
+export const createChef = async (chefData) => {
+  const res = await fetch(`${API_URL}/admin/chefs/create`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(chefData),
+  });
+  return handleResponse(res);
+};

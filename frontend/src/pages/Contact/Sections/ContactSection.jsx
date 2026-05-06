@@ -8,9 +8,6 @@ import {
   FaWater, FaLeaf, FaBrush, FaRulerCombined, FaIndustry
 } from "react-icons/fa";
 
-// ============================================================================
-// SERVICE SELECT COMPONENT (Improved Dropdown)
-// ============================================================================
 const services = [
   { value: "", label: "Sélectionnez un service", icon: null, disabled: true },
   { value: "masonry", label: "Maçonnerie", icon: FaBuilding, description: "Murs, fondations, structures" },
@@ -209,9 +206,6 @@ const ServiceSelect = ({ value, onChange, error, name, id }) => {
   );
 };
 
-// ============================================================================
-// MAIN CONTACT FORM COMPONENT
-// ============================================================================
 const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -224,7 +218,7 @@ const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
 
-  // ✅ UPDATED BUSINESS INFORMATION
+ 
   const businessInfo = {
     name: "A&M Gharred",
     phone: "+32 465 51 361",
