@@ -1,4 +1,7 @@
-import { createChefService } from "../services/adminService.js";
+import {
+  createChefService,
+  getChefsService,
+} from "../services/adminService.js";
 export const createChef = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -19,6 +22,19 @@ export const createChef = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const fetchChefs = async (req, res) => {
+  try {
+    const chefs = await getChefsService();
+    if (chefs.length === 0) {
+      return res.status(200).json({ message: "No Chefs yet" });
+    }
+  res.status(200).json(chefs);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch chefs" });
   }
 };

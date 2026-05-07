@@ -23,3 +23,16 @@ export const createChefService = async ({ name, email, password }) => {
 
   return newChef;
 };
+export const getChefsService = async()=>{
+   return prisma.user.findMany({
+   where: { role : "CHEF"} , 
+   select: {
+    id : true,
+    name: true ,
+    email:true , 
+    services:true , 
+    phone : true ,
+   }
+   })
+   
+}
