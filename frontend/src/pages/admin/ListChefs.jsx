@@ -32,16 +32,14 @@ const ListChefs = () => {
     );
   }
 
-  if (chefs.length === 0) {
-    return (
-      <div className="text-center py-12 bg-white rounded-lg shadow">
-        <p className="text-gray-500 text-lg">No chefs found</p>
-      </div>
-    );
-  }
-
   return (
     <AdminLayout pageTitle="Liste des Chefs">
+       {chefs.length === 0 ? (
+            <div className="text-center py-12 bg-white rounded-lg shadow">
+        <p className="text-gray-500 text-lg">Aucune chefs trouvée.</p>
+      </div>
+  
+      ) : (
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="p-6 border-b">
           <h2 className="text-xl font-bold text-gray-800">Liste des Chefs</h2>
@@ -110,6 +108,7 @@ const ListChefs = () => {
           </table>
         </div>
       </div>
+      )}
     </AdminLayout>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {logout } from "../../services/Logout"
+import { logout } from "../../services/Logout";
 import { Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -26,19 +26,44 @@ const defaultMenuItems = [
     label: "Chefs de services",
     icon: <Users size={20} />,
     children: [
-      { id: "create-chef", label: "Créer un compte", icon: <PlusCircle size={18} />, link: "/admin/chefs/create" },
-      { id: "list-chefs", label: "Liste des chefs", icon: <ListOrdered size={18} />, link: "/admin/chefs" },
+      {
+        id: "create-chef",
+        label: "Créer un compte",
+        icon: <PlusCircle size={18} />,
+        link: "/admin/chefs/create",
+      },
+      {
+        id: "list-chefs",
+        label: "Liste des chefs",
+        icon: <ListOrdered size={18} />,
+        link: "/admin/chefs",
+      },
     ],
   },
   {
     id: "clients",
     label: "Clients",
     icon: <Users size={20} />,
-        children: [
-      { id: "requests-clients", label: "requests des clients ", icon: <PlusCircle size={18} />, link: "/admin/clients/demandes" },
-      { id: "list-clients", label: "liste des clients", icon: <ListOrdered size={18} />, link: "/admin/clients" },
-      { id: "contact-clients", label: " future client contact us ", icon: <ListOrdered size={18} />, link: "/admin/clients/contactService" },
+    children: [
+      {
+        id: "requests-clients",
+        label: "requests des clients ",
+        icon: <PlusCircle size={18} />,
+        link: "/admin/clients/demandes",
+      },
+      {
+        id: "list-clients",
+        label: "liste des clients",
+        icon: <ListOrdered size={18} />,
+        link: "/admin/clients",
+      },
     ],
+  },
+  {
+    id: "contact-requests",
+    label: "Contact Requests",
+    icon: <ListOrdered size={18} />,
+    link: "/admin/guests/demandes",
   },
   {
     id: "settings",
@@ -47,7 +72,6 @@ const defaultMenuItems = [
     link: "/settings",
   },
 ];
-
 
 export default function Sidebar({ menuItems = defaultMenuItems, onToggle }) {
   const [isOpen, setIsOpen] = useState(() => {
@@ -94,28 +118,41 @@ export default function Sidebar({ menuItems = defaultMenuItems, onToggle }) {
 
           return (
             <div key={item.id}>
-              {/* Parent item */}
-              <button
-                onClick={() => (hasChildren ? toggleMenu(item.id) : null)}
-                className={`group flex items-center w-full px-3 py-2.5 rounded-lg transition-all duration-200
-                  ${isActive ? "bg-blue-600 text-white shadow-md" : "text-slate-300 hover:bg-slate-700 hover:text-white"}`}
-              >
-                <span className="flex-shrink-0">{item.icon}</span>
-                <span
-                  className={`ml-3 flex-1 text-left ${
-                    isOpen ? "opacity-100" : "opacity-0"
-                  }`}
+              {hasChildren ? (
+                // Parent with children stays a button
+                <button
+                  onClick={() => toggleMenu(item.id)}
+                  className={`group flex items-center w-full px-3 py-2.5 rounded-lg transition-all duration-200
+            ${isActive ? "bg-blue-600 text-white shadow-md" : "text-slate-300 hover:bg-slate-700 hover:text-white"}`}
                 >
-                  {item.label}
-                </span>
-                {hasChildren &&
-                  isOpen &&
-                  (openMenus[item.id] ? (
-                    <ChevronUp size={16} />
-                  ) : (
-                    <ChevronDown size={16} />
-                  ))}
-              </button>
+                  <span className="flex-shrink-0">{item.icon}</span>
+                  <span
+                    className={`ml-3 flex-1 text-left ${isOpen ? "opacity-100" : "opacity-0"}`}
+                  >
+                    {item.label}
+                  </span>
+                  {isOpen &&
+                    (openMenus[item.id] ? (
+                      <ChevronUp size={16} />
+                    ) : (
+                      <ChevronDown size={16} />
+                    ))}
+                </button>
+              ) : (
+                // ✅ Direct link for items without children
+                <Link
+                  to={item.link}
+                  className={`group flex items-center w-full px-3 py-2.5 rounded-lg transition-all duration-200
+            ${isActive ? "bg-blue-600 text-white shadow-md" : "text-slate-300 hover:bg-slate-700 hover:text-white"}`}
+                >
+                  <span className="flex-shrink-0">{item.icon}</span>
+                  <span
+                    className={`ml-3 flex-1 text-left ${isOpen ? "opacity-100" : "opacity-0"}`}
+                  >
+                    {item.label}
+                  </span>
+                </Link>
+              )}
 
               {/* Children items */}
               {hasChildren && openMenus[item.id] && isOpen && (
@@ -125,11 +162,11 @@ export default function Sidebar({ menuItems = defaultMenuItems, onToggle }) {
                       key={child.id}
                       to={child.link}
                       className={`flex items-center px-3 py-2 rounded-lg text-sm
-          ${
-            location.pathname === child.link
-              ? "bg-blue-500 text-white"
-              : "text-slate-300 hover:bg-slate-700 hover:text-white"
-          }`}
+                ${
+                  location.pathname === child.link
+                    ? "bg-blue-500 text-white"
+                    : "text-slate-300 hover:bg-slate-700 hover:text-white"
+                }`}
                     >
                       <span className="flex-shrink-0 mr-2">{child.icon}</span>
                       {child.label}

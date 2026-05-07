@@ -65,3 +65,15 @@ export const sendContactRequest = async (formData) => {
   });
   return handleResponse(res);
 };
+// get list guests requests 
+export const getGuests = async () => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/guests/demandes` , {
+        method: "GET",
+    headers: { "Content-Type": "application/json" ,
+    Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!res.ok) throw new Error("Failed to fetch guests");
+  return res.json();
+};

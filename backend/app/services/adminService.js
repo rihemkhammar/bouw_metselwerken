@@ -10,7 +10,6 @@ export const createChefService = async ({ name, email, password }) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  // Create new chef user
   const newChef = await prisma.user.create({
     data: {
       name,
@@ -53,6 +52,25 @@ export const getClientsService = async () => {
           id: true,
           title: true,
           status: true,
+        },
+      },
+    },
+  });
+};
+export const getGuestsService = async () => {
+  return prisma.user.findMany({
+    where: { role: "GUEST" },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      phone: true,
+      services: true,
+      requests: {
+        select: {
+          createdAt: true,   
+          status: true,      
+          description: true, 
         },
       },
     },
