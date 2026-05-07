@@ -35,4 +35,26 @@ export const getChefsService = async()=>{
    }
    })
    
-}
+};
+
+export const getClientsService = async () => {
+  return prisma.user.findMany({
+    where: { role: "CLIENT" },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      phone: true,
+      companyName: true,
+      address: true,
+      status: true,
+      projects: {
+        select: {
+          id: true,
+          title: true,
+          status: true,
+        },
+      },
+    },
+  });
+};

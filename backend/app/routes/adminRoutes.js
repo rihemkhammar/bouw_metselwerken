@@ -1,5 +1,5 @@
 import express from "express";
-import { createChef, fetchChefs} from "../controllers/adminController.js";
+import { createChef, fetchChefs , fetchClients} from "../controllers/adminController.js";
 import { authenticate } from "../middleware/auth.js";
 import { authorizeRoles } from "../middleware/role.js";
 
@@ -17,6 +17,12 @@ router.get(
   authenticate,
   authorizeRoles("ADMIN"),
   fetchChefs
+);
+router.get(
+"/clients",
+  authenticate,
+  authorizeRoles("ADMIN"),
+  fetchClients
 );
 
 export default router;
