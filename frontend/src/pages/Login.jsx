@@ -11,7 +11,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const handleLogin = async () => {
     try {
       const data = await login(email, password);
@@ -23,10 +23,9 @@ const Login = () => {
         window.location.href = "/chef/dashboard";
       } else if (data.user.role === "CLIENT") {
         window.location.href = "/client/dashboard";
+      } else {
+        window.location.href = "/"; // fallback
       }
-       else {
-      window.location.href = "/"; // fallback
-       }
     } catch (err) {
       alert(err.message);
     }
@@ -99,7 +98,7 @@ const Login = () => {
             {/* Helper Links */}
             <div className="w-3/4 mt-6 flex justify-between text-sm">
               <a
-                href="/forgot-password"
+                href="/ForgotPassword"
                 className="text-[#0073CF] hover:underline"
               >
                 Mot de passe oublié ?

@@ -8,6 +8,8 @@ import ForgotPassword from "./pages/Activer_Compte/mp_oublie";
 import Dashboard from "./pages/clientdashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import Chefcreate from "./pages/admin/CreateChef";
+import ListChefs from "./pages/admin/ListChefs";
+import ListClients from "./pages/admin/clients/ListClients";
 
 
 
@@ -23,6 +25,10 @@ export default function AppRoutes() {
          <Route path="/client_dashboard" element={<Dashboard/>}/>
           <Route path="/admin/dashboard" element={<AdminDashboard/>}/>
           <Route path="/admin/chefs/create" element={<Chefcreate/>}/>
+           <Route path="/admin/chefs" element={<ListChefs/>}/>
+           <Route path="/admin/clients" element={<ListClients/>}/>
+           
+          
           
        
 

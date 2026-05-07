@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import {logout } from "../../services/Logout"
 import { Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -26,14 +27,18 @@ const defaultMenuItems = [
     icon: <Users size={20} />,
     children: [
       { id: "create-chef", label: "Créer un compte", icon: <PlusCircle size={18} />, link: "/admin/chefs/create" },
-      { id: "list-chefs", label: "Liste des chefs", icon: <ListOrdered size={18} />, link: "/admin/chefs/list" },
+      { id: "list-chefs", label: "Liste des chefs", icon: <ListOrdered size={18} />, link: "/admin/chefs" },
     ],
   },
   {
     id: "clients",
     label: "Clients",
     icon: <Users size={20} />,
-    link: "/clients",
+        children: [
+      { id: "requests-clients", label: "requests des clients ", icon: <PlusCircle size={18} />, link: "/admin/clients/demandes" },
+      { id: "list-clients", label: "liste des clients", icon: <ListOrdered size={18} />, link: "/admin/clients" },
+      { id: "contact-clients", label: " future client contact us ", icon: <ListOrdered size={18} />, link: "/admin/clients/contactService" },
+    ],
   },
   {
     id: "settings",
@@ -138,8 +143,8 @@ export default function Sidebar({ menuItems = defaultMenuItems, onToggle }) {
       </nav>
 
       <div className="p-4 border-t border-slate-700">
-        <Link
-          to="/logout"
+        <button
+          onClick={logout}
           className="group flex items-center px-3 py-2.5 text-slate-300 hover:bg-red-600 hover:text-white rounded-lg transition-colors"
         >
           <LogOut size={20} className="flex-shrink-0" />
@@ -150,7 +155,7 @@ export default function Sidebar({ menuItems = defaultMenuItems, onToggle }) {
           >
             Déconnexion
           </span>
-        </Link>
+        </button>
       </div>
     </aside>
   );

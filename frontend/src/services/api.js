@@ -13,10 +13,14 @@ const handleResponse = async (res) => {
 export const login = async (email, password) => {
   const res = await fetch(`${API_URL}/login`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+       "Content-Type": "application/json",
+      },
     body: JSON.stringify({ email, password }),
   });
-  return handleResponse(res);
+  const data = await handleResponse(res);
+  localStorage.setItem("token" , data.token); //to save the token to  the after routes .
+  return data ; 
 };
 
 // create chef 
@@ -25,6 +29,28 @@ export const createChef = async (chefData) => {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(chefData),
+  });
+  return handleResponse(res);
+};
+// get all chefs
+export const getChefs = async () => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/chefs`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" ,
+    Authorization: `Bearer ${token}`,
+    },
+  });
+  return handleResponse(res);
+};
+// get all clients
+export const getClients = async () => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/clients`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" ,
+    Authorization: `Bearer ${token}`,
+    },
   });
   return handleResponse(res);
 };
