@@ -2,7 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import loginRoutes from "./app/routes/login.js";
 import cors from "cors";
-import adminRoutes from "./app/routes/adminRoutes.js"
+import adminRoutes from "./app/routes/adminRoutes.js";
+import guestRoutes from "./app/routes/guestRoutes.js";
 
 
 dotenv.config();
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/admin", adminRoutes);
+app.use(guestRoutes);
 /*
 app.use("/client", clientRoutes);
 app.use("/chef", chefRoutes);*/
