@@ -1,10 +1,7 @@
-// Import des services spécifiques
 import { signupService } from "./client/signupService.js";
+import { clientProfileService } from "./client/ClientprofileService.js";
 
 export const clientService = {
-  // Expose la méthode signup depuis signupService
-    registerClient: signupService.registerClient,
-
-  // Autres méthodes client à ajouter plus tard :
-  // getClientById, updateClientProfile, deleteClient, etc.
+  registerClient: signupService.registerClient,
+  getProfileById: clientProfileService.getProfileById,
 };

@@ -1,14 +1,77 @@
 import React, { useState, useEffect } from 'react';
 import {
-  LayoutDashboard, Users, Settings, LogOut, ChevronLeft, ChevronRight
+  LayoutDashboard, Users, Settings, LogOut, ChevronLeft, ChevronRight,Home,
+  UserCog,
+  FolderKanban,
+  Bell,
+  BarChart3,
+
+  Briefcase,
+ 
+  
+  MessageCircle,
+  Info,
+  User,
 } from 'lucide-react';
 
 const defaultMenuItems = [
-  { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={20} />, link: '/dashboard' },
-  { id: 'clients', label: 'Clients', icon: <Users size={20} />, link: '/clients' },
-  { id: 'settings', label: 'Paramètres', icon: <Settings size={20} />, link: '/settings' },
-];
+    {
+    id: "dashboard",
+    label: "Dashboard",
+    icon: <LayoutDashboard size={20} />,
+    link: "/dashboard",
+  },
 
+  {
+    id: "projects",
+    label: "Projects",
+    icon: <FolderKanban size={20} />,
+    link: "/projects",
+  },
+
+  {
+    id: "services",
+    label: "Nos Services",
+    icon: <Briefcase size={20} />,
+    link: "/services",
+  },
+
+  {
+    id: "team",
+    label: "Notre Équipe",
+    icon: <Users size={20} />,
+    link: "/team",
+  },
+
+  {
+    id: "notifications",
+    label: "Notifications",
+    icon: <Bell size={20} />,
+    link: "/notifications",
+  },
+
+  {
+    id: "messages",
+    label: "Envoyer Message",
+    icon: <MessageCircle size={20} />,
+    link: "/messages",
+  },
+
+  {
+    id: "about",
+    label: "À Propos",
+    icon: <Info size={20} />,
+    link: "/about",
+  },
+
+  {
+    id: "profile",
+    label: "Profile",
+    icon: <User size={20} />,
+    link: "/ClientProfilePage",
+  },
+
+];
 export default function Sidebar({ menuItems = defaultMenuItems, onToggle }) {
   // Initialisation sécurisée pour le SSR
   const [isOpen, setIsOpen] = useState(() => {
@@ -37,6 +100,7 @@ export default function Sidebar({ menuItems = defaultMenuItems, onToggle }) {
   const toggleSidebar = () => setIsOpen(prev => !prev);
 
   return (
+    
     <aside
       role="navigation"
       aria-expanded={isOpen}

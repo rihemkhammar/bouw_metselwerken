@@ -1,9 +1,7 @@
-// Import des contrôleurs spécifiques
 import { clientSignupController } from "./client/clientSignupController.js";
+import { clientProfileController } from "./client/clientProfileController.js";
 
 export const clientController = {
-  // Expose le handler signup
   signup: clientSignupController.handleSignup,
-
-  
+  getProfile: clientProfileController.getProfile,
 };

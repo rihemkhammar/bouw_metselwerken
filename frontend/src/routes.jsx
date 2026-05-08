@@ -6,6 +6,8 @@ import  Login  from "./pages/Login";
 import Compte from "./pages/Activer_Compte/activer_compte";
 import ClientDashboard from "./pages/clientdashboard";
 import ForgotPassword from "./pages/Activer_Compte/mp_oublie";
+import ClientProfilePage from "./pages/client/ClientProfilePage";
+
 
 export default function AppRoutes() {
   return (
@@ -16,6 +18,7 @@ export default function AppRoutes() {
         <Route path="/client_dashboard" element={<ClientDashboard/>}/>
         <Route path="/Activer_Compte" element={<Compte />} />
         <Route path="/ForgotPassword" element={<ForgotPassword/>}/>
+        <Route path="/ClientProfilePage" element={<ClientProfilePage/>}/>
     </Routes>
   );
 }
