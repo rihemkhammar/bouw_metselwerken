@@ -57,6 +57,7 @@ export const getClientsService = async () => {
     },
   });
 };
+
 export const getGuestsService = async () => {
   return prisma.user.findMany({
     where: { role: "GUEST" },
@@ -68,14 +69,17 @@ export const getGuestsService = async () => {
       services: true,
       requests: {
         select: {
-          createdAt: true,   
-          status: true,      
-          description: true, 
+          id: true,        
+          createdAt: true,
+          status: true,
+          description: true,
+          viewed: true       
         },
       },
     },
   });
 };
+
 
 export const approveClientRequest = async (requestId, adminId) => {
   const request = await prisma.request.findUnique({
@@ -100,7 +104,11 @@ export const approveClientRequest = async (requestId, adminId) => {
 
   await prisma.request.update({
     where: { id: requestId },
-    data: { status: "APPROVED", approvedBy: adminId }
+    data: {
+      status: "APPROVED",
+      approvedBy: adminId,
+      viewed: true  
+    }
   });
 
   await sendEmail({
@@ -121,6 +129,7 @@ L'équipe Admin`
   return { success: true };
 };
 
+
 export const getClientRequests = async () => {
   return prisma.request.findMany({
     where: {
@@ -140,5 +149,41 @@ export const getClientRequests = async () => {
       }
     },
     orderBy: { createdAt: "desc" }
+  });
+};
+export const declineClientRequest = async (requestId, adminId) => {
+  const request = await prisma.request.findUnique({
+    where: { id: requestId }
+  });
+
+  if (!request) {
+    throw new Error("Request not found");
+  }
+  if (request.status !== "PENDING") {
+    throw new Error("Request already processed");
+  }
+
+  await prisma.request.update({
+    where: { id: requestId },
+    data: {
+      status: "DECLINED",
+      approvedBy: adminId,
+      viewed: true   
+    }
+  });
+
+  return { success: true };
+};
+export const markGuestRequestViewedService = async (id) => {
+  return prisma.request.update({
+    where: { id },
+    data: { viewed: true }
+  });
+};
+
+export const markClientRequestViewedService = async (id) => {
+  return prisma.request.update({
+    where: { id },
+    data: { viewed: true }
   });
 };

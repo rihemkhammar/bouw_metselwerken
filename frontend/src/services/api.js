@@ -106,3 +106,24 @@ export const declineClientRequest = async (id) => {
   if (!res.ok) throw new Error("Failed to decline request");
   return res.json();
 };
+export const markGuestRequestViewed = async (id) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/guests/demandes/${id}/view`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  if (!res.ok) throw new Error("Failed to mark as viewed");
+  return res.json();
+};
+export const markClientRequestViewed = async (id) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/clients/demandes/${id}/view`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  if (!res.ok) throw new Error("Failed to mark client request as viewed");
+  return res.json();
+};
+
+
+

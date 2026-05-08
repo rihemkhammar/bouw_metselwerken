@@ -22,7 +22,12 @@ const NotificationsDropdown = () => {
     fetchData();
   }, []);
 
-  const totalCount = clientRequests.length + guestRequests.length;
+  const totalCount =
+    clientRequests.filter((req) => !req.viewed).length +
+    guestRequests.reduce(
+      (acc, guest) => acc + guest.requests.filter((r) => !r.viewed).length,
+      0,
+    );
 
   return (
     <div className="relative">
@@ -41,44 +46,30 @@ const NotificationsDropdown = () => {
       </button>
 
       {/* Dropdown */}
-      {open && (
-        <div className="absolute right-0 mt-2 w-72 bg-white shadow-lg rounded-lg border z-50">
-          <div className="p-3 border-b flex items-center justify-between">
-            <span className="font-semibold text-gray-700">Notifications</span>
-            <button
-              onClick={() => setOpen(false)}
-              className="text-gray-400 hover:text-red-500 transition-colors"
-              aria-label="Close notifications"
+      {clientRequests
+        .filter((req) => !req.viewed)
+        .map((req) => (
+          <Link
+            key={req.id}
+            to="/admin/clients/demandes"
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+          >
+            Client request: {req.user.name}
+          </Link>
+        ))}
+
+      {guestRequests.flatMap((guest) =>
+        guest.requests
+          .filter((r) => !r.viewed)
+          .map((r) => (
+            <Link
+              key={r.id}
+              to="/admin/guests/demandes"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
             >
-              ✕
-            </button>
-          </div>
-          <div className="max-h-64 overflow-y-auto">
-            {clientRequests.map((req) => (
-              <Link
-                key={req.id}
-                to="/admin/clients/demandes"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-              >
-                Client request: {req.user.name}
-              </Link>
-            ))}
-            {guestRequests.map((guest) => (
-              <Link
-                key={guest.id}
-                to="/admin/guests/demandes"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-              >
-                Guest request: {guest.name}
-              </Link>
-            ))}
-            {totalCount === 0 && (
-              <div className="px-4 py-2 text-sm text-gray-500">
-                No new requests
-              </div>
-            )}
-          </div>
-        </div>
+              Guest request: {guest.name}
+            </Link>
+          )),
       )}
     </div>
   );

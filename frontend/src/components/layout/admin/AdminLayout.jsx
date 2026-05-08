@@ -17,7 +17,7 @@ const AdminLayout = ({ children }) => {
         }`}
       >
         <Navbar isSidebarOpen={isSidebarOpen} />
-        <main className="p-6 pt-20">{children}</main>
+        <main className="p-6 pt-28">{children}</main>
       </div>
     </div>
   );

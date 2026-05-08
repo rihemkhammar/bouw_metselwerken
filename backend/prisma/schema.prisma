@@ -30,6 +30,7 @@ model Request {
   status    RequestStatus @default(PENDING)
   userId    String
   user      User     @relation(fields: [userId], references: [id])
+   viewed      Boolean       @default(false)   
   createdAt DateTime @default(now())
   approvedBy String? // admin who approved
   description String? 

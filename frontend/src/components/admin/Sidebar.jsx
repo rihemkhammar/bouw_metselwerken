@@ -65,7 +65,7 @@ const defaultMenuItems = [
   },
   {
     id: "contact-requests",
-    label: "Contact Requests",
+    label: "Demandes Des Services",
     icon: <MailQuestion size={18} />,
     link: "/admin/guests/demandes",
   },

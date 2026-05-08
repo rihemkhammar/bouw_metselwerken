@@ -4,15 +4,19 @@ import {
   getClientsService,
   getGuestsService,
   approveClientRequest,
+  declineClientRequest,
   getClientRequests,
+  markGuestRequestViewedService,
+  markClientRequestViewedService
 } from "../services/adminService.js";
+
+
+
 export const createChef = async (req, res) => {
   const { name, email, password } = req.body;
-
   if (!name || !email || !password) {
     return res.status(400).json({ error: "Tous les champs sont requis" });
   }
-
   try {
     const chef = await createChefService({ name, email, password });
     res.status(201).json({
@@ -33,39 +37,30 @@ export const createChef = async (req, res) => {
 export const fetchChefs = async (req, res) => {
   try {
     const chefs = await getChefsService();
-    if (chefs.length === 0) {
-      return res.status(200).json({ message: "No Chefs yet" });
-    }
-    res.status(200).json(chefs);
+    res.status(200).json(chefs.length ? chefs : { message: "No Chefs yet" });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: "Failed to fetch chefs" });
   }
 };
+
 export const fetchClients = async (req, res) => {
   try {
     const clients = await getClientsService();
-    if (clients.length === 0) {
-      return res.status(200).json({ message: "No Clients yet" });
-    }
-    res.status(200).json(clients);
+    res.status(200).json(clients.length ? clients : { message: "No Clients yet" });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: "Failed to fetch clients" });
   }
 };
+
 export const fetchGuests = async (req, res) => {
   try {
     const guests = await getGuestsService();
-    if (!guests || guests.length === 0) {
-      return res.status(200).json({ message: "No guests yet" });
-    }
-    res.status(200).json(guests);
+    res.status(200).json(guests.length ? guests : { message: "No guests yet" });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to fetch clients" });
+    res.status(500).json({ error: "Failed to fetch guests" });
   }
 };
+
 export const fetchClientRequestsController = async (req, res) => {
   try {
     const requests = await getClientRequests();
@@ -77,6 +72,9 @@ export const fetchClientRequestsController = async (req, res) => {
 
 export const approveRequestController = async (req, res) => {
   try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
     const result = await approveClientRequest(req.params.id, req.user.id);
     res.json(result);
   } catch (err) {
@@ -84,3 +82,32 @@ export const approveRequestController = async (req, res) => {
   }
 };
 
+export const declineRequestController = async (req, res) => {
+  try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    const result = await declineClientRequest(req.params.id, req.user.id);
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+export const markGuestRequestViewedController = async (req, res) => {
+  try {
+    const updated = await markGuestRequestViewedService(req.params.id);
+    res.json(updated);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+export const markClientRequestViewedController = async (req, res) => {
+  try {
+    const updated = await markClientRequestViewedService(req.params.id);
+    res.json(updated);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};

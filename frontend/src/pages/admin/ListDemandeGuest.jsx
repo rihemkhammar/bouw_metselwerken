@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getGuests } from "../../services/api";
+import { getGuests, markGuestRequestViewed } from "../../services/api";
 import AdminLayout from "../../components/layout/admin/AdminLayout";
 
 const ListDemandeGuest = () => {
@@ -39,7 +39,7 @@ const ListDemandeGuest = () => {
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <div className="p-6 border-b">
             <h2 className="text-xl font-bold text-gray-800">
-              Contact Requests (Guests)
+               Demandes Des Services
             </h2>
           </div>
           <div className="overflow-x-auto">
@@ -94,12 +94,45 @@ const ListDemandeGuest = () => {
                         )}
                       </div>
                     </td>
+
                     <td className="px-6 py-4 whitespace-nowrap text-gray-600">
                       {guest.requests?.[0]?.createdAt
-                        ? new Date(
-                            guest.requests[0].createdAt
-                          ).toLocaleString()
+                        ? new Date(guest.requests[0].createdAt).toLocaleString()
                         : "—"}
+                    </td>
+                    <td className="px-6 py-4">
+                      {!guest.requests?.[0]?.viewed ? (
+                        <button
+                          onClick={async () => {
+                            try {
+                              await markGuestRequestViewed(
+                                guest.requests[0].id,
+                              );
+                              setGuests((prev) =>
+                                prev.map((g) =>
+                                  g.id === guest.id
+                                    ? {
+                                        ...g,
+                                        requests: [
+                                          { ...g.requests[0], viewed: true },
+                                        ],
+                                      }
+                                    : g,
+                                ),
+                              );
+                            } catch (err) {
+                              console.error("Error marking viewed:", err);
+                            }
+                          }}
+                          className="text-sm text-blue-600 hover:text-blue-800"
+                        >
+                          Marquer comme vu
+                        </button>
+                      ) : (
+                        <span className="text-sm text-green-600 font-medium">
+                          Vu
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))}

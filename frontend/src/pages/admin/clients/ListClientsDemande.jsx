@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getClientRequests, approveClientRequest, declineClientRequest } from "../../../services/api";
+import { getClientRequests, approveClientRequest, declineClientRequest , markClientRequestViewed } from "../../../services/api";
 import AdminLayout from "../../../components/layout/admin/AdminLayout";
 
 const ListClientsDemande = () => {
@@ -93,8 +93,31 @@ const handleApprove = async (id) => {
                         >
                           Remove
                         </button>
+                        
                       </div>
                     </td>
+                    <td className="px-6 py-4">
+  {!req.viewed && (
+    <button
+      onClick={async () => {
+        try {
+          await markClientRequestViewed(req.id);
+          setRequests((prev) =>
+            prev.map((r) =>
+              r.id === req.id ? { ...r, viewed: true } : r
+            )
+          );
+        } catch (err) {
+          console.error("Error marking client request viewed:", err);
+        }
+      }}
+      className="text-sm text-blue-600 hover:text-blue-800"
+    >
+      Mark as Viewed
+    </button>
+  )}
+</td>
+
                   </tr>
                 ))}
               </tbody>

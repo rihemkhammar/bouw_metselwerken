@@ -29,10 +29,10 @@ const Navbar = ({ isSidebarOpen = true, onToggleSidebar }) => {
           isSidebarOpen ? "left-64" : "left-20"
         } right-0`}
       >
-        <div className="flex items-center justify-between px-4 py-3 md:px-6">
+        <div className="flex items-center justify-between px-4 py-3 md:px-6 ">
           
           {/* Left: Logo + Mobile Toggle */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 ">
             {/* Mobile Sidebar Toggle */}
             <button
               onClick={onToggleSidebar}
