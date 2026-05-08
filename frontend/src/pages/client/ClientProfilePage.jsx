@@ -61,13 +61,13 @@ useEffect(() => {
   return (
     
     <div className="profile-fullpage">
-      <header className="profile-topbar">
+     {/* <header className="profile-topbar">
         <div className="topbar-left">
           <h1>Profil</h1>
           <span className="breadcrumb">Dashboard / Profil</span>
         </div>
-        {/* Bouton de modification supprimé */}
-      </header>
+        {/* Bouton de modification supprimé *//*}
+      </header>*/}
 
       <div className="profile-grid">
         <aside className="profile-identity-card">

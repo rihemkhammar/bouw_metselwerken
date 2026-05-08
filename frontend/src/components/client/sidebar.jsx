@@ -1,178 +1,214 @@
-import React, { useState, useEffect } from 'react';
+// src/components/Sidebar.jsx
+import React, { useState, useEffect } from "react";
+import { logout } from "../../services/Logout";
+import { Link, useLocation } from "react-router-dom";
 import {
-  LayoutDashboard, Users, Settings, LogOut, ChevronLeft, ChevronRight,Home,
+  LayoutDashboard,
+  Users,
+  Settings,
+  LogOut,
+  ChevronLeft,
+  ChevronRight,
+  Home,
   UserCog,
   FolderKanban,
   Bell,
   BarChart3,
-
   Briefcase,
- 
-  
   MessageCircle,
   Info,
   User,
-} from 'lucide-react';
+  ChevronUp,
+  ChevronDown,
+} from "lucide-react";
 
 const defaultMenuItems = [
-    {
+  {
     id: "dashboard",
     label: "Dashboard",
     icon: <LayoutDashboard size={20} />,
-    link: "/dashboard",
+    link: "/client/Dashboard",
   },
-
   {
     id: "projects",
     label: "Projects",
     icon: <FolderKanban size={20} />,
     link: "/projects",
   },
-
   {
     id: "services",
     label: "Nos Services",
     icon: <Briefcase size={20} />,
     link: "/services",
   },
-
   {
     id: "team",
     label: "Notre Équipe",
     icon: <Users size={20} />,
     link: "/team",
   },
-
   {
     id: "notifications",
     label: "Notifications",
     icon: <Bell size={20} />,
     link: "/notifications",
   },
-
   {
     id: "messages",
     label: "Envoyer Message",
     icon: <MessageCircle size={20} />,
     link: "/messages",
   },
-
   {
     id: "about",
     label: "À Propos",
     icon: <Info size={20} />,
     link: "/about",
   },
-
   {
     id: "profile",
     label: "Profile",
     icon: <User size={20} />,
-    link: "/ClientProfilePage",
+    link: "/client/ClientProfile",
   },
-
 ];
+
 export default function Sidebar({ menuItems = defaultMenuItems, onToggle }) {
-  // Initialisation sécurisée pour le SSR
   const [isOpen, setIsOpen] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('sidebar-state');
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("sidebar-state");
       return saved !== null ? JSON.parse(saved) : true;
     }
     return true;
   });
 
-  const [activePath, setActivePath] = useState('');
+  const [openMenus, setOpenMenus] = useState({});
+  const location = useLocation();
 
-  // Persistance & callback
   useEffect(() => {
-    localStorage.setItem('sidebar-state', JSON.stringify(isOpen));
+    localStorage.setItem("sidebar-state", JSON.stringify(isOpen));
     if (onToggle) onToggle(isOpen);
   }, [isOpen, onToggle]);
 
-  // Détection du chemin actif
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setActivePath(window.location.pathname);
-    }
-  }, []);
-
-  const toggleSidebar = () => setIsOpen(prev => !prev);
+  const toggleSidebar = () => setIsOpen((prev) => !prev);
+  const toggleMenu = (id) =>
+    setOpenMenus((prev) => ({ ...prev, [id]: !prev[id] }));
 
   return (
-    
-    <aside
-      role="navigation"
-      aria-expanded={isOpen}
-      className={`fixed top-0 left-0 h-screen bg-slate-800 text-slate-100 transition-all duration-300 ease-in-out z-50 flex flex-col shadow-xl
-        ${isOpen ? 'w-64' : 'w-20'}`}
-    >
-      {/* Bouton de bascule */}
-      <div className="flex items-center justify-end p-4">
-        <button
-          onClick={toggleSidebar}
-          aria-label={isOpen ? 'Réduire le menu' : 'Agrandir le menu'}
-          className="p-2 rounded-lg hover:bg-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          {isOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
-        </button>
-      </div>
+    <>
+      {/* Sidebar FIXE - toujours visible */}
+      <aside
+        role="navigation"
+        aria-expanded={isOpen}
+        className={`fixed top-0 left-0 h-screen bg-slate-800 text-slate-100 transition-all duration-300 ease-in-out z-50 flex flex-col shadow-xl
+          ${isOpen ? "w-64" : "w-20"}`}
+      >
+        {/* Bouton toggle */}
+        <div className="flex items-center justify-end p-4">
+          <button
+            onClick={toggleSidebar}
+            aria-label={isOpen ? "Réduire le menu" : "Agrandir le menu"}
+            className="p-2 rounded-lg hover:bg-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            {isOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
+          </button>
+        </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 px-3 py-2 space-y-1 overflow-y-auto">
-        {menuItems.map((item) => {
-          const isActive = activePath === item.link || activePath.startsWith(item.link + '/');
-          return (
-            <a
-              key={item.id}
-              href={item.link}
-              onClick={() => setActivePath(item.link)}
-              aria-current={isActive ? 'page' : undefined}
-              className={`group relative flex items-center px-3 py-2.5 rounded-lg transition-all duration-200
-                ${isActive
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'text-slate-300 hover:bg-slate-700 hover:text-white'
-                }`}
-            >
-              <span className="flex-shrink-0 transition-transform duration-200 group-hover:scale-110">
-                {item.icon}
-              </span>
-              
-              <span
-                className={`ml-3 whitespace-nowrap transition-all duration-200
-                  ${isOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2 pointer-events-none absolute'}`}
-              >
-                {item.label}
-                {item.badge && (
-                  <span className="ml-2 px-1.5 py-0.5 text-xs font-medium bg-blue-500 text-white rounded-full">
-                    {item.badge}
-                  </span>
+        {/* Menu */}
+        <nav className="flex-1 px-3 py-2 space-y-1 overflow-y-auto">
+          {menuItems.map((item) => {
+            const isActive = item.link && location.pathname.startsWith(item.link);
+            const hasChildren = item.children && item.children.length > 0;
+
+            return (
+              <div key={item.id}>
+                {hasChildren ? (
+                  <button
+                    onClick={() => toggleMenu(item.id)}
+                    className={`group flex items-center w-full px-3 py-2.5 rounded-lg transition-all duration-200
+                      ${isActive ? "bg-blue-600 text-white shadow-md" : "text-slate-300 hover:bg-slate-700 hover:text-white"}`}
+                  >
+                    <span className="flex-shrink-0">{item.icon}</span>
+                    <span
+                      className={`ml-3 flex-1 text-left whitespace-nowrap overflow-hidden transition-opacity duration-200
+                        ${isOpen ? "opacity-100" : "opacity-0"}`}
+                    >
+                      {item.label}
+                    </span>
+                    {isOpen &&
+                      (openMenus[item.id] ? (
+                        <ChevronUp size={16} className="flex-shrink-0" />
+                      ) : (
+                        <ChevronDown size={16} className="flex-shrink-0" />
+                      ))}
+                  </button>
+                ) : (
+                  <Link
+                    to={item.link}
+                    className={`group flex items-center w-full px-3 py-2.5 rounded-lg transition-all duration-200
+                      ${isActive ? "bg-blue-600 text-white shadow-md" : "text-slate-300 hover:bg-slate-700 hover:text-white"}`}
+                  >
+                    <span className="flex-shrink-0">{item.icon}</span>
+                    <span
+                      className={`ml-3 flex-1 text-left whitespace-nowrap overflow-hidden transition-opacity duration-200
+                        ${isOpen ? "opacity-100" : "opacity-0"}`}
+                    >
+                      {item.label}
+                    </span>
+                  </Link>
                 )}
-              </span>
 
-              {/* Tooltip en mode réduit */}
-              {!isOpen && (
-                <div className="absolute left-full ml-2 px-2 py-1 bg-slate-900 text-white text-sm rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
-                  {item.label}
-                </div>
-              )}
-            </a>
-          );
-        })}
-      </nav>
+                {/* Sous-menu */}
+                {hasChildren && openMenus[item.id] && isOpen && (
+                  <div className="ml-8 mt-1 space-y-1">
+                    {item.children.map((child) => (
+                      <Link
+                        key={child.id}
+                        to={child.link}
+                        className={`flex items-center px-3 py-2 rounded-lg text-sm
+                          ${
+                            location.pathname === child.link
+                              ? "bg-blue-500 text-white"
+                              : "text-slate-300 hover:bg-slate-700 hover:text-white"
+                          }`}
+                      >
+                        <span className="flex-shrink-0 mr-2">{child.icon}</span>
+                        {child.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </nav>
 
-      {/* Pied de page / Déconnexion */}
-      <div className="p-4 border-t border-slate-700">
-        <a
-          href="/logout"
-          className="group flex items-center px-3 py-2.5 text-slate-300 hover:bg-red-600 hover:text-white rounded-lg transition-colors"
-        >
-          <LogOut size={20} className="flex-shrink-0" />
-          <span className={`ml-3 whitespace-nowrap transition-all duration-200 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-            Déconnexion
-          </span>
-        </a>
-      </div>
-    </aside>
+        {/* Footer : Logout */}
+        <div className="p-4 border-t border-slate-700">
+          <button
+            onClick={logout}
+            className="group flex items-center w-full px-3 py-2.5 text-slate-300 hover:bg-red-600 hover:text-white rounded-lg transition-colors"
+          >
+            <LogOut size={20} className="flex-shrink-0" />
+            <span
+              className={`ml-3 whitespace-nowrap transition-opacity duration-200 ${
+                isOpen ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              Déconnexion
+            </span>
+          </button>
+        </div>
+      </aside>
+
+      {/* Overlay mobile (optionnel) */}
+      <div
+        className={`fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity duration-300 ${
+          isOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
+        }`}
+        onClick={toggleSidebar}
+        aria-hidden="true"
+      />
+    </>
   );
 }

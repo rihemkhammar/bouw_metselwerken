@@ -6,24 +6,22 @@ import {
   FaBell,
   FaCog
 } from "react-icons/fa";
-import Sidebar from "../components/client/sidebar.jsx"
-import ClientProfilePage from "../pages/client/ClientProfilePage.jsx"
+import Sidebar from "../../components/client/sidebar.jsx"
+import ClientProfilePage from "./ClientProfilePage.jsx"
 
 const ClientDashboard = () => {
   return (
     <>
-    <Sidebar/>
-    <ClientProfilePage/>
-   {/*
+    
       <div className="min-h-screen bg-gray-100 p-6">
 
-      {/* Header *//*}
+      
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Dashboard</h1>
         <FaBell className="text-gray-600 text-xl cursor-pointer" />
       </div>
 
-      {/* Cards *//*}
+   =
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
         <div className="bg-white p-4 rounded-lg shadow">
@@ -46,7 +44,7 @@ const ClientDashboard = () => {
 
       </div>
 
-      {/* Section activité *//*}
+      
       <div className="mt-6 bg-white p-4 rounded-lg shadow">
         <h2 className="font-semibold mb-3">Activité récente</h2>
         <ul className="space-y-2 text-gray-600">
@@ -56,14 +54,14 @@ const ClientDashboard = () => {
         </ul>
       </div>
 
-      {/* Settings button *//*}
+     
       <div className="mt-6 flex justify-end">
         <button className="flex items-center gap-2 bg-gray-800 text-white px-4 py-2 rounded">
           <FaCog /> Paramètres
         </button>
       </div>
 
-    </div>*/}
+    </div>
 
     </>
 
