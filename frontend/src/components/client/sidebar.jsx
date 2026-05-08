@@ -33,7 +33,7 @@ const defaultMenuItems = [
     id: "projects",
     label: "Projects",
     icon: <FolderKanban size={20} />,
-    link: "/projects",
+    link: "/client/projetes",
   },
   {
     id: "services",

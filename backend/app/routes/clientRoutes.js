@@ -15,5 +15,12 @@ router.get(
   authorizeRoles("CLIENT"),
   clientController.getProfile
 );
+//project
+router.get(
+  "/:userId/projects",
+  authenticate,
+  authorizeRoles("CLIENT"),
+  clientController.getClientProjects
+);
 
 export default router;

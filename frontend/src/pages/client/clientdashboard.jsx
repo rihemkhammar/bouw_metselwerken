@@ -7,12 +7,12 @@ import {
   FaCog
 } from "react-icons/fa";
 import Sidebar from "../../components/client/sidebar.jsx"
-import ClientProfilePage from "./ClientProfilePage.jsx"
+import ProjectList from "../client/ProjectList.jsx"
 
 const ClientDashboard = () => {
   return (
     <>
-    
+      
       <div className="min-h-screen bg-gray-100 p-6">
 
       
@@ -21,7 +21,7 @@ const ClientDashboard = () => {
         <FaBell className="text-gray-600 text-xl cursor-pointer" />
       </div>
 
-   =
+   
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
         <div className="bg-white p-4 rounded-lg shadow">

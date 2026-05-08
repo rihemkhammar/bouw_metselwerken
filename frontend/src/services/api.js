@@ -9,6 +9,16 @@ const handleResponse = async (res) => {
 };
 
 // Login
+{/*export const login = async (email, password) => {
+  const res = await fetch(`${API_URL}/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
+  const data = await handleResponse(res);
+  localStorage.setItem("token", data.token);
+  return data;
+};*/}
 export const login = async (email, password) => {
   const res = await fetch(`${API_URL}/login`, {
     method: "POST",
@@ -17,6 +27,7 @@ export const login = async (email, password) => {
   });
   const data = await handleResponse(res);
   localStorage.setItem("token", data.token);
+  localStorage.setItem("userId", data.user.id); 
   return data;
 };
 
@@ -132,6 +143,19 @@ export const requestAccountCreation = async ({
       companyName: companyName?.trim() || null,
       description: description?.trim() || null,
     }),
+  });
+  return handleResponse(res);
+};
+
+
+export const getProjects = async (userId) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/client/${userId}/projects`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
   });
   return handleResponse(res);
 };

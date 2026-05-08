@@ -10,6 +10,7 @@ export default function ClientLayout() {
   const breadcrumbMap = {
     "/client/Dashboard": { title: "Tableau de bord", parent: "Espace Client" },
     "/client/ClientProfile": { title: "Profil", parent: "Espace Client" },
+    "/client/projetes":{ title: "Mes Projets", parent: "Espace Client" },
     // Ajoutez d'autres routes ici
   };
 

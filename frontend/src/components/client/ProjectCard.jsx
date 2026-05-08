@@ -1,76 +1,131 @@
-import React from "react";
 
-const STATUS_CONFIG = {
-  en_cours: { label: 'En cours', color: 'var(--primary)', bg: 'rgba(0, 115, 207, 0.12)' },
-  termine:  { label: 'Terminé',  color: 'var(--success)', bg: 'rgba(40, 167, 69, 0.12)' },
-  en_pause: { label: 'En pause', color: 'var(--warning)', bg: 'rgba(255, 193, 7, 0.15)' },
-  annule:   { label: 'Annulé',   color: 'var(--error)',   bg: 'rgba(220, 53, 69, 0.12)' },
-};
 
-const ProjectCard = ({ project }) => {
-  const status = STATUS_CONFIG[project.status] || STATUS_CONFIG.en_cours;
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { formatCurrency, formatDate, getProgress, getStatusConfig, getServiceLabel } from '../../styles/formatters';
+import StatusBadge from './StatusBadge';
+
+export default function ProjectCard({ project }) {
+  const progress = getProgress(project);
+  const config = getStatusConfig(project.status);
+  
+  // Générer les initiales du chef de projet
+  const getInitials = (name) => {
+    return name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'CP';
+  };
 
   return (
-    <article className="bg-[var(--white)] rounded-xl border border-[var(--border)] p-5 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1">
-      
-      {/* En-tête */}
-      <div className="flex justify-between items-start mb-3">
-        <h3 className="text-lg font-semibold text-[var(--text)] leading-tight">
-          {project.name}
-        </h3>
-        <span
-          className="px-2.5 py-1 rounded-full text-xs font-semibold tracking-wide"
-          style={{ color: status.color, backgroundColor: status.bg }}
-        >
-          {status.label}
-        </span>
-      </div>
-
-      {/* Client */}
-      <p className="text-sm text-[var(--secondary-text)] mb-4">
-        👤 <span className="font-medium">{project.client}</span>
-      </p>
-
-      {/* Progression */}
-      <div className="mb-4">
-        <div className="flex justify-between text-xs mb-1">
-          <span className="text-[var(--gris)]">Progression</span>
-          <span className="font-medium text-[var(--text)]">
-            {project.progress}%
-          </span>
-        </div>
-
-        <div className="w-full bg-[var(--border)] rounded-full h-1.5 overflow-hidden">
-          <div
-            className="h-full rounded-full transition-all duration-500"
-            style={{
-              width: `${project.progress}%`,
-              backgroundColor: 'var(--primary)'
-            }}
-          />
+    <article 
+      className="bg-white rounded-xl shadow-sm border border-[var(--border)] overflow-hidden hover:shadow-md transition-all duration-200 group"
+      style={{ borderColor: 'var(--border)' }}
+    >
+      {/* Header avec statut */}
+      <div 
+        className="px-5 py-4 border-b"
+        style={{ backgroundColor: config.bg, borderColor: config.border }}
+      >
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex-1 min-w-0">
+            <h3 className="text-lg font-semibold text-[var(--text)] truncate">
+              {project.title}
+            </h3>
+            <p className="mt-1 text-sm text-[var(--secondary-text)] line-clamp-2">
+              {project.description}
+            </p>
+          </div>
+          <StatusBadge status={project.status} />
         </div>
       </div>
 
-      {/* Infos */}
-      <div className="flex items-center justify-between pt-3 border-t border-[var(--border)]">
+      {/* Contenu principal */}
+      <div className="px-5 py-4 space-y-4">
         
-        <div className="flex flex-col">
-          <span className="text-xs text-[var(--gris)]">💰 Budget</span>
-          <span className="text-sm font-bold text-[var(--secondary)]">
-            {Number(project.budget).toLocaleString('fr-FR')} €
-          </span>
+        {/* Budget & Service */}
+        <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center gap-2">
+            <span className="text-[var(--gris)]">💰</span>
+            <span className="font-semibold text-[var(--text)]">
+              {formatCurrency(project.budget)}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-[var(--gris)]">🔧</span>
+            <span className="text-[var(--secondary-text)]">
+              {getServiceLabel(project.services)}
+            </span>
+          </div>
         </div>
 
-        <div className="flex flex-col text-right">
-          <span className="text-xs text-[var(--gris)]">📅 Échéance</span>
-          <span className="text-sm font-medium text-[var(--secondary-text)]">
-            {new Date(project.deadline).toLocaleDateString('fr-FR')}
-          </span>
+        {/* Progress Bar (seulement si en cours) */}
+        {project.status === 'IN_PROGRESS' && (
+          <div className="space-y-2">
+            <div className="flex justify-between text-xs text-[var(--secondary-text)]">
+              <span>Progression</span>
+              <span className="font-medium">{progress}%</span>
+            </div>
+            <div className="h-2 bg-[var(--standard-off-white)] rounded-full overflow-hidden">
+              <div 
+                className="h-full rounded-full transition-all duration-500"
+                style={{ 
+                  width: `${progress}%`,
+                  background: 'linear-gradient(90deg, var(--primary), var(--primary-light))'
+                }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Chef de projet */}
+        <div className="flex items-center gap-3 pt-2 border-t" style={{ borderColor: 'var(--border)' }}>
+          <div 
+            className="w-10 h-10 rounded-full flex items-center justify-center text-white font-medium text-sm flex-shrink-0"
+            style={{ 
+              background: 'linear-gradient(135deg, var(--primary), var(--primary-light))' 
+            }}
+          >
+            {getInitials(project.chef?.name)}
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-[var(--text)] truncate">
+              {project.chef?.name || 'Non assigné'}
+            </p>
+            <p className="text-xs text-[var(--gris)] truncate">
+              {project.chef?.email || '-'}
+            </p>
+          </div>
         </div>
 
+        {/* Dernière mise à jour */}
+        {project.updates?.length > 0 && (
+          <div className="pt-2 border-t" style={{ borderColor: 'var(--border)' }}>
+            <p className="text-xs text-[var(--gris)] mb-1">
+              Dernière MAJ • {formatDate(project.updates[0].timestamp)}
+            </p>
+            <p className="text-sm text-[var(--secondary-text)] line-clamp-1">
+              {project.updates[0].details}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Footer avec actions */}
+      <div 
+        className="px-5 py-3 flex items-center justify-between"
+        style={{ backgroundColor: 'var(--standard-off-white)', borderTop: `1px solid var(--border)` }}
+      >
+        <span className="text-xs text-[var(--gris)] font-mono">
+          project id : #{project.id.slice(0, 8)}
+        </span>
+        <Link 
+          to={`/client/projects/${project.id}`}
+          className="text-sm font-medium transition-colors"
+          style={{ color: 'var(--primary)' }}
+          onMouseEnter={(e) => e.target.style.color = 'var(--primary-light)'}
+          onMouseLeave={(e) => e.target.style.color = 'var(--primary)'}
+        >
+          Voir détails →
+        </Link>
       </div>
     </article>
   );
-};
-
-export default ProjectCard;
+}
