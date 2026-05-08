@@ -3,6 +3,8 @@ import {
   getChefsService,
   getClientsService,
   getGuestsService,
+  approveClientRequest,
+  getClientRequests,
 } from "../services/adminService.js";
 export const createChef = async (req, res) => {
   const { name, email, password } = req.body;
@@ -64,3 +66,21 @@ export const fetchGuests = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch clients" });
   }
 };
+export const fetchClientRequestsController = async (req, res) => {
+  try {
+    const requests = await getClientRequests();
+    res.json(requests);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+export const approveRequestController = async (req, res) => {
+  try {
+    const result = await approveClientRequest(req.params.id, req.user.id);
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+

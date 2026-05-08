@@ -11,6 +11,7 @@ import Chefcreate from "./pages/admin/CreateChef";
 import ListChefs from "./pages/admin/ListChefs";
 import ListClients from "./pages/admin/clients/ListClients";
 import ListDemandeGuest from "./pages/admin/ListDemandeGuest"
+import ListClientsDemande from "./pages/admin/clients/ListClientsDemande";
 
 
 
@@ -28,6 +29,7 @@ export default function AppRoutes() {
            <Route path="/admin/chefs" element={<ListChefs/>}/>
            <Route path="/admin/clients" element={<ListClients/>}/>
           <Route path="/admin/guests/demandes" element={<ListDemandeGuest/>}/>
+           <Route path="/admin/clients/demandes" element={<ListClientsDemande/>}/>
            
           
           

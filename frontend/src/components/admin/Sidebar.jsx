@@ -12,6 +12,10 @@ import {
   ChevronUp,
   PlusCircle,
   ListOrdered,
+  ClipboardList,
+  MailQuestion,
+  UserCog,
+  UserSquare,
 } from "lucide-react";
 
 const defaultMenuItems = [
@@ -19,12 +23,12 @@ const defaultMenuItems = [
     id: "dashboard",
     label: "Dashboard",
     icon: <LayoutDashboard size={20} />,
-    link: "/dashboard",
+    link: "/admin/dashboard",
   },
   {
     id: "chefs",
     label: "Chefs de services",
-    icon: <Users size={20} />,
+    icon: <UserCog size={20} />,
     children: [
       {
         id: "create-chef",
@@ -43,12 +47,12 @@ const defaultMenuItems = [
   {
     id: "clients",
     label: "Clients",
-    icon: <Users size={20} />,
+    icon: <UserSquare size={20} />,
     children: [
       {
         id: "requests-clients",
         label: "requests des clients ",
-        icon: <PlusCircle size={18} />,
+        icon: <ClipboardList size={18} />,
         link: "/admin/clients/demandes",
       },
       {
@@ -62,7 +66,7 @@ const defaultMenuItems = [
   {
     id: "contact-requests",
     label: "Contact Requests",
-    icon: <ListOrdered size={18} />,
+    icon: <MailQuestion size={18} />,
     link: "/admin/guests/demandes",
   },
   {

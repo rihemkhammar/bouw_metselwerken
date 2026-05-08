@@ -1,5 +1,5 @@
 import express from "express";
-import { createChef, fetchChefs , fetchClients , fetchGuests} from "../controllers/adminController.js";
+import { createChef, fetchChefs , fetchClients , fetchGuests , approveRequestController , fetchClientRequestsController } from "../controllers/adminController.js";
 import { authenticate } from "../middleware/auth.js";
 import { authorizeRoles } from "../middleware/role.js";
 
@@ -29,6 +29,19 @@ router.get(
   authenticate,
   authorizeRoles("ADMIN"),
   fetchGuests
+);
+router.get(
+  "/clients/demandes",
+  authenticate,
+  authorizeRoles("ADMIN"),
+  fetchClientRequestsController 
+);
+
+router.post(
+  "/clients/demandes/:id/approve",
+  authenticate,
+  authorizeRoles("ADMIN"),
+  approveRequestController 
 );
 
 export default router;

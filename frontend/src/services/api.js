@@ -77,3 +77,32 @@ export const getGuests = async () => {
   if (!res.ok) throw new Error("Failed to fetch guests");
   return res.json();
 };
+
+export const getClientRequests = async () => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/clients/demandes`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  if (!res.ok) throw new Error("Failed to fetch client requests");
+  return res.json();
+};
+
+export const approveClientRequest = async (id) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/clients/demandes/${id}/approve`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  if (!res.ok) throw new Error("Failed to approve request");
+  return res.json();
+};
+
+export const declineClientRequest = async (id) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/clients/demandes/${id}/decline`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  if (!res.ok) throw new Error("Failed to decline request");
+  return res.json();
+};

@@ -108,11 +108,11 @@ const ListClients = () => {
                     <div className="flex gap-2">
                       <Link
                         to={`/admin/clients/${client.id}/edit`}
-                        className="text-blue-600 hover:text-blue-800"
+                        className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
                       >
                         Modifier
                       </Link>
-                      <button className="text-red-600 hover:text-red-800">
+                      <button className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
                         Supprimer
                       </button>
                     </div>
