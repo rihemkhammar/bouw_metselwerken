@@ -159,3 +159,15 @@ export const getProjects = async (userId) => {
   });
   return handleResponse(res);
 };
+// GET project detail (client)
+export const getProjectDetail = async (projectId, userId) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/client/${userId}/projects/${projectId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return handleResponse(res);
+};
