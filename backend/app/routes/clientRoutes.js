@@ -28,5 +28,10 @@ router.get(
   authorizeRoles("CLIENT"),
   clientController.getProjectDetail
 );
+router.get("/services", 
+  authenticate,
+  authorizeRoles("CLIENT"), 
+   clientController.getAllServices
+);
 
 export default router;

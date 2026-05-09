@@ -10,6 +10,8 @@ export default function ClientLayout() {
     "/client/Dashboard": { title: "Tableau de bord", parent: "Espace Client" },
     "/client/ClientProfile": { title: "Profil", parent: "Espace Client" },
     "/client/projetes": { title: "Mes Projets", parent: "Espace Client" },
+    "/client/Service": { title: "Nos service", parent: "Espace Client" },
+    "/client/Contact":  {title: "Contact" , parent: "Espace Client" }
   };
 
   // Routes qui gèrent leur propre header

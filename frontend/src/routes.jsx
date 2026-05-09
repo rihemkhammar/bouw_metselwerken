@@ -10,6 +10,9 @@ import ForgotPassword from "./pages/Activer_Compte/mp_oublie";
 import ClientProfilePage from "./pages/client/ClientProfilePage";
 import ClientLayout from "../src/components/layout/ClientLayout";
 import ProjectDetail from "../src/pages/client/ProjectDetail";
+import  Service from "../src/pages/client/Service";
+import  ClientContact from "../src/pages/client/Clientcontact";
+
 
 export default function AppRoutes() {
   return (
@@ -26,11 +29,13 @@ export default function AppRoutes() {
         <Route path="/client/Dashboard" element={<ClientDashboard />} />
         <Route path="/client/ClientProfile" element={<ClientProfilePage />} />
         <Route path="/client/projetes" element={<ProjectList/>}/>
-               <Route path="/client/projeteDetail/:projectId" element={<ProjectDetail/>}/>
+        <Route path="/client/projeteDetail/:projectId" element={<ProjectDetail/>}/>
+        <Route path="/client/Service" element={<Service/>}/>
+        <Route path="/client/Contact" element={<ClientContact/>}/>
 
         </Route>
         
-     
+    
     
 
         

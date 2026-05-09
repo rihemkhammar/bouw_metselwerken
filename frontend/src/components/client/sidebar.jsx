@@ -39,25 +39,14 @@ const defaultMenuItems = [
     id: "services",
     label: "Nos Services",
     icon: <Briefcase size={20} />,
-    link: "/services",
+    link: "/client/Service",
   },
+ 
   {
-    id: "team",
-    label: "Notre Équipe",
-    icon: <Users size={20} />,
-    link: "/team",
-  },
-  {
-    id: "notifications",
-    label: "Notifications",
-    icon: <Bell size={20} />,
-    link: "/notifications",
-  },
-  {
-    id: "messages",
+    id: " Contact",
     label: "Envoyer Message",
     icon: <MessageCircle size={20} />,
-    link: "/messages",
+    link: "/client/Contact",
   },
   {
     id: "about",
