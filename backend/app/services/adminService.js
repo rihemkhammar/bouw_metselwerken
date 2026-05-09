@@ -80,7 +80,6 @@ export const getGuestsService = async () => {
   });
 };
 
-
 export const approveClientRequest = async (requestId, adminId) => {
   const request = await prisma.request.findUnique({
     where: { id: requestId },
@@ -111,22 +110,8 @@ export const approveClientRequest = async (requestId, adminId) => {
     }
   });
 
-  await sendEmail({
-    to: request.user.email,
-    subject: "Votre compte a été activé",
-    body: `Bonjour ${request.user.name},
-
-Votre compte a été activé. Voici vos identifiants :
-- Email : ${request.user.email}
-- Mot de passe : ${plainPassword}
-
-Merci de vous connecter et de changer votre mot de passe dès la première connexion.
-
-Cordialement,
-L'équipe Admin`
-  });
-
-  return { success: true };
+  
+  return { success: true, request };
 };
 
 

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { getGuests, markGuestRequestViewed } from "../../services/api";
 import AdminLayout from "../../components/layout/admin/AdminLayout";
+import { toast } from "react-toastify";
 
 const ListDemandeGuest = () => {
   const [guests, setGuests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [processingId, setProcessingId] = useState(null);
 
   useEffect(() => {
     const fetchGuests = async () => {
@@ -28,6 +30,30 @@ const ListDemandeGuest = () => {
       </div>
     );
   }
+  const handleMarkViewed = async (guestId, requestId) => {
+    try {
+      setProcessingId(requestId);
+      await markGuestRequestViewed(requestId);
+      setGuests((prev) =>
+        prev.map((g) =>
+          g.id === guestId
+            ? {
+                ...g,
+                requests: [{ ...g.requests[0], viewed: true }],
+              }
+            : g,
+        ),
+      );
+      toast.info("Demande de guest marquée comme vue.");
+      const data = await getGuests();
+      setGuests(data);
+    } catch (err) {
+      console.error("Error marking guest request viewed:", err);
+      toast.error(err.message);
+    } finally {
+      setProcessingId(null);
+    }
+  };
 
   return (
     <AdminLayout pageTitle="Liste des demandes de Guests">
@@ -39,7 +65,7 @@ const ListDemandeGuest = () => {
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <div className="p-6 border-b">
             <h2 className="text-xl font-bold text-gray-800">
-               Demandes Des Services
+              Demandes Des Services
             </h2>
           </div>
           <div className="overflow-x-auto">
@@ -103,34 +129,28 @@ const ListDemandeGuest = () => {
                     <td className="px-6 py-4">
                       {!guest.requests?.[0]?.viewed ? (
                         <button
-                          onClick={async () => {
-                            try {
-                              await markGuestRequestViewed(
-                                guest.requests[0].id,
-                              );
-                              setGuests((prev) =>
-                                prev.map((g) =>
-                                  g.id === guest.id
-                                    ? {
-                                        ...g,
-                                        requests: [
-                                          { ...g.requests[0], viewed: true },
-                                        ],
-                                      }
-                                    : g,
-                                ),
-                              );
-                            } catch (err) {
-                              console.error("Error marking viewed:", err);
-                            }
-                          }}
-                          className="text-sm text-blue-600 hover:text-blue-800"
+                          onClick={() =>
+                            handleMarkViewed(guest.id, guest.requests[0].id)
+                          }
+                          disabled={processingId === guest.requests[0].id}
+                          className={`text-sm px-3 py-1 rounded ${
+                            processingId === guest.requests[0].id
+                              ? "bg-blue-400 text-white cursor-not-allowed"
+                              : "bg-blue-600 text-white hover:bg-blue-700"
+                          }`}
                         >
-                          Marquer comme vu
+                          {processingId === guest.requests[0].id ? (
+                            <span className="flex items-center">
+                              <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                              Processing...
+                            </span>
+                          ) : (
+                            "Marquer comme vu"
+                          )}
                         </button>
                       ) : (
                         <span className="text-sm text-green-600 font-medium">
-                          Vu
+                           Vu
                         </span>
                       )}
                     </td>

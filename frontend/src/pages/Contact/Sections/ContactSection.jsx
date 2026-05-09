@@ -123,6 +123,7 @@ const ServiceSelect = ({ value, onChange, error, name, id }) => {
       setSearchTerm("");
     }
   };
+  
 
   const handleKeyDown = (e, serviceValue) => {
     if (e.key === "Enter" || e.key === " ") {
@@ -352,20 +353,27 @@ const ContactForm = () => {
     { icon: FaClock, label: "Horaires", value: businessInfo.hours, href: null },
   ];
 
-  const validateForm = () => {
-    const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = "Le nom est requis";
-    if (!formData.phone.trim()) newErrors.phone = "Le téléphone est requis";
-    if (!formData.email.trim()) {
-      newErrors.email = "L'email est requis";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Email invalide";
-    }
-    if (!formData.service)
-      newErrors.service = "Veuillez sélectionner un service";
-    if (!formData.message.trim()) newErrors.message = "Le message est requis";
-    return newErrors;
-  };
+const validateForm = () => {
+  const newErrors = {};
+  if (!formData.name.trim()) newErrors.name = "Le nom est requis";
+  if (!formData.phone.trim()) newErrors.phone = "Le téléphone est requis";
+
+  if (!formData.email.trim()) {
+    newErrors.email = "L'email est requis";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    newErrors.email = "Email invalide";
+  }
+
+
+  if (!formData.services || formData.services.length === 0) {
+    newErrors.services = "Veuillez sélectionner au moins un service";
+  }
+
+  if (!formData.message.trim()) newErrors.message = "Le message est requis";
+
+  return newErrors;
+};
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -375,35 +383,45 @@ const ContactForm = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  console.log("➡️ handleSubmit déclenché"); // 🔥 log 1
 
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
+  const validationErrors = validateForm();
+  console.log("✅ Résultat validation:", validationErrors); // 🔥 log 2
 
-    setIsSubmitting(true);
-    setSubmitStatus(null);
+  if (Object.keys(validationErrors).length > 0) {
+    setErrors(validationErrors);
+    console.log("❌ Erreurs détectées, soumission annulée"); // 🔥 log 3
+    return;
+  }
 
-    try {
-      await sendContactRequest(formData); 
-      setSubmitStatus("success");
-      setFormData({
-        name: "",
-        phone: "",
-        email: "",
-        services: [], 
-        message: "",
-      });
-    } catch (error) {
-      console.error("Form submission error:", error);
-      setSubmitStatus("error");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  setIsSubmitting(true);
+  setSubmitStatus(null);
+  console.log("📤 Données envoyées:", formData); // 🔥 log 4
+
+  try {
+    const response = await sendContactRequest(formData);
+    console.log("✅ Réponse backend:", response); // 🔥 log 5
+
+    setSubmitStatus("success");
+    setFormData({
+      name: "",
+      phone: "",
+      email: "",
+      services: [],
+      message: "",
+    });
+    console.log("🎉 Formulaire réinitialisé"); // 🔥 log 6
+  } catch (error) {
+    console.error("❌ Erreur lors de l'envoi:", error); // 🔥 log 7
+    setSubmitStatus("error");
+  } finally {
+    setIsSubmitting(false);
+    console.log("🔄 isSubmitting remis à false"); // 🔥 log 8
+  }
+};
+
 
   return (
     <section className="bg-gradient-to-br from-gray-50 to-blue-50 py-16 px-4">

@@ -19,19 +19,24 @@ export const login = async (email, password) => {
     body: JSON.stringify({ email, password }),
   });
   const data = await handleResponse(res);
-  localStorage.setItem("token" , data.token); //to save the token to  the after routes .
+  localStorage.setItem("token" , data.token); 
   return data ; 
 };
 
 // create chef 
 export const createChef = async (chefData) => {
+  const token = localStorage.getItem("token"); 
   const res = await fetch(`${API_URL}/admin/chefs/create`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { 
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`, 
+    },
     body: JSON.stringify(chefData),
   });
   return handleResponse(res);
 };
+
 // get all chefs
 export const getChefs = async () => {
   const token = localStorage.getItem("token");
@@ -54,7 +59,7 @@ export const getClients = async () => {
   });
   return handleResponse(res);
 };
-// send contact request
+
 export const sendContactRequest = async (formData) => {
   const res = await fetch(`${API_URL}/contact`, {
     method: "POST",
@@ -93,9 +98,13 @@ export const approveClientRequest = async (id) => {
     method: "POST",
     headers: { Authorization: `Bearer ${token}` }
   });
-  if (!res.ok) throw new Error("Failed to approve request");
-  return res.json();
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.error || "Failed to approve request");
+  }
+  return data; 
 };
+
 
 export const declineClientRequest = async (id) => {
   const token = localStorage.getItem("token");

@@ -2,6 +2,8 @@ import { createGuestRequest } from "../services/guestService.js";
 
 export const submitGuestRequest = async (req, res) => {
   try {
+    console.log("Payload reçu:", req.body); // 🔥 debug
+
     const { name, email, phone, services, message, companyName, address } = req.body;
 
     if (!name || !email || !phone || !services?.length || !message) {
