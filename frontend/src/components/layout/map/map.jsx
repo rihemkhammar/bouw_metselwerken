@@ -118,7 +118,7 @@ export default function GeoMap({ onBubbleClick, onCountryHover }) {
   );
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container}  id="MAP">
       <div className={styles.wrapper}>
         {/* Carte */}
         <div className={styles.mapContainer} ref={containerRef}>
@@ -202,34 +202,25 @@ export default function GeoMap({ onBubbleClick, onCountryHover }) {
         {/* Description */}
         <div className={styles["description-container"]}>
           <div className={styles["description-header"]}>
-            <h2>Notre Expertise</h2>
+            <h2>A&M Gharred </h2>
             <span className={styles.subtitle}>Solutions Technologiques Sur Mesure</span>
           </div>
 
           <p>
-            Notre société est spécialisée dans la conception et le développement 
-            de solutions informatiques adaptées aux besoins des entreprises. Grâce 
-            à une expertise solide et une équipe qualifiée, nous accompagnons nos 
-            clients dans la réalisation de leurs projets technologiques.
+            Notre entreprise est une entreprise spécialisée dans les travaux de construction et de rénovation, récemment créée et dirigée par Gharred Hamza, qui bénéficie de 15 ans d’expérience dans le domaine du bâtiment.
           </p>
 
           <p>
-            Au fil des années, nous avons mené à bien plusieurs projets en Tunisie, 
-            dans divers secteurs d'activité. Ces réalisations témoignent de notre 
-            capacité à répondre efficacement aux exigences du marché local tout en 
-            garantissant un haut niveau de qualité.
+            Forte de l’expertise de son gérant, elle propose une large gamme de services, allant de la maçonnerie générale à la rénovation complète, en passant par la restauration et les travaux de finition.
           </p>
 
           <p>
             Par ailleurs, nous avons également contribué à des projets à l'international, 
-            ce qui nous permet de renforcer notre savoir-faire et d'intégrer des 
-            standards et pratiques reconnus à l'échelle mondiale.
+           Notre objectif est d’offrir des prestations de qualité, adaptées aux besoins de chaque client, tout en respectant les délais et les normes en vigueur.
           </p>
 
           <p>
-            Soucieux de la satisfaction de nos clients, nous nous engageons à fournir 
-            des solutions fiables, performantes et durables, tout en assurant un 
-            accompagnement professionnel à chaque étape des projets.
+            Nous accompagnons nos clients à chaque étape de leur projet, en garantissant un travail sérieux, professionnel et soigné.
           </p>
 
           {/* Stats optionnelles */}

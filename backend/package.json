@@ -1,9 +1,15 @@
 {
   "name": "backend",
   "version": "1.0.0",
+<<<<<<< HEAD
   "type": "module",
   "main": "server.js",
   "scripts": {
+=======
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+>>>>>>> origin/GuestPage_Rihem
     "dev": "nodemon server.js"
   },
   "keywords": [],

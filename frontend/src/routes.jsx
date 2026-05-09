@@ -4,7 +4,10 @@ import GuestHome from "./pages/Guest/GuestDashboard";
 import Contact from "./pages/Contact/Contact";
 import  Login  from "./pages/Login";
 import Compte from "./pages/Activer_Compte/activer_compte";
+import ClientDashboard from "./pages/client/clientdashboard";
+import ProjectList from "./pages/client/ProjectList";
 import ForgotPassword from "./pages/Activer_Compte/mp_oublie";
+<<<<<<< HEAD
 import Dashboard from "./pages/clientdashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import Chefcreate from "./pages/admin/CreateChef";
@@ -13,6 +16,13 @@ import ListClients from "./pages/admin/clients/ListClients";
 import ListDemandeGuest from "./pages/admin/ListDemandeGuest"
 import ListClientsDemande from "./pages/admin/clients/ListClientsDemande";
 
+=======
+import ClientProfilePage from "./pages/client/ClientProfilePage";
+import ClientLayout from "../src/components/layout/ClientLayout";
+import ProjectDetail from "../src/pages/client/ProjectDetail";
+import  Service from "../src/pages/client/Service";
+import  ClientContact from "../src/pages/client/Clientcontact";
+>>>>>>> origin/GuestPage_Rihem
 
 
 export default function AppRoutes() {
@@ -23,6 +33,7 @@ export default function AppRoutes() {
        <Route path="/login" element={<Login />} />
         <Route path="/Activer_Compte" element={<Compte />} />
         <Route path="/ForgotPassword" element={<ForgotPassword/>}/>
+<<<<<<< HEAD
          <Route path="/client_dashboard" element={<Dashboard/>}/>
           <Route path="/admin/dashboard" element={<AdminDashboard/>}/>
           <Route path="/admin/chefs/create" element={<Chefcreate/>}/>
@@ -34,8 +45,26 @@ export default function AppRoutes() {
           
           
        
+=======
+        
+        {/*<Route path="/client/ClientProfile" element={<ClientProfilePage/>}/>*/}
+
+        <Route element={<ClientLayout />}>
+        <Route path="/client/Dashboard" element={<ClientDashboard />} />
+        <Route path="/client/ClientProfile" element={<ClientProfilePage />} />
+        <Route path="/client/projetes" element={<ProjectList/>}/>
+        <Route path="/client/projeteDetail/:projectId" element={<ProjectDetail/>}/>
+        <Route path="/client/Service" element={<Service/>}/>
+        <Route path="/client/Contact" element={<ClientContact/>}/>
+
+        </Route>
+        
+    
+    
+>>>>>>> origin/GuestPage_Rihem
 
         
     </Routes>
   );
 }
+//

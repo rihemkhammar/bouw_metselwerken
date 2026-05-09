@@ -461,48 +461,6 @@
   color: var(--success);
   flex-shrink: 0;
 }
-/* Wrapper input avec toggle */
-.inputWrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-/* Input avec espace pour le bouton toggle */
-.inputWithToggle {
-  padding-right: 40px !important; /* Espace pour l'icône œil */
-}
-
-/* Bouton toggle password */
-.togglePassword {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: #6b7280; /* gray-500 */
-  cursor: pointer;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.2s ease;
-  z-index: 2;
-}
-
-.togglePassword:hover {
-  color: var(--primary); /* blue-500 */
-}
-
-
-
-/* Désactiver le hover sur mobile */
-@media (hover: none) {
-  .togglePassword:hover {
-    color: #6b7280;
-  }
-}
 
 .securityTitle {
   font-weight: 600;
@@ -510,7 +468,111 @@
   font-size: 0.875rem;
   margin: 0 0 0.125rem 0;
 }
+/* activer_compte.module.css */
+.textarea {
+  width: 100%;
+  padding: 12px 12px 12px 40px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  resize: vertical;
+  min-height: 80px;
+}
 
+.textarea:focus {
+  outline: none;
+  border-color: var( --primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.stepsList {
+  
+  list-style: none;
+  padding: 0;
+  margin: 0.1rem 0;
+}
+
+.stepsList li {
+ 
+  padding-left: 2rem;
+  margin: 0.25rem 0;
+  position: relative;
+}
+
+
+
+.benefitsList {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+/* Bloc client existant */
+.existingClientBox {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1px solid #bae6fd;
+  border-radius: 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.existingClientIcon {
+  color: var( --primary);
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+.existingClientText {
+  font-size: 0.9rem;
+  color: #0c4a6e;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.loginLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  background: var(--primary);
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.loginLink:hover {
+  background: var( --primary);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
+}
+
+.loginLink:active {
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .existingClientBox {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .existingClientIcon {
+    margin: 0 auto;
+  }
+}
+.benefitsList li {
+  padding: 0.25rem 0;
+  color: #4b5563;
+  font-size: 0.95rem;
+}
 .securityDesc {
   font-size: 0.75rem;
   color: var(--secondary-text);

@@ -10,17 +10,130 @@
     "description": "Capitale de la France",
     "coords": [2.3522, 48.8566],
     "value": 70
+  }
+  ,{
+    "name": "Sousse",
+    "description": "Ville côtière touristique en Tunisie",
+    "coords": [10.6411, 35.8256],
+    "value": 75
   },
   {
-    "name": "New York",
-    "description": "Ville des États-Unis",
-    "coords": [-74.006, 40.7128],
-    "value": 60
+    "name": "Sfax",
+    "description": "Grand centre économique de la Tunisie",
+    "coords": [10.7603, 34.7406],
+    "value": 70
   },
   {
-    "name": "Tokyo",
-    "description": "Capitale du Japon",
-    "coords": [139.6917, 35.6895],
+    "name": "Djerba",
+    "description": "Île touristique au sud de la Tunisie",
+    "coords": [10.8451, 33.8076],
+    "value": 80
+  },
+  {
+    "name": "Bruxelles",
+    "description": "Capitale de la Belgique",
+    "coords": [4.3517, 50.8503],
+    "value": 85
+  },{
+    "name": "Anvers",
+    "description": "Grand port et centre économique de la Belgique",
+    "coords": [4.4025, 51.2194],
+    "value": 80
+  },
+  {
+    "name": "Anvers",
+    "description": "Grand port et centre économique de la Belgique",
+    "coords": [4.4025, 51.2194],
+    "value": 80
+  },
+  {
+    "name": "Bruges",
+    "description": "Ville médiévale touristique de Belgique",
+    "coords": [3.2247, 51.2093],
+    "value": 78
+  },
+  {
+    "name": "Gand",
+    "description": "Ville historique et universitaire de Belgique",
+    "coords": [3.7174, 51.0543],
+    "value": 77
+  },
+  {
+    "name": "Liège",
+    "description": "Grande ville industrielle et culturelle de Belgique",
+    "coords": [5.5797, 50.6326],
+    "value": 75
+  },
+  {
+    "name": "Charleroi",
+    "description": "Ville industrielle importante de Belgique",
+    "coords": [4.4446, 50.4108],
+    "value": 73
+  },
+  {
+    "name": "Marseille",
+    "description": "Grand port méditerranéen de France",
+    "coords": [5.3698, 43.2965],
+    "value": 85
+  },
+  {
+    "name": "Nice",
+    "description": "Ville touristique de la Côte d’Azur en France",
+    "coords": [7.2620, 43.7102],
+    "value": 80
+  },
+  {
+    "name": "Barcelone",
+    "description": "Grande ville côtière de l’Espagne",
+    "coords": [2.1734, 41.3851],
+    "value": 90
+  },
+  {
+    "name": "Valence",
+    "description": "Ville portuaire sur la côte est de l’Espagne",
+    "coords": [-0.3763, 39.4699],
+    "value": 82
+  },
+  {
+    "name": "Alger",
+    "description": "Capitale de l’Algérie en bord de Méditerranée",
+    "coords": [3.0588, 36.7538],
+    "value": 88
+  },
+  {
+    "name": "Oran",
+    "description": "Grande ville portuaire de l’Algérie",
+    "coords": [-0.6417, 35.6971],
+    "value": 80
+  },
+  {
+    "name": "Alexandrie",
+    "description": "Ville historique et portuaire d’Égypte",
+    "coords": [29.9187, 31.2001],
+    "value": 90
+  },
+  {
+    "name": "Port-Saïd",
+    "description": "Ville portuaire à l’entrée du canal de Suez",
+    "coords": [32.3019, 31.2653],
+    "value": 78
+  },
+  {
+    "name": "Naples",
+    "description": "Ville côtière du sud de l’Italie",
+    "coords": [14.2681, 40.8518],
+    "value": 85
+  },
+  {
+    "name": "Gênes",
+    "description": "Grand port maritime de l’Italie",
+    "coords": [8.9463, 44.4056],
+    "value": 83
+  },
+  {
+    "name": "Palerme",
+    "description": "Ville côtière de la Sicile en Italie",
+    "coords": [13.3615, 38.1157],
     "value": 80
   }
 ]

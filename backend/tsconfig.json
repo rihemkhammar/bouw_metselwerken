@@ -1,8 +1,19 @@
 {
   "compilerOptions": {
     "target": "ES2020",
+<<<<<<< HEAD
     "module": "commonjs",
     "esModuleInterop": true,
     "types": ["node"]
 }
+=======
+    "module": "CommonJS",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node"]
+  },
+  "include": ["."]
+>>>>>>> origin/GuestPage_Rihem
 }

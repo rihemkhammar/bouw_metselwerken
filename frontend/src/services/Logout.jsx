@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/GuestPage_Rihem
 export const logout = () => {
 
   localStorage.removeItem("token");
@@ -8,4 +11,8 @@ export const logout = () => {
 
  
   window.location.href = "/";
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> origin/GuestPage_Rihem
