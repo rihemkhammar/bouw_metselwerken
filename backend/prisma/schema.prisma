@@ -30,10 +30,12 @@ model Request {
   status    RequestStatus @default(PENDING)
   userId    String
   user      User     @relation(fields: [userId], references: [id])
-   viewed      Boolean       @default(false)   
+  viewed      Boolean       @default(false)   
   createdAt DateTime @default(now())
-  approvedBy String? // admin who approved
-  description String? 
+  approvedBy String? 
+  description String?
+    @@index([userId])      
+  @@index([createdAt])   
 }
 model Project {
   id          String   @id @default(uuid())
