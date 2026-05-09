@@ -1,18 +1,12 @@
 import { Router } from "express";
 import { clientController } from "../controllers/clientController.js";
-<<<<<<< HEAD
-=======
 import { authenticate } from "../middleware/auth.js";
 import { authorizeRoles } from "../middleware/role.js";
->>>>>>> origin/GuestPage_Rihem
 
 const router = Router();
 
 // Routes publiques
 router.post("/signup", clientController.signup);
-<<<<<<< HEAD
-;
-=======
 
 // Profil client
 router.get(
@@ -39,6 +33,5 @@ router.get("/services",
   authorizeRoles("CLIENT"), 
    clientController.getAllServices
 );
->>>>>>> origin/GuestPage_Rihem
 
 export default router;

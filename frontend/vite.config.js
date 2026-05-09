@@ -8,8 +8,4 @@ export default defineConfig({
     port: 5173,
     strictPort: true
   }
-<<<<<<< HEAD
 })
-=======
-})
->>>>>>> origin/GuestPage_Rihem

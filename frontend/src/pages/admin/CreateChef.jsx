@@ -20,9 +20,7 @@ export default function CreateChef() {
   const validateForm = () => {
     const newErrors = {};
     
-    // ✅ Name is OPTIONAL
     
-    // ✅ Email: REQUIRED
     if (!formData.email.trim()) {
       newErrors.email = "L'email est requis";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
