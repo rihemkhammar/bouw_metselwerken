@@ -10,6 +10,9 @@ import {
   markClientRequestViewedService,
   getProfile,
   updateProfile,
+  getAllProjectsService,
+  getProjectByIdService,
+  getServicesWithChefsService,
 } from "../services/adminService.js";
 
 export const createChef = async (req, res) => {
@@ -146,5 +149,39 @@ export const updateProfileSettings = async (req, res) => {
   } catch (error) {
     console.error("Error updating admin profile:", error);
     res.status(500).json({ error: "Failed to update admin profile" });
+  }
+};
+
+export const getAllProjectsController = async (req, res) => {
+  try {
+    const projects = await getAllProjectsService();
+    res.json(projects);
+  } catch (err) {
+    console.error("Erreur getAllProjects:", err);
+    res.status(500).json({ error: "Impossible de charger les projets" });
+  }
+};
+
+
+
+export const getProjectByIdController = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const project = await getProjectByIdService(id);
+    if (!project) return res.status(404).json({ error: "Projet introuvable" });
+    res.json(project);
+  } catch (err) {
+    console.error("Erreur getProjectById:", err);
+    res.status(500).json({ error: "Impossible de charger le projet" });
+  }
+};
+
+export const getServicesWithChefsController = async (req, res) => {
+  try {
+    const data = await getServicesWithChefsService();
+    res.json(data);
+  } catch (err) {
+    console.error("Erreur getServicesWithChefs:", err);
+    res.status(500).json({ error: "Impossible de charger les services avec chefs" });
   }
 };

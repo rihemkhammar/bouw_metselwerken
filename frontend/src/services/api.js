@@ -235,3 +235,31 @@ export const updateAdminProfile = async (adminData) => {
   });
   return handleResponse(res);
 };
+
+// GET all projects (admin)
+export const getAllProjects = async () => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/projects`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return handleResponse(res);
+};
+
+
+
+// GET services avec chefs et projets
+export const getServicesWithChefs = async () => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/projects/services`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`, 
+    },
+  });
+  return handleResponse(res);
+};

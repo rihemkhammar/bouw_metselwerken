@@ -21,6 +21,9 @@ import ProjectList from "./pages/client/ProjectList";
 import ClientDashboard from "./pages/client/clientdashboard";
 import AdminProfile from "./pages/admin/AdminProfile";
 
+import ProjectsListPage from "./pages/admin/ProjectsListPage";
+import ServicesCardsPage from "./pages/admin/ServicesCardsPage";
+
 
 export default function AppRoutes() {
   return (
@@ -36,8 +39,12 @@ export default function AppRoutes() {
            <Route path="/admin/clients" element={<ListClients/>}/>
           <Route path="/admin/guests/demandes" element={<ListDemandeGuest/>}/>
            <Route path="/admin/clients/demandes" element={<ListClientsDemande/>}/>
+           <Route path="/admin/projects" element={<ProjectsListPage/>}/>
+            <Route path="/admin/projects/services" element={<ServicesCardsPage/>}/>
 
            <Route path="/admin/profile" element={<AdminProfile/>}/>
+               
+        
            
             <Route element={<ClientLayout />}>
         <Route path="/client/Dashboard" element={<ClientDashboard />} />
@@ -46,6 +53,7 @@ export default function AppRoutes() {
         <Route path="/client/projeteDetail/:projectId" element={<ProjectDetail/>}/>
         <Route path="/client/Service" element={<Service/>}/>
         <Route path="/client/Contact" element={<ClientContact/>}/>
+    
 
        
 

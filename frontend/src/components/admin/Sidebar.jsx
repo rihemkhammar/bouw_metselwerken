@@ -63,12 +63,34 @@ const defaultMenuItems = [
       },
     ],
   },
+
+  {
+    id: "projects",
+    label: "Projets",
+    icon: <ClipboardList size={20} />,
+    children: [
+      {
+        id: "projects-by-service",
+        label: "Par service",
+        icon: <ListOrdered size={18} />,
+        link: "/admin/projects/services",
+      },
+      {
+        id: "projects-list",
+        label: "Tous les projets",
+        icon: <ClipboardList size={18} />,
+        link: "/admin/projects",
+      },
+    ]
+  },
+
   {
     id: "contact-requests",
     label: "Demandes Des Services",
     icon: <MailQuestion size={18} />,
     link: "/admin/guests/demandes",
   },
+
   {
     id: "settings",
     label: "Paramètres",

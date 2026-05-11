@@ -1,4 +1,6 @@
 import prisma from "../configs/prisma.js";
+
+
 import bcrypt from "bcryptjs";
 
 export const createChefService = async ({ name, email, password }) => {
@@ -184,5 +186,63 @@ export const updateProfile = async (data) => {
   return await prisma.user.updateMany({
     where: { role: "ADMIN" },
     data,
+  });
+};
+
+
+export const getAllProjectsService = async () => {
+  return prisma.project.findMany({
+    include: {
+      client: { select: { id: true, name: true, email: true } },
+      chef: { select: { id: true, name: true, email: true } },
+    },
+    orderBy: { title: "asc" },
+  });
+};
+
+export const getServicesWithChefsService = async () => {
+  // Define the enum values manually
+  const services = [
+    "MACONNERIE",
+    "RENOVATION",
+    "RESTAURATION",
+    "CONSTRUCTION_GENERALE",
+    "REJOINTOIEMENT_RUSTIQUE",
+    "TRAITEMENT_HYDROFUGE",
+    "DEMOUSSAGE",
+  ];
+
+  const result = await Promise.all(
+    services.map(async (s) => {
+      const projects = await prisma.project.findMany({
+        where: { services: s }, 
+        include: { chef: true },
+      });
+
+      const chef = projects.length > 0 ? projects[0].chef : null;
+
+      return {
+        service: s,
+        chef,
+        projectsCount: projects.length,
+      };
+    })
+  );
+
+  return result;
+};
+
+
+
+
+
+export const getProjectByIdService = async (id) => {
+  return prisma.project.findUnique({
+    where: { id },
+    include: {
+      client: true,
+      chef: true,
+      updates: true,
+    },
   });
 };
