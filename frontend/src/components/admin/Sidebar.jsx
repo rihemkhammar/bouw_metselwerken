@@ -73,7 +73,7 @@ const defaultMenuItems = [
     id: "settings",
     label: "Paramètres",
     icon: <Settings size={20} />,
-    link: "/settings",
+    link: "/admin/profile",
   },
 ];
 

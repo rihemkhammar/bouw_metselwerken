@@ -19,6 +19,7 @@ import  Service from "../src/pages/client/Service";
 import  ClientContact from "../src/pages/client/Clientcontact";
 import ProjectList from "./pages/client/ProjectList";
 import ClientDashboard from "./pages/client/clientdashboard";
+import AdminProfile from "./pages/admin/AdminProfile";
 
 
 export default function AppRoutes() {
@@ -35,6 +36,8 @@ export default function AppRoutes() {
            <Route path="/admin/clients" element={<ListClients/>}/>
           <Route path="/admin/guests/demandes" element={<ListDemandeGuest/>}/>
            <Route path="/admin/clients/demandes" element={<ListClientsDemande/>}/>
+
+           <Route path="/admin/profile" element={<AdminProfile/>}/>
            
             <Route element={<ClientLayout />}>
         <Route path="/client/Dashboard" element={<ClientDashboard />} />
@@ -43,6 +46,8 @@ export default function AppRoutes() {
         <Route path="/client/projeteDetail/:projectId" element={<ProjectDetail/>}/>
         <Route path="/client/Service" element={<Service/>}/>
         <Route path="/client/Contact" element={<ClientContact/>}/>
+
+       
 
         </Route>
         

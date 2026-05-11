@@ -195,6 +195,7 @@ export const getProjectDetail = async (projectId, userId) => {
     },
   });
   return handleResponse(res);
+
 };
 export const getServices = async () => {
   const token = localStorage.getItem("token");
@@ -205,5 +206,32 @@ export const getServices = async () => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     }, });
+  return handleResponse(res);
+};
+
+// GET admin profile
+export const getAdminProfile = async () => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/profile`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return handleResponse(res);
+};
+
+// UPDATE admin profile
+export const updateAdminProfile = async (adminData) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/profile`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(adminData),
+  });
   return handleResponse(res);
 };

@@ -8,6 +8,8 @@ import {
   getClientRequests,
   markGuestRequestViewedService,
   markClientRequestViewedService,
+  getProfile,
+  updateProfile,
 } from "../services/adminService.js";
 
 export const createChef = async (req, res) => {
@@ -116,5 +118,33 @@ export const markClientRequestViewedController = async (req, res) => {
     res.json(updated);
   } catch (err) {
     res.status(400).json({ error: err.message });
+  }
+};
+
+export const getProfileSettings = async (req, res) => {
+  try {
+    const admin = await getProfile();
+    if (!admin) {
+      console.error("No admin found in DB");
+      return res.status(404).json({ error: "Admin not found" });
+    }
+    res.json(admin);
+  } catch (error) {
+    console.error("Error fetching admin profile:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+
+export const updateProfileSettings = async (req, res) => {
+  const { name, email, phone, address } = req.body;
+
+  try {
+    await updateProfile({ name, email, phone, address });
+    res.json({ message: "Profile updated successfully" });
+  } catch (error) {
+    console.error("Error updating admin profile:", error);
+    res.status(500).json({ error: "Failed to update admin profile" });
   }
 };

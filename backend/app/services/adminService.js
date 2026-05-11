@@ -172,3 +172,17 @@ export const markClientRequestViewedService = async (id) => {
     data: { viewed: true }
   });
 };
+
+export const getProfile = async () => {
+  const admin = await prisma.user.findFirst({ where: { role: "ADMIN" } });
+  console.log("Admin fetched:", admin);
+  return admin;
+};
+
+
+export const updateProfile = async (data) => {
+  return await prisma.user.updateMany({
+    where: { role: "ADMIN" },
+    data,
+  });
+};
