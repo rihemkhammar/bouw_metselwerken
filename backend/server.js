@@ -15,13 +15,14 @@ const app = express();
 
 
 app.use(express.json());
+app.use(cors({ origin: "http://localhost:5173" }));
 
 app.use("/admin", adminRoutes);
 app.use(guestRoutes);
 
 app.use("/client", clientRoutes);
 //app.use("/chef", chefRoutes);
-app.use(cors({ origin: "http://localhost:5173" }));
+
 app.use("/login" , loginRoutes)
 
 app.listen(5000, () => console.log("Server running"))
