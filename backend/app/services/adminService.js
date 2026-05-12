@@ -246,3 +246,39 @@ export const getProjectByIdService = async (id) => {
     },
   });
 };
+export const getAdminDashboardService = async () => {
+  const totalClients = await prisma.user.count({
+    where: { role: "CLIENT" }
+  });
+
+  const totalChefs = await prisma.user.count({
+    where: { role: "CHEF" }
+  });
+
+  const totalProjects = await prisma.project.count();
+
+  const pendingRequests = await prisma.request.count({
+    where: { status: "PENDING" }
+  });
+
+  
+  const recentClients = await prisma.user.findMany({
+    where: { role: "CLIENT", status: "ACTIVE" },
+    orderBy: { createdAt: "desc" },
+    take: 5,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      createdAt: true
+    }
+  });
+
+  return {
+    totalClients,
+    totalChefs,
+    totalProjects,
+    pendingRequests,
+    recentClients
+  };
+};

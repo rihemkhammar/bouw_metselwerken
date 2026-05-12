@@ -13,6 +13,7 @@ import {
   getAllProjectsService,
   getProjectByIdService,
   getServicesWithChefsService,
+  getAdminDashboardService,
 } from "../services/adminService.js";
 
 export const createChef = async (req, res) => {
@@ -183,5 +184,14 @@ export const getServicesWithChefsController = async (req, res) => {
   } catch (err) {
     console.error("Erreur getServicesWithChefs:", err);
     res.status(500).json({ error: "Impossible de charger les services avec chefs" });
+  }
+};
+
+export const getAdminDashboard = async (req, res) => {
+  try {
+    const data = await getAdminDashboardService();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };

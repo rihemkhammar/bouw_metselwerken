@@ -1,5 +1,5 @@
 import express from "express";
-import { createChef, fetchChefs , fetchClients , fetchGuests , approveRequestController , fetchClientRequestsController , markClientRequestViewedController ,markGuestRequestViewedController , getProfileSettings , updateProfileSettings ,getAllProjectsController, getProjectByIdController, getServicesWithChefsController } from "../controllers/adminController.js";
+import { getAdminDashboard, createChef, fetchChefs , fetchClients , fetchGuests , approveRequestController , fetchClientRequestsController , markClientRequestViewedController ,markGuestRequestViewedController , getProfileSettings , updateProfileSettings ,getAllProjectsController, getProjectByIdController, getServicesWithChefsController } from "../controllers/adminController.js";
 import { authenticate } from "../middleware/auth.js";
 import { authorizeRoles } from "../middleware/role.js";
 
@@ -78,5 +78,6 @@ router.put(
 router.get("/projects", authenticate, authorizeRoles("ADMIN"), getAllProjectsController);
 router.get("/projects/services", authenticate, authorizeRoles("ADMIN"), getServicesWithChefsController);
 router.get("/projects/:id", authenticate, authorizeRoles("ADMIN"), getProjectByIdController);
+router.get("/dashboard", authenticate, authorizeRoles("ADMIN"), getAdminDashboard);
 
 export default router;
