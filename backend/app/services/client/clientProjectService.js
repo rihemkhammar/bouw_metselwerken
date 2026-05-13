@@ -15,7 +15,8 @@ const getClientProjects = async (userId) => {
       },
       updates: {
         orderBy: { timestamp: "desc" },
-      },
+      }
+
     },
   });
 
@@ -34,10 +35,10 @@ const getClientProjects = async (userId) => {
             },
           });
           return { ...update, updatedByUser: updater };
-        })
+        }),
       );
       return { ...project, updates };
-    })
+    }),
   );
 
   return enriched;

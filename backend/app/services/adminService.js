@@ -299,13 +299,42 @@ export const getAdminDashboardService = async () => {
 export const getProjectByIdService = async (id) => {
   return prisma.project.findUnique({
     where: { id },
-    include: {
-      client: true,
-      chef: true,
-      updates: true,
+    select: {
+      id: true,
+      title: true,
+      status: true,
+      progress: true,   // 👈 include this field
+      client: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+          companyName: true,
+        },
+      },
+      chef: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+        },
+      },
+      updates: {
+        orderBy: { timestamp: "desc" },
+        select: {
+          id: true,
+          updateType: true,
+          details: true,
+          progress: true,
+          timestamp: true,
+        },
+      },
     },
   });
 };
+
 
 export const getProjectsByServiceService = async (service) => {
   return prisma.project.findMany({
