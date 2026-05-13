@@ -114,6 +114,15 @@ useEffect(() => {
   // Rafraîchir en arrière-plan sans bloquer l’UI
   chargerDonnees();
 }, []);
+useEffect(() => {
+  const handleScroll = () => {
+    setShowScroll(window.scrollY > 300);
+  };
+
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
+}, []);
+
 
 
 
