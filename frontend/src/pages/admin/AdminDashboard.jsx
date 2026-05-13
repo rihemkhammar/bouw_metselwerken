@@ -51,74 +51,71 @@ const AdminDashboard = () => {
   const [chargement, setChargement] = useState(true);
   const [erreur, setErreur] = useState(null);
   const [showScroll, setShowScroll] = useState(false);
+useEffect(() => {
+  const chargerDonnees = async () => {
+    try {
+      const res = await getAdminDashboard();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowScroll(window.scrollY > 300);
-    };
+      setStats({
+        totalClients: res.totalClients ?? 0,
+        totalChefs: res.totalChefs ?? 0,
+        totalProjects: res.totalProjects ?? 0,
+        guestPending: res.guestPending ?? 0,
+        clientPending: res.clientPending ?? 0,
+      });
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+      setClientsRecents(res.recentClients || []);
+      setProjetsRecents(res.recentProjects || []);
 
-  // 1️⃣ Load cache immediately (no async here)
-  useEffect(() => {
-    const cached = sessionStorage.getItem("admin-dashboard");
+      // Mettre en cache avec timestamp
+      sessionStorage.setItem(
+        "admin-dashboard",
+        JSON.stringify({
+          timestamp: Date.now(),
+          stats: {
+            totalClients: res.totalClients,
+            totalChefs: res.totalChefs,
+            totalProjects: res.totalProjects,
+            guestPending: res.guestPending,
+            clientPending: res.clientPending,
+          },
+          clientsRecents: res.recentClients,
+          projetsRecents: res.recentProjects,
+        })
+      );
+    } catch (err) {
+      setErreur("Impossible de charger les données du tableau de bord.");
+      console.error("Erreur dashboard :", err);
+    } finally {
+      setChargement(false);
+    }
+  };
 
-    if (cached) {
-      const parsed = JSON.parse(cached);
+  // Vérifier le cache
+  const cached = sessionStorage.getItem("admin-dashboard");
+  if (cached) {
+    const parsed = JSON.parse(cached);
+    const now = Date.now();
+
+    if (now - parsed.timestamp < 5 * 60 * 1000) {
+      // Cache valide → afficher immédiatement
       setStats(parsed.stats);
       setClientsRecents(parsed.clientsRecents);
       setProjetsRecents(parsed.projetsRecents);
       setChargement(false);
+    } else {
+      // Cache expiré → montrer loader
+      setChargement(true);
     }
-  }, []);
+  } else {
+    setChargement(true);
+  }
 
-  // 2️⃣ Fetch fresh data AFTER initial render
-  useEffect(() => {
-    const chargerDonnees = async () => {
-      try {
-        setChargement(true);
+  // Rafraîchir en arrière-plan sans bloquer l’UI
+  chargerDonnees();
+}, []);
 
-        const data = await getAdminDashboard();
 
-        setStats({
-          totalClients: data.totalClients ?? 0,
-          totalChefs: data.totalChefs ?? 0,
-          totalProjects: data.totalProjects ?? 0,
-          guestPending: data.guestPending ?? 0,
-          clientPending: data.clientPending ?? 0,
-        });
-
-        setClientsRecents(data.recentClients || []);
-        setProjetsRecents(data.recentProjects || []);
-
-        // Update cache
-        sessionStorage.setItem(
-          "admin-dashboard",
-          JSON.stringify({
-            stats: {
-              totalClients: data.totalClients,
-              totalChefs: data.totalChefs,
-              totalProjects: data.totalProjects,
-              guestPending: data.guestPending,
-              clientPending: data.clientPending,
-            },
-            clientsRecents: data.recentClients,
-            projetsRecents: data.recentProjects,
-          }),
-        );
-      } catch (err) {
-        setErreur("Impossible de charger les données du tableau de bord.");
-        console.error("Erreur dashboard :", err);
-      } finally {
-        setChargement(false);
-      }
-    };
-
-    // Always refresh in background
-    chargerDonnees();
-  }, []);
 
   if (chargement) {
     return (
