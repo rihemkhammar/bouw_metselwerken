@@ -1,5 +1,5 @@
 import express from "express";
-import { getAdminDashboard, createChef, fetchChefs , fetchClients , fetchGuests , approveRequestController , fetchClientRequestsController , markClientRequestViewedController ,markGuestRequestViewedController , getProfileSettings , updateProfileSettings ,getAllProjectsController, getProjectByIdController, getServicesWithChefsController } from "../controllers/adminController.js";
+import { getAdminDashboard,getProjectsByServiceController, createChef, fetchChefs , fetchClients , fetchGuests , approveRequestController , fetchClientRequestsController , markClientRequestViewedController ,markGuestRequestViewedController , getProfileSettings , updateProfileSettings ,getAllProjectsController, getProjectByIdController, getServicesWithChefsController } from "../controllers/adminController.js";
 import { authenticate } from "../middleware/auth.js";
 import { authorizeRoles } from "../middleware/role.js";
 
@@ -79,5 +79,12 @@ router.get("/projects", authenticate, authorizeRoles("ADMIN"), getAllProjectsCon
 router.get("/projects/services", authenticate, authorizeRoles("ADMIN"), getServicesWithChefsController);
 router.get("/projects/:id", authenticate, authorizeRoles("ADMIN"), getProjectByIdController);
 router.get("/dashboard", authenticate, authorizeRoles("ADMIN"), getAdminDashboard);
+
+router.get(
+  "/admin/projects/by-service",
+  authenticate,
+  authorizeRoles("ADMIN"),
+  getProjectsByServiceController
+);
 
 export default router;

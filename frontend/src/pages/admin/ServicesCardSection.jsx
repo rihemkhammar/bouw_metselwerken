@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AdminLayout from "../../components/layout/admin/AdminLayout";
 import { FaUserTie, FaListUl } from "react-icons/fa";
 import { getServicesWithChefs } from "../../services/api";
 
-const ServicesCardsPage = () => {
+const ServicesCardsSection = () => {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
 
@@ -21,8 +20,9 @@ const ServicesCardsPage = () => {
   }, []);
 
   return (
-    <AdminLayout pageTitle="Services et Chefs">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+    <section className="mt-8">
+      <h2 className="text-xl font-bold mb-4">Services et Chefs</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {data.map((item) => (
           <div
             key={item.service}
@@ -32,7 +32,7 @@ const ServicesCardsPage = () => {
           >
             <div className="flex items-center gap-2 mb-3">
               <FaListUl className="text-blue-500" />
-              <h2 className="text-xl font-bold text-gray-800">{item.service}</h2>
+              <h2 className="text-lg font-bold text-gray-800">{item.service}</h2>
             </div>
 
             <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
@@ -46,8 +46,8 @@ const ServicesCardsPage = () => {
           </div>
         ))}
       </div>
-    </AdminLayout>
+    </section>
   );
 };
 
-export default ServicesCardsPage;
+export default ServicesCardsSection;

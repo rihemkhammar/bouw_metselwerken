@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { getGuests, markGuestRequestViewed } from "../../services/api";
 import AdminLayout from "../../components/layout/admin/AdminLayout";
 import { toast } from "react-toastify";
+import { FiRefreshCw } from "react-icons/fi";
 
 const ListDemandeGuest = () => {
   const [guests, setGuests] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [chargement, setChargement] = useState(true);
   const [processingId, setProcessingId] = useState(null);
 
   useEffect(() => {
@@ -14,22 +15,29 @@ const ListDemandeGuest = () => {
         const data = await getGuests();
         setGuests(data);
       } catch (err) {
-        console.error("Error fetching guests:", err);
+        console.error("Erreur lors du chargement des demandes guests :", err);
       } finally {
-        setLoading(false);
+        setChargement(false);
       }
     };
     fetchGuests();
   }, []);
 
-  if (loading) {
+  if (chargement) {
     return (
-      <div className="flex items-center justify-center py-12 bg-white rounded-lg shadow">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        <span className="ml-3 text-gray-600">Chargement des demandes...</span>
-      </div>
+      <AdminLayout pageTitle="Liste des demandes de Guests">
+        <div className="flex items-center justify-center py-20">
+          <div className="flex flex-col items-center gap-3">
+            <FiRefreshCw className="w-8 h-8 text-blue-600 animate-spin" />
+            <p className="text-gray-500 font-medium">
+              Chargement des demandes de guests...
+            </p>
+          </div>
+        </div>
+      </AdminLayout>
     );
   }
+
   const handleMarkViewed = async (guestId, requestId) => {
     try {
       setProcessingId(requestId);
@@ -41,14 +49,14 @@ const ListDemandeGuest = () => {
                 ...g,
                 requests: [{ ...g.requests[0], viewed: true }],
               }
-            : g,
-        ),
+            : g
+        )
       );
       toast.info("Demande de guest marquée comme vue.");
       const data = await getGuests();
       setGuests(data);
     } catch (err) {
-      console.error("Error marking guest request viewed:", err);
+      console.error("Erreur lors du marquage :", err);
       toast.error(err.message);
     } finally {
       setProcessingId(null);
@@ -65,28 +73,29 @@ const ListDemandeGuest = () => {
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <div className="p-6 border-b">
             <h2 className="text-xl font-bold text-gray-800">
-              Demandes Des Services
+              Demandes des services
             </h2>
           </div>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr className="hover:bg-gray-50 transition-colors animate-fadeIn">
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                     Nom
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                     Email
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                     Téléphone
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                     Services
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                     Date de demande
                   </th>
+                  <th className="px-6 py-3"></th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -95,16 +104,14 @@ const ListDemandeGuest = () => {
                     key={guest.id}
                     className="hover:bg-gray-50 transition-colors animate-fadeIn"
                   >
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                    <td className="px-6 py-4 font-medium text-gray-900">
                       {guest.name}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-600">
-                      {guest.email}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
+                    <td className="px-6 py-4 text-gray-600">{guest.email}</td>
+                    <td className="px-6 py-4 text-gray-900">
                       {guest.phone || "—"}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4">
                       <div className="flex flex-wrap gap-1">
                         {guest.services?.length > 0 ? (
                           guest.services.map((service, idx) => (
@@ -120,10 +127,11 @@ const ListDemandeGuest = () => {
                         )}
                       </div>
                     </td>
-
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-600">
+                    <td className="px-6 py-4 text-gray-600">
                       {guest.requests?.[0]?.createdAt
-                        ? new Date(guest.requests[0].createdAt).toLocaleString()
+                        ? new Date(
+                            guest.requests[0].createdAt
+                          ).toLocaleString("fr-FR")
                         : "—"}
                     </td>
                     <td className="px-6 py-4">
@@ -142,7 +150,7 @@ const ListDemandeGuest = () => {
                           {processingId === guest.requests[0].id ? (
                             <span className="flex items-center">
                               <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
-                              Processing...
+                              Traitement...
                             </span>
                           ) : (
                             "Marquer comme vu"
@@ -150,7 +158,7 @@ const ListDemandeGuest = () => {
                         </button>
                       ) : (
                         <span className="text-sm text-green-600 font-medium">
-                           Vu
+                          ✔ Vu
                         </span>
                       )}
                     </td>

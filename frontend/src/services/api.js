@@ -197,6 +197,19 @@ export const getProjectDetail = async (projectId, userId) => {
   return handleResponse(res);
 
 };
+// GET project detail (admin)
+export const getProjectById = async (projectId) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/projects/${projectId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return handleResponse(res);
+};
+
 export const getServices = async () => {
   const token = localStorage.getItem("token");
   const res = await fetch(`${API_URL}/client/services`,
@@ -263,3 +276,14 @@ export const getServicesWithChefs = async () => {
   });
   return handleResponse(res);
 };
+
+export const getAdminDashboard = async () => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/dashboard`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  if (!res.ok) throw new Error("Failed to load dashboard");
+  return res.json();
+};
+
+

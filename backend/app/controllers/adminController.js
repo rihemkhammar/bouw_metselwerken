@@ -11,9 +11,10 @@ import {
   getProfile,
   updateProfile,
   getAllProjectsService,
-  getProjectByIdService,
   getServicesWithChefsService,
   getAdminDashboardService,
+  getProjectByIdService,
+  getProjectsByServiceService
 } from "../services/adminService.js";
 
 export const createChef = async (req, res) => {
@@ -191,7 +192,27 @@ export const getAdminDashboard = async (req, res) => {
   try {
     const data = await getAdminDashboardService();
     res.json(data);
+  } catch (error) {
+  console.error("Dashboard error:", error);
+  res.status(500).json({ error: error.message });
+};
+
+}
+
+
+export const getProjectsByServiceController = async (req, res) => {
+  try {
+    const { service } = req.query;
+
+    if (!service) {
+      return res.status(400).json({ error: "Service manquant" });
+    }
+
+    const projects = await getProjectsByServiceService(service);
+
+    return res.json(projects);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Erreur getProjectsByService:", err);
+    return res.status(500).json({ error: "Erreur serveur" });
   }
 };
