@@ -151,6 +151,20 @@ export const fetchClientProfile = async (userId, token) => {
 
   return handleResponse(res);
 };
+export const fetchChefProfile = async (userId, token) => {
+  const res = await fetch(
+    `${API_URL}/chef/${userId}/profile`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return handleResponse(res);
+};
 // Creation request Account 
 
 export const requestAccountCreation = async ({ 
@@ -184,6 +198,20 @@ export const getProjects = async (userId) => {
   });
   return handleResponse(res);
 };
+//////////////////
+
+
+export const getProjectsChef = async (userId) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/chef/${userId}/projects`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return handleResponse(res);
+};
 // GET project detail (client)
 export const getProjectDetail = async (projectId, userId) => {
   const token = localStorage.getItem("token");
@@ -196,14 +224,146 @@ export const getProjectDetail = async (projectId, userId) => {
   });
   return handleResponse(res);
 };
-export const getServices = async () => {
+
+export const getProjectDetailChef = async (projectId, userId) => {
   const token = localStorage.getItem("token");
-  const res = await fetch(`${API_URL}/client/services`,
-   { 
+
+  console.log("[API] getProjectDetailChef REQUEST:", { projectId, userId });
+
+  const res = await fetch(`${API_URL}/chef/${userId}/projects/${projectId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
-    }, });
+    },
+  });
+
+  console.log("[API] getProjectDetailChef STATUS:", res.status);
+
+  return handleResponse(res);
+};
+export const getServices = async () => {
+  const token = localStorage.getItem("token");
+
+  console.log("[API] getServices REQUEST");
+
+  const res = await fetch(`${API_URL}/client/services`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  console.log("[API] getServices STATUS:", res.status);
+
+  return handleResponse(res);
+};
+// POST - Ajouter une mise à jour de projet (chef)
+export const addProjectUpdate = async (userId, projectId, updateData) => {
+  const token = localStorage.getItem("token");
+
+  console.log("[API] addProjectUpdate REQUEST:", {
+    userId,
+    projectId,
+    updateData,
+  });
+
+  const res = await fetch(
+    `${API_URL}/chef/${userId}/projects/${projectId}/updates`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        updateType: updateData.updateType,
+        details: updateData.details,
+        progress: updateData.progress ?? null,
+        services: updateData.services ?? [],
+      }),
+    }
+  );
+
+  console.log("[API] addProjectUpdate STATUS:", res.status);
+
+  return handleResponse(res);
+};
+
+// PATCH - Changer le statut d'un projet (chef)
+export const updateProjectStatus = async (userId, projectId, status) => {
+  const token = localStorage.getItem("token");
+
+  console.log("[API] updateProjectStatus REQUEST:", {
+    userId,
+    projectId,
+    status,
+  });
+
+  const res = await fetch(
+    `${API_URL}/chef/${userId}/projects/${projectId}/status`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ status }),
+    }
+  );
+
+  console.log("[API] updateProjectStatus STATUS:", res.status);
+
+  return handleResponse(res);
+};
+////////////////
+// GET - Historique des updates d'un projet (chef)
+export const getProjectUpdatesHistory = async (userId, projectId) => {
+  const token = localStorage.getItem("token");
+
+  console.log("[API] getProjectUpdatesHistory REQUEST:", {
+    userId,
+    projectId,
+  });
+
+  const res = await fetch(
+    `${API_URL}/chef/${userId}/projects/${projectId}/updates`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  console.log("[API] getProjectUpdatesHistory STATUS:", res.status);
+
+  return handleResponse(res);
+};
+
+// GET - Statistiques de progression d'un projet (chef)
+export const getProjectProgressStats = async (userId, projectId) => {
+  const token = localStorage.getItem("token");
+
+  console.log("[API] getProjectProgressStats REQUEST:", {
+    userId,
+    projectId,
+  });
+
+  const res = await fetch(
+    `${API_URL}/chef/${userId}/projects/${projectId}/progress-stats`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  console.log("[API] getProjectProgressStats STATUS:", res.status);
+
   return handleResponse(res);
 };

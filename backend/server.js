@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import adminRoutes from "./app/routes/adminRoutes.js";
 import clientRoutes from "./app/routes/clientRoutes.js";
-//import chefRoutes from "./app/routes/chefRoutes.js";
+import chefRoutes from "./app/routes/chefRoutes.js";
 import loginRoutes from "./app/routes/login.js";
 import guestRoutes from "./app/routes/guestRoutes.js";
 
@@ -21,7 +21,7 @@ app.use("/admin", adminRoutes);
 app.use(guestRoutes);
 
 app.use("/client", clientRoutes);
-//app.use("/chef", chefRoutes);
+app.use("/chef", chefRoutes);
 
 app.use("/login" , loginRoutes)
 
