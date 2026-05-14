@@ -97,7 +97,8 @@ const ProjectDetailPage = () => {
   };
 
   const statusConfig = getStatusConfig(project?.status || "");
-  const progress = project?.progress || 0;
+ const progress = project.updates?.[0]?.progress ?? project.progress ?? 0;
+
 
   // Loading State
   if (loading) {

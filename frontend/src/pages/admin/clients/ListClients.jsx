@@ -4,6 +4,7 @@ import Navbar from "../../../components/admin/Navbar";
 import Sidebar from "../../../components/admin/Sidebar";
 import AdminLayout from "../../../components/layout/admin/AdminLayout";
 import { Link } from "react-router-dom";
+import { FiRefreshCw } from "react-icons/fi";
 
 const ListClients = () => {
   const [clients, setClients] = useState([]);
@@ -26,7 +27,7 @@ const ListClients = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12 bg-white rounded-lg shadow">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+        <FiRefreshCw className="w-8 h-8 text-green-600 animate-spin" />
         <span className="ml-3 text-gray-600">Loading Clients...</span>
       </div>
     );
