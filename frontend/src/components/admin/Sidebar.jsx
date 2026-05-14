@@ -63,17 +63,27 @@ const defaultMenuItems = [
       },
     ],
   },
+
+  {
+    id: "projects",
+    label: "Tous les projets",
+    icon: <ClipboardList size={20} />,
+    link: "/admin/projects",
+    
+  },
+
   {
     id: "contact-requests",
     label: "Demandes Des Services",
     icon: <MailQuestion size={18} />,
     link: "/admin/guests/demandes",
   },
+
   {
     id: "settings",
     label: "Paramètres",
     icon: <Settings size={20} />,
-    link: "/settings",
+    link: "/admin/profile",
   },
 ];
 
@@ -115,7 +125,8 @@ export default function Sidebar({ menuItems = defaultMenuItems, onToggle }) {
         </button>
       </div>
 
-      <nav className="flex-1 px-3 py-2 space-y-1 overflow-y-auto">
+      <nav className="flex-1 px-3 py-2 space-y-1 overflow-y-auto overflow-x-hidden">
+
         {menuItems.map((item) => {
           const isActive = item.link && location.pathname.startsWith(item.link);
           const hasChildren = item.children && item.children.length > 0;
@@ -143,7 +154,7 @@ export default function Sidebar({ menuItems = defaultMenuItems, onToggle }) {
                     ))}
                 </button>
               ) : (
-                // ✅ Direct link for items without children
+          
                 <Link
                   to={item.link}
                   className={`group flex items-center w-full px-3 py-2.5 rounded-lg transition-all duration-200

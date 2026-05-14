@@ -97,7 +97,7 @@ const ListClients = () => {
                       {client.projects?.map((project) => (
                         <span
                           key={project.id}
-                          className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full"
+                          className="bg-slate-100 text-slate-700 text-xs px-2.5 py-1 rounded-lg border border-slate-200"
                         >
                           {project.title} ({project.status})
                         </span>
@@ -108,11 +108,12 @@ const ListClients = () => {
                     <div className="flex gap-2">
                       <Link
                         to={`/admin/clients/${client.id}/edit`}
-                        className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+                        className="px-3 py-1.5 rounded-lg text-sm font-medium bg-blue-500 text-white hover:bg-blue-600 transition"
                       >
                         Modifier
                       </Link>
-                      <button className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
+
+                      <button className="px-3 py-1.5 rounded-lg text-sm font-medium bg-red-500 text-white hover:bg-red-600 transition">
                         Supprimer
                       </button>
                     </div>

@@ -1,5 +1,5 @@
 import express from "express";
-import { createChef, fetchChefs , fetchClients , fetchGuests , approveRequestController , fetchClientRequestsController , markClientRequestViewedController ,markGuestRequestViewedController} from "../controllers/adminController.js";
+import { getAdminDashboard,getProjectsByServiceController, createChef, fetchChefs , fetchClients , fetchGuests , approveRequestController , fetchClientRequestsController , markClientRequestViewedController ,markGuestRequestViewedController , getProfileSettings , updateProfileSettings ,getAllProjectsController, getProjectByIdController, getServicesWithChefsController } from "../controllers/adminController.js";
 import { authenticate } from "../middleware/auth.js";
 import { authorizeRoles } from "../middleware/role.js";
 
@@ -58,5 +58,33 @@ router.post(
   markGuestRequestViewedController
 );
 
+router.get(
+  "/profile",
+  authenticate,
+  authorizeRoles("ADMIN"),
+  getProfileSettings
+);
+
+router.put(
+  "/profile",
+  authenticate,
+  authorizeRoles("ADMIN"),
+  updateProfileSettings
+);
+
+
+
+// Projets admin
+router.get("/projects", authenticate, authorizeRoles("ADMIN"), getAllProjectsController);
+router.get("/projects/services", authenticate, authorizeRoles("ADMIN"), getServicesWithChefsController);
+router.get("/projects/:id", authenticate, authorizeRoles("ADMIN"), getProjectByIdController);
+router.get("/dashboard", authenticate, authorizeRoles("ADMIN"), getAdminDashboard);
+
+router.get(
+  "/admin/projects/by-service",
+  authenticate,
+  authorizeRoles("ADMIN"),
+  getProjectsByServiceController
+);
 
 export default router;

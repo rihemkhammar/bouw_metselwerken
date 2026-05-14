@@ -8,6 +8,13 @@ import {
   getClientRequests,
   markGuestRequestViewedService,
   markClientRequestViewedService,
+  getProfile,
+  updateProfile,
+  getAllProjectsService,
+  getServicesWithChefsService,
+  getAdminDashboardService,
+  getProjectByIdService,
+  getProjectsByServiceService
 } from "../services/adminService.js";
 
 export const createChef = async (req, res) => {
@@ -116,5 +123,96 @@ export const markClientRequestViewedController = async (req, res) => {
     res.json(updated);
   } catch (err) {
     res.status(400).json({ error: err.message });
+  }
+};
+
+export const getProfileSettings = async (req, res) => {
+  try {
+    const admin = await getProfile();
+    if (!admin) {
+      console.error("No admin found in DB");
+      return res.status(404).json({ error: "Admin not found" });
+    }
+    res.json(admin);
+  } catch (error) {
+    console.error("Error fetching admin profile:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+
+export const updateProfileSettings = async (req, res) => {
+  const { name, email, phone, address } = req.body;
+
+  try {
+    await updateProfile({ name, email, phone, address });
+    res.json({ message: "Profile updated successfully" });
+  } catch (error) {
+    console.error("Error updating admin profile:", error);
+    res.status(500).json({ error: "Failed to update admin profile" });
+  }
+};
+
+export const getAllProjectsController = async (req, res) => {
+  try {
+    const projects = await getAllProjectsService();
+    res.json(projects);
+  } catch (err) {
+    console.error("Erreur getAllProjects:", err);
+    res.status(500).json({ error: "Impossible de charger les projets" });
+  }
+};
+
+
+
+export const getProjectByIdController = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const project = await getProjectByIdService(id);
+    if (!project) return res.status(404).json({ error: "Projet introuvable" });
+    res.json(project);
+  } catch (err) {
+    console.error("Erreur getProjectById:", err);
+    res.status(500).json({ error: "Impossible de charger le projet" });
+  }
+};
+
+export const getServicesWithChefsController = async (req, res) => {
+  try {
+    const data = await getServicesWithChefsService();
+    res.json(data);
+  } catch (err) {
+    console.error("Erreur getServicesWithChefs:", err);
+    res.status(500).json({ error: "Impossible de charger les services avec chefs" });
+  }
+};
+
+export const getAdminDashboard = async (req, res) => {
+  try {
+    const data = await getAdminDashboardService();
+    res.json(data);
+  } catch (error) {
+  console.error("Dashboard error:", error);
+  res.status(500).json({ error: error.message });
+};
+
+}
+
+
+export const getProjectsByServiceController = async (req, res) => {
+  try {
+    const { service } = req.query;
+
+    if (!service) {
+      return res.status(400).json({ error: "Service manquant" });
+    }
+
+    const projects = await getProjectsByServiceService(service);
+
+    return res.json(projects);
+  } catch (err) {
+    console.error("Erreur getProjectsByService:", err);
+    return res.status(500).json({ error: "Erreur serveur" });
   }
 };

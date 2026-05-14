@@ -46,6 +46,15 @@ export const clientProjectDetailService = {
             timestamp: true,
           },
         },
+        documents: {
+          select: {
+            id: true,
+            fileName: true,
+            fileType: true,
+            fileUrl: true,
+            timestamp: true,
+          },
+        },
       },
     });
 

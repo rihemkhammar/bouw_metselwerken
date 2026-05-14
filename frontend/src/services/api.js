@@ -223,9 +223,24 @@ export const getProjectDetail = async (projectId, userId) => {
     },
   });
   return handleResponse(res);
+
 };
 
-export const getProjectDetailChef = async (projectId, userId) => {
+// GET project detail (admin)
+export const getProjectById = async (projectId) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/projects/${projectId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return handleResponse(res);
+};
+
+/*export const getServices = async () => {
+
   const token = localStorage.getItem("token");
 
   console.log("[API] getProjectDetailChef REQUEST:", { projectId, userId });
@@ -241,7 +256,7 @@ export const getProjectDetailChef = async (projectId, userId) => {
   console.log("[API] getProjectDetailChef STATUS:", res.status);
 
   return handleResponse(res);
-};
+};*/
 export const getServices = async () => {
   const token = localStorage.getItem("token");
 
@@ -367,3 +382,69 @@ export const getProjectProgressStats = async (userId, projectId) => {
 
   return handleResponse(res);
 };
+
+// GET admin profile
+export const getAdminProfile = async () => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/profile`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return handleResponse(res);
+};
+
+// UPDATE admin profile
+export const updateAdminProfile = async (adminData) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/profile`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(adminData),
+  });
+  return handleResponse(res);
+};
+
+// GET all projects (admin)
+export const getAllProjects = async () => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/projects`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return handleResponse(res);
+};
+
+
+
+// GET services avec chefs et projets
+export const getServicesWithChefs = async () => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/projects/services`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`, 
+    },
+  });
+  return handleResponse(res);
+};
+
+export const getAdminDashboard = async () => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/dashboard`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  if (!res.ok) throw new Error("Failed to load dashboard");
+  return res.json();
+};
+
+
