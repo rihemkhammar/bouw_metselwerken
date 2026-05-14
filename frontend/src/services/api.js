@@ -239,8 +239,7 @@ export const getProjectById = async (projectId) => {
   return handleResponse(res);
 };
 
-/*export const getServices = async () => {
-
+export const getProjectDetailChef = async (projectId, userId) => {
   const token = localStorage.getItem("token");
 
   console.log("[API] getProjectDetailChef REQUEST:", { projectId, userId });
@@ -256,7 +255,8 @@ export const getProjectById = async (projectId) => {
   console.log("[API] getProjectDetailChef STATUS:", res.status);
 
   return handleResponse(res);
-};*/
+};
+
 export const getServices = async () => {
   const token = localStorage.getItem("token");
 

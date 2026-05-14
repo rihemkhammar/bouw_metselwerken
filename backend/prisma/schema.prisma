@@ -51,6 +51,7 @@ model Project {
   services    Service
   chef        User     @relation("ChefProjects", fields: [chefId], references: [id])
   updates     ProjectUpdate[]
+  progress Int @default(0)
   documents   ProjectDocument[] 
 
 }

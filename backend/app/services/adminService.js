@@ -303,7 +303,7 @@ export const getProjectByIdService = async (id) => {
       id: true,
       title: true,
       status: true,
-      progress: true,   // 👈 include this field
+     progress: true,   
       client: {
         select: {
           id: true,
@@ -329,6 +329,7 @@ export const getProjectByIdService = async (id) => {
           details: true,
           progress: true,
           timestamp: true,
+          
         },
       },
     },

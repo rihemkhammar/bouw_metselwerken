@@ -135,7 +135,7 @@ export default function ProjectCard({ project }) {
                 {project.updates.length}
               </span>
             </p>
-            <div className="flex flex-col gap-2"> --secondary
+            <div className="flex flex-col gap-2"> 
               {visibleUpdates.map((update) => (
                 <div
                   key={update.id}
