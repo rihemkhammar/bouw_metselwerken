@@ -103,7 +103,7 @@ const Login = () => {
               >
                 Mot de passe oublié ?
               </a>
-              <a href="/register" className="text-[#0073CF] hover:underline">
+              <a href="/Activer_Compte" className="text-[#0073CF] hover:underline">
                 Créer un compte
               </a>
             </div>
@@ -137,7 +137,7 @@ const Login = () => {
               </div>
               <div className="flex flex-col items-center">
                 <FaMapMarkerAlt />
-                <span className="text-sm mt-2">Tunis, Tunisie</span>
+                <span className="text-sm mt-2">Kortrijstraat Ingelmunster, Belgique</span>
               </div>
             </div>
           </div>

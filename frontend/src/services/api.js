@@ -383,6 +383,18 @@ export const getProjectProgressStats = async (userId, projectId) => {
   return handleResponse(res);
 };
 
+export const deleteProject = async (projectId) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/projects/${projectId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return handleResponse(res);
+};
+
 // GET admin profile
 export const getAdminProfile = async () => {
   const token = localStorage.getItem("token");
@@ -447,4 +459,24 @@ export const getAdminDashboard = async () => {
   return res.json();
 };
 
+export const getChefServices = async (userId) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/chef/${userId}/services`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return handleResponse(res);
+};
 
+export const createProject = async (projectData) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/projects`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify(projectData),
+  });
+  return handleResponse(res);
+};

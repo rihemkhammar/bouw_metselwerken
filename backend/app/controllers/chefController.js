@@ -1,6 +1,8 @@
 import { chefProfileController } from "./chef/chefProfileController.js";
 import { chefProjectController } from "./chef/chefProjectController.js";
 import { chefProjectDetailController } from "./chef/chefProjectDetailController.js";
+import { serviceController } from "./chef/Servicecontroller.js";
+
 
 export const chefController = {
   // ========== PROFIL ==========
@@ -38,4 +40,6 @@ export const chefController = {
 
   // Récupère tous les détails du projet
   getProjectDetailFull: chefProjectDetailController.handleGetProjectDetailFull,
+
+ getChefServices: serviceController.getChefServices,
 };

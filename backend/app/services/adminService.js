@@ -347,3 +347,25 @@ export const getProjectsByServiceService = async (service) => {
     orderBy: { createdAt: "desc" }
   });
 };
+export const createProjectService = async ({ title, description, budget, services, clientId, chefId }) => {
+  return prisma.project.create({
+    data: {
+      title,
+      description,
+      budget: budget ? parseFloat(budget) : null,
+      services,
+      clientId,
+      chefId,
+      status: "PLANNED",
+    },
+    include: {
+      client: { select: { id: true, name: true, email: true } },
+      chef: { select: { id: true, name: true, email: true } },
+    },
+  });
+};
+export const deleteProjectService = async (id) => {
+  return prisma.project.delete({
+    where: { id },
+  });
+};

@@ -14,7 +14,9 @@ import {
   getServicesWithChefsService,
   getAdminDashboardService,
   getProjectByIdService,
-  getProjectsByServiceService
+  getProjectsByServiceService,
+  createProjectService,
+  deleteProjectService 
 } from "../services/adminService.js";
 
 export const createChef = async (req, res) => {
@@ -214,5 +216,32 @@ export const getProjectsByServiceController = async (req, res) => {
   } catch (err) {
     console.error("Erreur getProjectsByService:", err);
     return res.status(500).json({ error: "Erreur serveur" });
+  }
+};
+
+// Ajouter ce controller
+export const createProjectController = async (req, res) => {
+  const { title, description, budget, services, clientId, chefId } = req.body;
+  if (!title || !services || !clientId || !chefId) {
+    return res.status(400).json({ error: "Champs obligatoires manquants (title, services, clientId, chefId)" });
+  }
+  try {
+    const project = await createProjectService({ title, description, budget, services, clientId, chefId });
+    res.status(201).json(project);
+  } catch (err) {
+    console.error("Erreur createProject:", err);
+    res.status(500).json({ error: "Impossible de créer le projet" });
+  }
+};
+
+
+export const deleteProjectController = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await deleteProjectService(id);
+    res.json({ message: "Projet supprimé avec succès" });
+  } catch (err) {
+    console.error("Erreur deleteProject:", err);
+    res.status(500).json({ error: "Impossible de supprimer le projet" });
   }
 };

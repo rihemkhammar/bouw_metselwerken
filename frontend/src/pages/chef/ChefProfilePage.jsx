@@ -219,9 +219,9 @@ function ChefProfilePage() {
             </Section>
 
             {/* Entreprise */}
-            <Section icon={Building2} title="Entreprise">
+            <Section icon={Building2} title=" service">
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 8 }}>
-                <DetailItem icon={Building2}   label="Entreprise" value={user.companyName || '—'} />
+                <DetailItem icon={Building2}   label=" service" value={user.companyName || '—'} />
                 <DetailItem icon={Briefcase}   label="Matricule"  value={user.matricule   || '—'} />
                 <DetailItem icon={CheckCircle} label="Statut"     value={user.status} highlight={isActive} />
               </div>

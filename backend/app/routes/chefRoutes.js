@@ -93,7 +93,12 @@ router.get(
   authorizeRoles("CHEF"),
   chefController.getProjectDetailFull
 );
-
+router.get(
+  "/:userId/services",
+  authenticate,
+  authorizeRoles("CHEF"),
+  chefController.getChefServices   
+);
 
 
 export default router;

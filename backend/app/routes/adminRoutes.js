@@ -1,5 +1,5 @@
 import express from "express";
-import { getAdminDashboard,getProjectsByServiceController, createChef, fetchChefs , fetchClients , fetchGuests , approveRequestController , fetchClientRequestsController , markClientRequestViewedController ,markGuestRequestViewedController , getProfileSettings , updateProfileSettings ,getAllProjectsController, getProjectByIdController, getServicesWithChefsController } from "../controllers/adminController.js";
+import { getAdminDashboard,getProjectsByServiceController,deleteProjectController, createProjectController, createChef, fetchChefs , fetchClients , fetchGuests , approveRequestController , fetchClientRequestsController , markClientRequestViewedController ,markGuestRequestViewedController , getProfileSettings , updateProfileSettings ,getAllProjectsController, getProjectByIdController, getServicesWithChefsController } from "../controllers/adminController.js";
 import { authenticate } from "../middleware/auth.js";
 import { authorizeRoles } from "../middleware/role.js";
 
@@ -80,11 +80,17 @@ router.get("/projects/services", authenticate, authorizeRoles("ADMIN"), getServi
 router.get("/projects/:id", authenticate, authorizeRoles("ADMIN"), getProjectByIdController);
 router.get("/dashboard", authenticate, authorizeRoles("ADMIN"), getAdminDashboard);
 
+
+router.post("/projects", authenticate, authorizeRoles("ADMIN"), createProjectController);
 router.get(
   "/admin/projects/by-service",
   authenticate,
   authorizeRoles("ADMIN"),
   getProjectsByServiceController
 );
+
+
+// Ajouter dans la section projets :
+router.delete("/projects/:id", authenticate, authorizeRoles("ADMIN"), deleteProjectController);
 
 export default router;

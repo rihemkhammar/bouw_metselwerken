@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import AdminLayout from "../../components/layout/admin/AdminLayout";
-import { getProjectById } from "../../services/api";
+import { getProjectById, deleteProject } from "../../services/api";
 import {
   FiArrowLeft,
   FiAlertTriangle,
@@ -17,14 +17,59 @@ import {
   FiMail,
   FiUser,
   FiEdit2,
-  FiDownload,
   FiMoreVertical,
   FiCheckCircle,
   FiRefreshCw,
   FiXCircle,
   FiFlag,
+  FiTrash,
 } from "react-icons/fi";
 
+/* ─── Modal de confirmation ─── */
+const ConfirmDeleteModal = ({ projectTitle, onConfirm, onCancel, loading }) => (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+    <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 animate-fade-in">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
+          <FiTrash className="w-5 h-5 text-red-600" />
+        </div>
+        <h2 className="text-lg font-bold text-gray-900">Supprimer le projet</h2>
+      </div>
+      <p className="text-gray-600 mb-2">
+        Vous êtes sur le point de supprimer définitivement :
+      </p>
+      <p className="font-semibold text-gray-900 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 mb-5 truncate">
+        {projectTitle}
+      </p>
+      <p className="text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2 mb-6">
+        ⚠️ Cette action est irréversible. Toutes les données associées seront perdues.
+      </p>
+      <div className="flex gap-3 justify-end">
+        <button
+          onClick={onCancel}
+          disabled={loading}
+          className="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition"
+        >
+          Annuler
+        </button>
+        <button
+          onClick={onConfirm}
+          disabled={loading}
+          className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-medium transition flex items-center gap-2"
+        >
+          {loading ? (
+            <FiRefreshCw className="w-4 h-4 animate-spin" />
+          ) : (
+            <FiTrash className="w-4 h-4" />
+          )}
+          {loading ? "Suppression..." : "Supprimer définitivement"}
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
+/* ─── Page principale ─── */
 const ProjectDetailPage = () => {
   const { projectId } = useParams();
   const navigate = useNavigate();
@@ -32,6 +77,8 @@ const ProjectDetailPage = () => {
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -50,6 +97,20 @@ const ProjectDetailPage = () => {
     if (projectId) load();
   }, [projectId]);
 
+  const handleDelete = async () => {
+    try {
+      setDeleteLoading(true);
+      await deleteProject(projectId);
+      navigate("/admin/projects", { replace: true });
+    } catch (err) {
+      console.error("Erreur suppression:", err);
+      setError("Impossible de supprimer le projet. Veuillez réessayer.");
+      setShowDeleteModal(false);
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
   const formatBudget = (amount) =>
     new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(amount || 0);
 
@@ -66,25 +127,25 @@ const ProjectDetailPage = () => {
 
   const getStatusConfig = (status) => {
     const config = {
-      PLANNED: { 
-        label: "Planifié", 
-        class: "bg-gray-100 text-gray-700 border-gray-200", 
-        icon: <FiFlag className="w-3 h-3 mr-1" /> 
+      PLANNED: {
+        label: "Planifié",
+        class: "bg-gray-100 text-gray-700 border-gray-200",
+        icon: <FiFlag className="w-3 h-3 mr-1" />,
       },
-      IN_PROGRESS: { 
-        label: "En cours", 
-        class: "bg-blue-100 text-blue-700 border-blue-200", 
-        icon: <FiRefreshCw className="w-3 h-3 mr-1" /> 
+      IN_PROGRESS: {
+        label: "En cours",
+        class: "bg-blue-100 text-blue-700 border-blue-200",
+        icon: <FiRefreshCw className="w-3 h-3 mr-1" />,
       },
-      COMPLETED: { 
-        label: "Terminé", 
-        class: "bg-green-100 text-green-700 border-green-200", 
-        icon: <FiCheckCircle className="w-3 h-3 mr-1" /> 
+      COMPLETED: {
+        label: "Terminé",
+        class: "bg-green-100 text-green-700 border-green-200",
+        icon: <FiCheckCircle className="w-3 h-3 mr-1" />,
       },
-      CANCELLED: { 
-        label: "Annulé", 
-        class: "bg-red-100 text-red-700 border-red-200", 
-        icon: <FiXCircle className="w-3 h-3 mr-1" /> 
+      CANCELLED: {
+        label: "Annulé",
+        class: "bg-red-100 text-red-700 border-red-200",
+        icon: <FiXCircle className="w-3 h-3 mr-1" />,
       },
     };
     return config[status] || { label: status, class: "bg-gray-100 text-gray-800 border-gray-200", icon: null };
@@ -99,7 +160,6 @@ const ProjectDetailPage = () => {
   const statusConfig = getStatusConfig(project?.status || "");
   const progress = project?.progress || 0;
 
-  // Loading State
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -111,8 +171,7 @@ const ProjectDetailPage = () => {
     );
   }
 
-  // Error State
-  if (error) {
+  if (error && !project) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
         <div className="bg-white rounded-2xl shadow-sm border p-8 max-w-md w-full text-center">
@@ -130,7 +189,6 @@ const ProjectDetailPage = () => {
     );
   }
 
-  // Not Found State
   if (!project) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -150,6 +208,24 @@ const ProjectDetailPage = () => {
 
   return (
     <AdminLayout pageTitle={`Projet - ${project.title}`}>
+      {/* Modal */}
+      {showDeleteModal && (
+        <ConfirmDeleteModal
+          projectTitle={project.title}
+          onConfirm={handleDelete}
+          onCancel={() => setShowDeleteModal(false)}
+          loading={deleteLoading}
+        />
+      )}
+
+      {/* Erreur inline (après chargement) */}
+      {error && (
+        <div className="mx-4 md:mx-6 mt-4 bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 flex items-center gap-2">
+          <FiAlertTriangle className="w-4 h-4 flex-shrink-0" />
+          <span className="text-sm">{error}</span>
+        </div>
+      )}
+
       {/* Sticky Header */}
       <header className="bg-white border-b sticky top-0 z-20 shadow-sm">
         <div className="px-4 md:px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -181,9 +257,12 @@ const ProjectDetailPage = () => {
               <FiEdit2 className="w-4 h-4" />
               <span className="hidden sm:inline">Modifier</span>
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition shadow-sm">
-              <FiDownload className="w-4 h-4" />
-              <span className="hidden sm:inline">Exporter</span>
+            <button
+              onClick={() => setShowDeleteModal(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition shadow-sm"
+            >
+              <FiTrash className="w-4 h-4" />
+              <span className="hidden sm:inline">Supprimer</span>
             </button>
             <button className="p-2 hover:bg-gray-100 rounded-lg transition">
               <FiMoreVertical className="w-5 h-5 text-gray-500" />
@@ -215,13 +294,11 @@ const ProjectDetailPage = () => {
 
         {/* Progress & General Info Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left: Project Details */}
           <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 shadow-sm p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <FiBriefcase className="w-5 h-5 text-gray-500" />
               Informations du chantier
             </h2>
-            
             <div className="space-y-4">
               <div>
                 <p className="text-sm font-medium text-gray-500 mb-1">Description</p>
@@ -229,7 +306,6 @@ const ProjectDetailPage = () => {
                   {project.description || "Aucune description fournie pour ce projet."}
                 </p>
               </div>
-              
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm font-medium text-gray-500 mb-1">Service / Corps d'état</p>
@@ -240,8 +316,6 @@ const ProjectDetailPage = () => {
                   <p className="text-gray-800">{statusConfig.label}</p>
                 </div>
               </div>
-
-              {/* Progress Bar */}
               <div className="pt-2">
                 <div className="flex justify-between items-center mb-2">
                   <p className="text-sm font-medium text-gray-500">Progression globale</p>
@@ -260,7 +334,6 @@ const ProjectDetailPage = () => {
             </div>
           </div>
 
-          {/* Right: Contacts */}
           <div className="space-y-6">
             {project.client && (
               <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
