@@ -15,62 +15,28 @@ import {
   FaBrush,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { sendContactRequest } from "../../../services/api"; 
 const services = [
   { value: "", label: "Service souhaité", icon: null, disabled: true },
-  {
-    value: "masonry",
-    label: "Maçonnerie",
-    icon: FaBuilding,
-    description: "Murs, fondations",
-  },
-  {
-    value: "renovation",
-    label: "Rénovation",
-    icon: FaHome,
-    description: "Modernisation",
-  },
-  {
-    value: "restoration",
-    label: "Restauration",
-    icon: FaPaintRoller,
-    description: "Pierres anciennes",
-  },
-  {
-    value: "general-construction",
-    label: "Construction générale",
-    icon: FaHardHat,
-    description: "Projets neufs",
-  },
-  {
-    value: "repointing",
-    label: "Rejointoiement rustique",
-    icon: FaBrush,
-    description: "Finitions",
-  },
-  {
-    value: "waterproofing",
-    label: "Traitement hydrofuge",
-    icon: FaWater,
-    description: "Protection humidité",
-  },
-  {
-    value: "moss-removal",
-    label: "Démoussage",
-    icon: FaLeaf,
-    description: "Nettoyage façades",
-  },
-  {
-    value: "other",
-    label: "Autre service",
-    icon: FaTools,
-    description: "Projet personnalisé",
-  },
+  { value: "MACONNERIE", label: "Maçonnerie", icon: FaBuilding, description: "Murs, fondations" },
+  { value: "RENOVATION", label: "Rénovation", icon: FaHome, description: "Modernisation" },
+  { value: "RESTAURATION", label: "Restauration", icon: FaPaintRoller, description: "Pierres anciennes" },
+  { value: "CONSTRUCTION_GENERALE", label: "Construction générale", icon: FaHardHat, description: "Projets neufs" },
+  { value: "REJOINTOIEMENT_RUSTIQUE", label: "Rejointoiement rustique", icon: FaBrush, description: "Finitions" },
+  { value: "TRAITEMENT_HYDROFUGE", label: "Traitement hydrofuge", icon: FaWater, description: "Protection humidité" },
+  { value: "DEMOUSSAGE", label: "Démoussage", icon: FaLeaf, description: "Nettoyage façades" },
+  { value: "OTHER", label: "Autre service", icon: FaTools, description: "Projet personnalisé" },
 ];
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState("");
   const dropdownRef = useRef(null);
+
+  // Form state
+  const [formData, setFormData] = useState({ name: "", phone: "", email: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // "success" | "error"
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -83,7 +49,6 @@ const Header = () => {
   }, []);
 
   const selectedService = services.find((s) => s.value === value);
-  const SelectedIcon = selectedService?.icon;
 
   const handleSelect = (serviceValue) => {
     if (serviceValue) {
@@ -92,11 +57,29 @@ const Header = () => {
     }
   };
 
+  const handleChange = (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+    try {
+      await sendContactRequest({ ...formData, services: value ? [value] : [] });
+      setSubmitStatus("success");
+      setFormData({ name: "", phone: "", email: "", message: "" });
+      setValue("");
+    } catch (error) {
+      console.error("Erreur lors de l'envoi:", error);
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <div
-      className="relative h-[55vh] md:h-screen w-full overflow-hidden"
-      id="Header"
-    >
+    <div className="relative h-[55vh] md:h-screen w-full overflow-hidden" id="Header">
       <Navbar />
 
       <video
@@ -109,20 +92,18 @@ const Header = () => {
       />
       <div className="absolute inset-0 bg-black/40" />
 
-      {/* Content */}
-      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between h-full pt-40 md:pt-0 px-6 md:pl-40 md:pr-0 ">
+      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between h-full pt-40 md:pt-0 px-6 md:pl-40 md:pr-0">
         {/* LEFT: Hero Text */}
         <div className="text-white md:flex-1 lg:max-w-2xl text-center md:text-left">
           <h1 className="text-4xl md:text-6xl font-bold leading-tight drop-shadow-lg">
             Votre Projet , Notre Expertise
           </h1>
           <p className="text-lg md:text-2xl mt-4 drop-shadow-md">
-            Nous transformons vos idées en réalisations solides, durables et
-            parfaitement maîtrisées.
+            Nous transformons vos idées en réalisations solides, durables et parfaitement maîtrisées.
           </p>
           <div className="flex gap-4 mt-8 justify-center md:justify-start">
             <Link
-              to = "/login"
+              to="/login"
               className="border-2 border-white text-white font-semibold px-6 py-3 rounded-full text-lg hover:bg-[#0073CF] hover:text-white transition shadow-lg"
             >
               Se Connecter
@@ -133,24 +114,46 @@ const Header = () => {
         {/* RIGHT: Contact Form */}
         <div className="hidden md:flex h-full items-center">
           <div className="pt-10 md:pt-10 md:self-start">
-            <div className="relative z-20 bg-white/70 h-screen md:p-10 md:w-[380px] md:pt-40 rounded-l-lg md:rounded-r-none shadow-xl gap-4 ">
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                Démarrons Votre Projet
-              </h2>
-              <form className="flex flex-col gap-5">
+            <div className="relative z-20 bg-white/70 h-screen md:p-10 md:w-[380px] md:pt-40 rounded-l-lg md:rounded-r-none shadow-xl gap-4">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">Démarrons Votre Projet</h2>
+
+              {/* Success / Error feedback */}
+              {submitStatus === "success" && (
+                <div className="mb-4 p-3 bg-green-100 text-green-700 rounded text-sm font-medium">
+                  ✅ Votre message a bien été envoyé !
+                </div>
+              )}
+              {submitStatus === "error" && (
+                <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm font-medium">
+                  ❌ Une erreur est survenue. Veuillez réessayer.
+                </div>
+              )}
+
+              <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
                 <input
                   type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
                   placeholder="Nom"
+                  required
                   className="border p-3 rounded focus:outline-none focus:ring-2 focus:ring-[#0073CF] focus:border-[#0073CF] transition"
                 />
                 <input
                   type="text"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
                   placeholder="Téléphone"
                   className="border p-3 rounded focus:outline-none focus:ring-2 focus:ring-[#0073CF] focus:border-[#0073CF] transition"
                 />
                 <input
                   type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   placeholder="Email"
+                  required
                   className="border p-3 rounded focus:outline-none focus:ring-2 focus:ring-[#0073CF] focus:border-[#0073CF] transition"
                 />
 
@@ -164,14 +167,9 @@ const Header = () => {
                     onClick={() => setIsOpen(!isOpen)}
                     className="w-full flex items-center justify-between px-3 py-2"
                   >
-                    <span
-                      className={`truncate ${
-                        !value ? "text-gray-400" : "text-gray-700"
-                      }`}
-                    >
+                    <span className={`truncate ${!value ? "text-gray-400" : "text-gray-700"}`}>
                       {selectedService?.label || "Service souhaité"}
                     </span>
-
                     {isOpen ? (
                       <FaChevronUp size={14} className="text-gray-400" />
                     ) : (
@@ -187,9 +185,7 @@ const Header = () => {
                           <li
                             key={service.value}
                             role="option"
-                            onClick={() =>
-                              !service.disabled && handleSelect(service.value)
-                            }
+                            onClick={() => !service.disabled && handleSelect(service.value)}
                             className={`flex items-center gap-2.5 px-3 py-2.5 cursor-pointer transition-colors ${
                               service.disabled
                                 ? "text-gray-300 cursor-not-allowed"
@@ -199,36 +195,19 @@ const Header = () => {
                             }`}
                           >
                             {Icon && (
-                              <div
-                                className={`w-6 h-6 rounded flex items-center justify-center ${
-                                  isSelected
-                                    ? "bg-[#0073CF] text-white"
-                                    : "bg-gray-100 text-gray-500"
-                                }`}
-                              >
+                              <div className={`w-6 h-6 rounded flex items-center justify-center ${isSelected ? "bg-[#0073CF] text-white" : "bg-gray-100 text-gray-500"}`}>
                                 <Icon size={12} />
                               </div>
                             )}
                             <div className="flex-1 min-w-0">
-                              <p
-                                className={`text-sm font-medium truncate ${
-                                  isSelected ? "text-[#0073CF]" : ""
-                                }`}
-                              >
+                              <p className={`text-sm font-medium truncate ${isSelected ? "text-[#0073CF]" : ""}`}>
                                 {service.label}
                               </p>
                               {service.description && (
-                                <p className="text-xs text-gray-400 truncate">
-                                  {service.description}
-                                </p>
+                                <p className="text-xs text-gray-400 truncate">{service.description}</p>
                               )}
                             </div>
-                            {isSelected && (
-                              <FaCheck
-                                size={14}
-                                className="text-[#0073CF] flex-shrink-0"
-                              />
-                            )}
+                            {isSelected && <FaCheck size={14} className="text-[#0073CF] flex-shrink-0" />}
                           </li>
                         );
                       })}
@@ -237,14 +216,19 @@ const Header = () => {
                 </div>
 
                 <textarea
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
                   placeholder="Message"
                   className="border p-3 rounded h-24 focus:outline-none focus:ring-2 focus:ring-[#0073CF] focus:border-[#0073CF] transition"
                 ></textarea>
+
                 <button
                   type="submit"
-                  className="bg-[#f16c13] text-white font-semibold px-5 py-2 rounded-full hover:opacity-90 transition"
+                  disabled={isSubmitting}
+                  className="bg-[#f16c13] text-white font-semibold px-5 py-2 rounded-full hover:opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  Envoyer
+                  {isSubmitting ? "Envoi en cours..." : "Envoyer"}
                 </button>
               </form>
             </div>

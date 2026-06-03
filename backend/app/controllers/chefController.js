@@ -20,8 +20,8 @@ export const chefController = {
 
   // Met à jour le statut du projet
   updateProjectStatus: chefProjectController.handleUpdateProjectStatus,
-
-  // Récupère l'historique des mises à jour
+handleUpdateProjectProgress: chefProjectController.handleUpdateProjectProgress,
+// Récupère l'historique des mises à jour
   getProjectUpdatesHistory: chefProjectController.handleGetProjectUpdatesHistory,
 
   // Récupère les statistiques de progression
@@ -42,4 +42,6 @@ export const chefController = {
   getProjectDetailFull: chefProjectDetailController.handleGetProjectDetailFull,
 
  getChefServices: serviceController.getChefServices,
+ 
+
 };

@@ -187,6 +187,7 @@ export const requestAccountCreation = async ({
   });
   return handleResponse(res);
 };
+
 export const getProjects = async (userId) => {
   const token = localStorage.getItem("token");
   const res = await fetch(`${API_URL}/client/${userId}/projects`, {
@@ -296,7 +297,7 @@ export const addProjectUpdate = async (userId, projectId, updateData) => {
         updateType: updateData.updateType,
         details: updateData.details,
         progress: updateData.progress ?? null,
-        services: updateData.services ?? [],
+        
       }),
     }
   );
@@ -330,6 +331,21 @@ export const updateProjectStatus = async (userId, projectId, status) => {
 
   console.log("[API] updateProjectStatus STATUS:", res.status);
 
+  return handleResponse(res);
+};
+export const updateProjectProgress = async (userId, projectId, progress) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(
+    `${API_URL}/chef/${userId}/projects/${projectId}/progress`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ progress }),
+    }
+  );
   return handleResponse(res);
 };
 ////////////////

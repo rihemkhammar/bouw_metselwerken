@@ -153,6 +153,29 @@ const handleDeleteProjectUpdate = async (req, res) => {
     });
   }
 };
+const handleUpdateProjectProgress = async (req, res) => {
+  try {
+    const { userId, projectId } = req.params;
+    if (req.user.id !== userId)
+      return res.status(403).json({ message: "Accès refusé" });
+
+    const { progress } = req.body;
+    if (progress === undefined || isNaN(Number(progress)) ||
+        Number(progress) < 0 || Number(progress) > 100)
+      return res.status(400).json({
+        message: "progress doit être un nombre entre 0 et 100."
+      });
+
+    const updated = await chefService.updateProjectProgress(
+      userId, projectId, Number(progress)
+    );
+    return res.status(200).json({ success: true, project: updated });
+  } catch (error) {
+    const isAccess = error.message.includes("accès refusé");
+    return res.status(isAccess ? 403 : 500).json({ message: error.message });
+  }
+};
+
 
 export const chefProjectController = {
   handleGetChefProjects,
@@ -162,4 +185,5 @@ export const chefProjectController = {
   handleGetProjectUpdatesHistory,
   handleGetProjectProgressStats,
   handleDeleteProjectUpdate,
+  handleUpdateProjectProgress,
 };

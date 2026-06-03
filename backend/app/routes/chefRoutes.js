@@ -42,6 +42,12 @@ router.patch(
   authorizeRoles("CHEF"),
   chefController.updateProjectStatus
 );
+router.patch(
+  "/:userId/projects/:projectId/progress",
+  authenticate,
+  authorizeRoles("CHEF"),
+  chefController.handleUpdateProjectProgress
+);
 router.get(
   "/:userId/projects/:projectId/updates",
   authenticate,

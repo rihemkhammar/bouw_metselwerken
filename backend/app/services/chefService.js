@@ -2,6 +2,7 @@ import { chefProfileService } from "./chef/ChefprofileService.js";
 import { chefProjectService } from "./chef/clientProjectService.js"; 
 import { chefProjectDetailService } from "./chef/chefProjectDetailService.js";
 import { serviceService} from "./chef/Serviceservice.js";
+
 export const chefService = {
   // Profil
   getProfileById: chefProfileService.getProfileById,
@@ -25,6 +26,7 @@ export const chefService = {
   // Récupère les statistiques de progression
   getProjectProgressStats: chefProjectService.getProjectProgressStats,
   
+  updateProjectProgress: chefProjectService.updateProjectProgress
  
 
 };

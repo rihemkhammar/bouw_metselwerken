@@ -95,7 +95,7 @@ const addProjectUpdate = async (chefId, projectId, { updateType, details, progre
       updateType,
       details,
       progress: progress ?? 0,
-      services,
+      services: project.services,  
       updatedBy: chefId,
     },
   });
@@ -176,13 +176,39 @@ const getProjectProgressStats = async (chefId, projectId) => {
     averageProgress: Number(averageProgress.toFixed(2)),
   };
 };
+const updateProjectProgress = async (chefId, projectId, progress) => {
+  const project = await prisma.project.findFirst({
+    where: { id: projectId, chefId },
+  });
+  if (!project) throw new Error("Projet introuvable ou accès refusé.");
+
+  // 1. Mettre à jour progress sur le projet
+  const updated = await prisma.project.update({
+    where: { id: projectId },
+    data: { progress },
+  });
+
+  // 2. Créer un update de type "progress"
+  await prisma.projectUpdate.create({
+    data: {
+      projectId,
+      updateType: "progress",
+      details: `Progression mise à jour : ${progress}%`,
+      progress,
+      updatedBy: chefId,
+      services: project.services,
+    },
+  });
+
+  return updated;
+};
 
 export const chefProjectService = {
   getChefProjects,
   getChefProjectById,
   addProjectUpdate,
   updateProjectStatus,
-
+updateProjectProgress,
  
   getProjectUpdatesHistory,
   getProjectProgressStats,
