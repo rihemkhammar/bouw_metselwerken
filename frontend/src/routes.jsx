@@ -33,6 +33,8 @@ import AdminProfile from "./pages/admin/AdminProfile";
 import ProjectsListPage from "./pages/admin/ProjectsListPage";
 import ProjectDetailPage from "./pages/admin/ProjectDetailPage";
 
+import ServicesPage from "./pages/admin/Servicespage";
+
 export default function AppRoutes() {
   return (
     <Routes>
@@ -48,8 +50,8 @@ export default function AppRoutes() {
       <Route path="/admin/guests/demandes" element={<ListDemandeGuest />} />
       <Route path="/admin/clients/demandes" element={<ListClientsDemande />} />
       <Route path="/admin/projects" element={<ProjectsListPage />} />
-      <Route path="/admin/projects/:projectId" element={<ProjectDetailPage />}
-     />
+      <Route path="/admin/projects/:projectId" element={<ProjectDetailPage />}/>
+       <Route path="/admin/service" element={<ServicesPage/>}/>
 
       <Route path="/admin/profile" element={<AdminProfile />} />
 

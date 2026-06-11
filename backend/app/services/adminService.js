@@ -1,6 +1,9 @@
 import prisma from "../configs/prisma.js";
 
 import bcrypt from "bcryptjs";
+import { sendClientCredentials } from "./email.service.js";
+ 
+
 
 export const createChefService = async ({ name, email, password }) => {
   const existingUser = await prisma.user.findUnique({ where: { email } });
@@ -92,13 +95,29 @@ export const approveClientRequest = async (requestId, adminId) => {
     throw new Error("Request already processed");
   }
 
-  const plainPassword = Math.random().toString(36).slice(-8);
+  console.log("ENV CHECK:", {
+    host: process.env.EMAIL_HOST,
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS ? "✅ défini" : "❌ undefined",
+  });
+
+    const plainPassword =
+    Math.random().toString(36).slice(-4).toUpperCase() +
+    Math.random().toString(36).slice(-4) +
+    "!";
+ 
   const hashedPassword = await bcrypt.hash(plainPassword, 10);
 
-  await prisma.user.update({
+
+   await prisma.user.update({
     where: { id: request.userId },
-    data: { status: "ACTIVE", password: hashedPassword },
+    data: {
+      status: "ACTIVE",
+      password: hashedPassword,
+      role: "CLIENT",           
+    },
   });
+
 
   await prisma.request.update({
     where: { id: requestId },
@@ -108,8 +127,16 @@ export const approveClientRequest = async (requestId, adminId) => {
       viewed: true,
     },
   });
+   await sendClientCredentials({
+    name: request.user.name,
+    email: request.user.email,
+    password: plainPassword,      // mot de passe EN CLAIR (avant hash) pour l'email
+  });
+
 
   return { success: true, request };
+
+  
 };
 
 export const getClientRequests = async () => {
@@ -221,6 +248,7 @@ export const getServicesWithChefsService = async () => {
       };
     }),
   );
+
 
   return result;
 };
@@ -367,5 +395,122 @@ export const createProjectService = async ({ title, description, budget, service
 export const deleteProjectService = async (id) => {
   return prisma.project.delete({
     where: { id },
+  });
+};
+export const deleteClientService = async (id) => {
+  // 1. Récupérer les IDs des projets du client
+  const projects = await prisma.project.findMany({
+    where: { clientId: id },
+    select: { id: true },
+  });
+  const projectIds = projects.map((p) => p.id);
+
+  // 2. Supprimer les sous-relations 
+  await prisma.projectDocument.deleteMany({ where: { projectId: { in: projectIds } } });
+  await prisma.projectUpdate.deleteMany({ where: { projectId: { in: projectIds } } });
+
+  // 3. Supprimer les projets
+  await prisma.project.deleteMany({ where: { clientId: id } });
+
+  // 4. Supprimer les requests
+  await prisma.request.deleteMany({ where: { userId: id } });
+
+  // 5. Supprimer le client
+  return prisma.user.delete({ where: { id } });
+};
+export const updateClientService = async (id, data) => {
+  return prisma.user.update({
+    where: { id },
+    data: {
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      companyName: data.companyName,
+      address: data.address,
+    },
+  });
+};
+export const deleteChefService = async (id) => {
+  const projects = await prisma.project.findMany({
+    where: { chefId: id },
+    select: { id: true },
+  });
+  const projectIds = projects.map((p) => p.id);
+
+  await prisma.projectDocument.deleteMany({ where: { projectId: { in: projectIds } } });
+  await prisma.projectUpdate.deleteMany({ where: { projectId: { in: projectIds } } });
+  await prisma.project.deleteMany({ where: { chefId: id } });
+
+  return prisma.user.delete({ where: { id } });
+};
+
+export const updateChefService = async (id, data) => {
+  return prisma.user.update({
+    where: { id },
+    data: {
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+    },
+  });
+};
+export const updateProjectService = async (id, data) => {
+  return prisma.project.update({
+    where: { id },
+    data: {
+      title: data.title,
+      description: data.description,
+      budget: data.budget ? parseFloat(data.budget) : null,
+      services: data.services,
+      clientId: data.clientId,
+      chefId: data.chefId,
+      status: data.status,
+    },
+    include: {
+      client: { select: { id: true, name: true, email: true } },
+      chef: { select: { id: true, name: true, email: true } },
+    },
+  });
+};
+
+
+
+export const getServicesListService = async () => {
+  const services = [
+    "MACONNERIE", "RENOVATION", "RESTAURATION",
+    "CONSTRUCTION_GENERALE", "REJOINTOIEMENT_RUSTIQUE",
+    "TRAITEMENT_HYDROFUGE", "DEMOUSSAGE",
+  ];
+
+  return Promise.all(
+    services.map(async (service) => {
+      const projectsCount = await prisma.project.count({
+        where: { services: service },
+      });
+
+      const chefs = await prisma.user.findMany({
+        where: { role: "CHEF", services: { has: service } },
+        select: { id: true, name: true, email: true, phone: true },
+      });
+
+      return { service, projectsCount, chefs };
+    })
+  );
+};
+
+export const assignChefToServiceService = async (chefId, service) => {
+  return prisma.user.update({
+    where: { id: chefId },
+    data: { services: { push: service } },
+  });
+};
+
+export const removeChefFromServiceService = async (chefId, service) => {
+  const chef = await prisma.user.findUnique({ where: { id: chefId } });
+  if (!chef) throw new Error("Chef introuvable");
+
+  return prisma.user.update({
+    where: { id: chefId },
+    data: { services: chef.services.filter((s) => s !== service) },
   });
 };

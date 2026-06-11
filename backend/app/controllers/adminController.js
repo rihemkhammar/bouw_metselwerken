@@ -16,7 +16,15 @@ import {
   getProjectByIdService,
   getProjectsByServiceService,
   createProjectService,
-  deleteProjectService 
+  deleteProjectService,
+  deleteClientService,
+  updateClientService,
+  deleteChefService,
+  updateChefService ,
+  updateProjectService,
+  getServicesListService,
+  assignChefToServiceService,
+  removeChefFromServiceService
 } from "../services/adminService.js";
 
 export const createChef = async (req, res) => {
@@ -243,5 +251,95 @@ export const deleteProjectController = async (req, res) => {
   } catch (err) {
     console.error("Erreur deleteProject:", err);
     res.status(500).json({ error: "Impossible de supprimer le projet" });
+  }
+};
+export const deleteClientController = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await deleteClientService(id);
+    res.json({ message: "Client supprimé avec succès" });
+  } catch (err) {
+    console.error("Erreur deleteClient:", err);
+    res.status(500).json({ error: "Impossible de supprimer le client" });
+  }
+};
+export const updateClientController = async (req, res) => {
+  const { id } = req.params;
+  const { name, email, phone, companyName, address } = req.body;
+  try {
+    const updated = await updateClientService(id, { name, email, phone, companyName, address });
+    res.json(updated);
+  } catch (err) {
+    console.error("Erreur updateClient:", err);
+    res.status(500).json({ error: "Impossible de modifier le client" });
+  }
+};
+export const deleteChefController = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await deleteChefService(id);
+    res.json({ message: "Chef supprimé avec succès" });
+  } catch (err) {
+    console.error("Erreur deleteChef:", err);
+    res.status(500).json({ error: "Impossible de supprimer le chef" });
+  }
+};
+
+export const updateChefController = async (req, res) => {
+  const { id } = req.params;
+  const { name, email, phone } = req.body;
+  try {
+    const updated = await updateChefService(id, { name, email, phone });
+    res.json(updated);
+  } catch (err) {
+    console.error("Erreur updateChef:", err);
+    res.status(500).json({ error: "Impossible de modifier le chef" });
+  }
+};
+export const updateProjectController = async (req, res) => {
+  const { id } = req.params;
+  const { title, description, budget, services, clientId, chefId, status } = req.body;
+  try {
+    const updated = await updateProjectService(id, { title, description, budget, services, clientId, chefId, status });
+    res.json(updated);
+  } catch (err) {
+    console.error("Erreur updateProject:", err);
+    res.status(500).json({ error: "Impossible de modifier le projet" });
+  }
+};
+
+
+
+export const getServicesListController = async (req, res) => {
+  try {
+    const data = await getServicesListService();
+    res.json(data);
+  } catch (err) {
+    console.error("Erreur getServicesList:", err);
+    res.status(500).json({ error: "Impossible de charger les services" });
+  }
+};
+
+export const assignChefToServiceController = async (req, res) => {
+  const { service } = req.params;
+  const { chefId } = req.body;
+  if (!chefId) return res.status(400).json({ error: "chefId requis" });
+  try {
+    await assignChefToServiceService(chefId, service);
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Erreur assignChefToService:", err);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const removeChefFromServiceController = async (req, res) => {
+  const { service, chefId } = req.params;
+  try {
+    await removeChefFromServiceService(chefId, service);
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Erreur removeChefFromService:", err);
+    res.status(500).json({ error: err.message });
   }
 };

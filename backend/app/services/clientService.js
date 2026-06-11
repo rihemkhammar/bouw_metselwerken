@@ -3,7 +3,7 @@ import { clientProfileService } from "./client/ClientprofileService.js";
 import { clientProjectService } from "./client/clientProjectService.js";
 import {clientProjectDetailService} from "./client/Clientprojectdetailservice.js"
 import {serviceService} from "./client/Serviceservice.js"
-
+import { uploadDocumentService } from "./client/uploadDocumentService.js";
 
 export const clientService = {
   registerClient: signupService.registerClient,
@@ -11,5 +11,7 @@ export const clientService = {
   getClientProjects: clientProjectService.getClientProjects,
   getProjectDetail: clientProjectDetailService.getProjectDetail,
   getAllServices: serviceService.getAllServices,
+  uploadDocument: uploadDocumentService.uploadDocument,
+   getProjectUpdates: clientProjectDetailService.getProjectUpdates,
 
 };

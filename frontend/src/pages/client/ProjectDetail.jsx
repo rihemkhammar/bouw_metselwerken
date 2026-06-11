@@ -1,31 +1,105 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { getProjectDetail } from "../../services/api";
+import {
+  getProjectDetail,
+  uploadProjectDocument,
+  getClientProjectUpdates,
+} from "../../services/api";
 
 import {
   HiArrowLeft,
   HiEnvelope,
   HiPhone,
-  HiUser,
-  HiHashtag,
-  HiChatBubbleLeft,
-  HiPencilSquare,
-  HiClipboardDocumentList,
   HiUserGroup,
-  HiArrowPath,
+  HiClipboardDocumentList,
+  HiArrowUpTray,
   HiInbox,
   HiExclamationTriangle,
-  HiMagnifyingGlass,
+  HiChartBar,
+  HiClock,
+  HiCheckCircle,
+  HiWrenchScrewdriver,
 } from "react-icons/hi2";
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+const formatBudget = (amount) =>
+  new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(amount);
+
+const formatDate = (dateString) => {
+  if (!dateString) return "Non disponible";
+  return new Date(dateString).toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
+const getStatusConfig = (status) => {
+  const config = {
+    PENDING:     { label: "En attente", cls: "bg-yellow-100 text-yellow-800 border-yellow-300" },
+    IN_PROGRESS: { label: "En cours",   cls: "bg-blue-100   text-blue-800   border-blue-300"   },
+    COMPLETED:   { label: "Terminé",    cls: "bg-green-100  text-green-800  border-green-300"  },
+    CANCELLED:   { label: "Annulé",     cls: "bg-red-100    text-red-800    border-red-300"    },
+  };
+  return config[status] || { label: status, cls: "bg-gray-100 text-gray-800 border-gray-200" };
+};
+
+const getServiceLabel = (serviceKey) => {
+  const services = {
+    CONSTRUCTION_GENERALE: "Construction Générale",
+    RENOVATION:            "Rénovation",
+    ELECTRICITE:           "Électricité",
+    PLOMBERIE:             "Plomberie",
+    PEINTURE:              "Peinture",
+    TRAITEMENT_HYDROFUGE:  "Traitement Hydrofuge",
+  };
+  if (Array.isArray(serviceKey)) return serviceKey.map((s) => services[s] || s).join(", ");
+  return services[serviceKey] || serviceKey;
+};
+
+const getUpdateTypeConfig = (type) => {
+  const map = {
+    STATUS_CHANGE:   { label: "Changement de statut", color: "text-blue-600",   bg: "bg-blue-50"   },
+    PROGRESS_UPDATE: { label: "Progression",           color: "text-green-600",  bg: "bg-green-50"  },
+    DOCUMENT_ADDED:  { label: "Document ajouté",       color: "text-purple-600", bg: "bg-purple-50" },
+    GENERAL:         { label: "Mise à jour",           color: "text-gray-600",   bg: "bg-gray-50"   },
+  };
+  return map[type] || { label: type, color: "text-gray-600", bg: "bg-gray-50" };
+};
+
+// ─── Barre de progression colorée ────────────────────────────────────────────
+// Couleur réelle (pas de variable CSS) selon le pourcentage
+const getProgressColor = (pct) => {
+  if (pct === 100) return "#22c55e"; // green-500
+  if (pct >= 70)   return "#3b82f6"; // blue-500
+  if (pct >= 30)   return "#f59e0b"; // amber-500
+  return "#94a3b8";                  // slate-400
+};
+
+const getProgressLabel = (pct) => {
+  if (pct === 100) return "Projet terminé avec succès";
+  if (pct >= 70)   return "Projet presque terminé";
+  if (pct >= 30)   return "Le projet avance bien";
+  return "Le projet vient de commencer";
+};
+
+// ─── Composant principal ──────────────────────────────────────────────────────
 
 const ProjectDetail = () => {
   const { projectId } = useParams();
   const navigate = useNavigate();
 
-  const [project, setProject] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [project,      setProject]      = useState(null);
+  const [updates,      setUpdates]      = useState([]);
+  const [loading,      setLoading]      = useState(true);
+  const [error,        setError]        = useState(null);
+  const [uploading,    setUploading]    = useState(false);
+  const [uploadError,  setUploadError]  = useState(null);
+  const [activeTab,    setActiveTab]    = useState("documents"); // "documents" | "updates"
 
   const getUserId = () => {
     try {
@@ -40,141 +114,89 @@ const ProjectDetail = () => {
     return localStorage.getItem("userId");
   };
 
+  // ─── Chargement initial ─────────────────────────────────────────────────────
   useEffect(() => {
-    const fetchProject = async () => {
+    const fetchAll = async () => {
       try {
         setLoading(true);
         const userId = getUserId();
         if (!userId) throw new Error("Utilisateur non authentifié");
+
+        // Projet + documents + updates (dans le même appel)
         const data = await getProjectDetail(projectId, userId);
+        console.log("[DEBUG] project data:", data); // ← vérification
         setProject(data);
+
+        // Updates viennent déjà dans data.updates — on les sépare pour plus de clarté
+        if (data.updates) {
+          setUpdates(data.updates);
+        } else {
+          // Fallback : appel séparé si le backend ne les inclut pas encore
+          const upd = await getClientProjectUpdates(userId, projectId);
+          setUpdates(upd);
+        }
+
         setError(null);
       } catch (err) {
         setError(err.message || "Erreur lors du chargement du projet");
-        console.error("Erreur fetch project:", err);
+        console.error(err);
       } finally {
         setLoading(false);
       }
     };
 
-    if (projectId) fetchProject();
+    if (projectId) fetchAll();
   }, [projectId]);
 
-  const formatBudget = (amount) => {
-    return new Intl.NumberFormat("fr-FR", {
-      style: "currency",
-      currency: "EUR",
-    }).format(amount);
-  };
+  // ─── Upload fichier ─────────────────────────────────────────────────────────
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "Non disponible";
-    return new Date(dateString).toLocaleDateString("fr-FR", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
+    try {
+      setUploading(true);
+      setUploadError(null);
+      const userId = getUserId();
 
-  const getStatusConfig = (status) => {
-    const config = {
-      PENDING: { label: "En attente", class: "status-pending" },
-      IN_PROGRESS: { label: "En cours", class: "status-in-progress" },
-      COMPLETED: { label: "Terminé", class: "status-completed" },
-      CANCELLED: { label: "Annulé", class: "status-cancelled" },
-    };
-    return (
-      config[status] || {
-        label: status,
-        class: "bg-gray-100 text-gray-800 border-gray-200",
-      }
-    );
-  };
+      await uploadProjectDocument(userId, projectId, file);
 
-  const getServiceLabel = (serviceKey) => {
-    const services = {
-      CONSTRUCTION_GENERALE: "Construction Générale",
-      RENOVATION: "Rénovation",
-      ELECTRICITE: "Électricité",
-      PLOMBERIE: "Plomberie",
-      PEINTURE: "Peinture",
-      TRAITEMENT_HYDROFUGE: "Traitement Hydrofuge",
-    };
-    if (Array.isArray(serviceKey)) {
-      return serviceKey.map((s) => services[s] || s).join(", ");
+      // Rafraîchir les données du projet
+      const updatedData = await getProjectDetail(projectId, userId);
+      setProject(updatedData);
+      if (updatedData.updates) setUpdates(updatedData.updates);
+    } catch (err) {
+      setUploadError("Échec de l'upload : " + err.message);
+    } finally {
+      setUploading(false);
+      // Réinitialiser l'input file pour pouvoir ré-uploader le même fichier
+      e.target.value = "";
     }
-    return services[serviceKey] || serviceKey;
   };
 
-  const getUpdateTypeConfig = (type) => {
-    const config = {
-      "state change": {
-        label: "Changement de statut",
-        class: "bg-blue-100 text-blue-800 border-blue-200",
-      },
-      progress: {
-        label: "Avancement",
-        class: "bg-green-100 text-green-800 border-green-200",
-      },
-      comment: {
-        label: "Commentaire",
-        class: "bg-yellow-100 text-yellow-800 border-yellow-200",
-      },
-      document: {
-        label: "Document ajouté",
-        class: "bg-purple-100 text-purple-800 border-purple-200",
-      },
-    };
-    return (
-      config[type] || {
-        label: type,
-        class: "bg-gray-100 text-gray-800 border-gray-200",
-      }
-    );
-  };
-
+  // ─── États de chargement / erreur ──────────────────────────────────────────
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent mx-auto mb-4" />
           <p className="text-secondary">Chargement du projet...</p>
         </div>
       </div>
     );
   }
 
-  if (error) {
+  if (error || !project) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md w-full text-center border border-border">
-          <HiExclamationTriangle className="w-12 h-12 text-error mx-auto mb-4" />
+        <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md w-full text-center">
+          <HiExclamationTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-primary mb-2">Oups !</h2>
-          <p className="text-secondary mb-6">{error}</p>
+          <p className="text-secondary mb-6">{error || "Projet non trouvé"}</p>
           <button
             onClick={() => navigate(-1)}
-            className="px-6 py-2.5 bg-off-white hover:bg-gray-200 text-secondary rounded-lg font-medium transition-colors border border-border"
+            className="px-6 py-2.5 bg-primary text-white rounded-lg font-medium"
           >
-            ← Retour
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (!project) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <HiMagnifyingGlass className="w-16 h-16 text-primary mx-auto mb-4" />
-          <p className="text-secondary text-lg">Projet non trouvé</p>
-          <button
-            onClick={() => navigate(-1)}
-            className="mt-4 text-primary hover:opacity-80 font-medium transition-opacity"
-          >
-            Retourner en arrière
+            Retour
           </button>
         </div>
       </div>
@@ -182,35 +204,33 @@ const ProjectDetail = () => {
   }
 
   const statusConfig = getStatusConfig(project.status);
+  const progress     = typeof project.progress === "number" ? project.progress : 0;
+  const progressColor = getProgressColor(progress);
+
+  // Documents viennent de project.documents
+  const documents = project.documents ?? [];
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
+    <div className="min-h-screen bg-background pb-24">
+
+      {/* ── Header ─────────────────────────────────────────────────────────── */}
       <header className="bg-white border-b border-border sticky top-0 z-10">
         <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center gap-4 justify-start">
+          <div className="flex items-center gap-4">
             <button
               onClick={() => navigate(-1)}
-              className="p-2 hover:bg-off-white rounded-lg transition-colors text-secondary"
-              aria-label="Retour"
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <HiArrowLeft className="w-5 h-5 text-primary" />
             </button>
-
-            <div className="min-w-0">
+            <div className="flex-1 min-w-0">
               <h1 className="text-xl sm:text-2xl font-bold text-primary truncate">
                 {project.title}
               </h1>
-              <p className="text-sm text-muted mt-1">
-                ID:{" "}
-                <code className="bg-off-white px-1.5 py-0.5 rounded text-xs border border-border">
-                  {project.id}
-                </code>
-              </p>
+              <p className="text-sm text-muted">ID : {project.id}</p>
             </div>
-
             <span
-              className={`px-3 py-1.5 rounded-full text-xs font-semibold border ${statusConfig.class}`}
+              className={`px-4 py-1.5 rounded-full text-sm font-semibold border ${statusConfig.cls}`}
             >
               {statusConfig.label}
             </span>
@@ -218,355 +238,334 @@ const ProjectDetail = () => {
         </div>
       </header>
 
-      {/* Main content */}
-      <main className="w-full px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-        {/* Informations Générales */}
+      <main className="w-full px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+
+        {/* ── Progression ──────────────────────────────────────────────────── */}
+        <section className="bg-white rounded-2xl shadow-sm border border-border p-6">
+          <div className="flex items-center gap-3 mb-5">
+            <HiChartBar className="w-6 h-6 text-primary" />
+            <h2 className="text-lg font-semibold text-primary">
+              Progression du projet
+            </h2>
+          </div>
+
+          {/* Pourcentage + label */}
+          <div className="flex items-end justify-between mb-3">
+            <p className="text-sm text-muted">{getProgressLabel(progress)}</p>
+            <span
+              className="text-2xl font-extrabold"
+              style={{ color: progressColor }}
+            >
+              {progress}%
+            </span>
+          </div>
+
+          {/* Barre — couleur inline pour éviter le problème bg-primary */}
+          <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+            <div
+              className="h-4 rounded-full transition-all duration-700 ease-out"
+              style={{
+                width: `${progress}%`,
+                backgroundColor: progressColor,
+                minWidth: progress > 0 ? "1rem" : "0",
+              }}
+            />
+          </div>
+
+          {/* Repères 0 / 50 / 100 */}
+          <div className="flex justify-between mt-1.5">
+            <span className="text-xs text-muted">0%</span>
+            <span className="text-xs text-muted">50%</span>
+            <span className="text-xs text-muted">100%</span>
+          </div>
+        </section>
+
+        {/* ── Détails du projet ─────────────────────────────────────────────── */}
         <section className="bg-white rounded-2xl shadow-sm border border-border p-6">
           <h2 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
-            <HiClipboardDocumentList className="w-6 h-6 text-primary" />
-            Informations du projet
+            <HiClipboardDocumentList className="w-6 h-6" />
+            Détails du projet
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-success/10 to-success/5 rounded-xl p-4 border border-success/30">
-              <p className="text-xs font-medium text-success uppercase tracking-wide">
-                Budget
-              </p>
-              <p className="text-2xl font-bold text-success mt-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <p className="text-xs uppercase text-muted mb-1">Service(s)</p>
+              <p className="font-medium">{getServiceLabel(project.services)}</p>
+            </div>
+            <div>
+              <p className="text-xs uppercase text-muted mb-1">Budget</p>
+              <p className="font-semibold text-primary">
                 {formatBudget(project.budget)}
               </p>
             </div>
-
-            <div className="bg-off-white rounded-xl p-4 border border-border">
-              <p className="text-xs font-medium text-muted uppercase tracking-wide">
-                Service
-              </p>
-              <p className="text-lg font-semibold text-primary mt-1">
-                {getServiceLabel(project.services)}
-              </p>
+            <div>
+              <p className="text-xs uppercase text-muted mb-1">Date de début</p>
+              <p>{formatDate(project.startDate)}</p>
             </div>
-
-            <div className="bg-off-white rounded-xl p-4 border border-border">
-              <p className="text-xs font-medium text-muted uppercase tracking-wide">
-                Statut
+            <div>
+              <p className="text-xs uppercase text-muted mb-1">
+                Date estimée de fin
               </p>
-              <p className="text-lg font-semibold text-primary mt-1">
-                {statusConfig.label}
-              </p>
-            </div>
-
-            <div className="bg-off-white rounded-xl p-4 border border-border">
-              <p className="text-xs font-medium text-muted uppercase tracking-wide">
-                Client ID
-              </p>
-              <p
-                className="text-xs font-mono text-secondary mt-1 truncate"
-                title={project.clientId}
-              >
-                {project.clientId}
-              </p>
+              <p>{formatDate(project.endDate)}</p>
             </div>
           </div>
 
-          <div>
-            <label className="block text-xs font-medium text-muted uppercase tracking-wide mb-2">
-              Description
-            </label>
-            <p className="text-secondary leading-relaxed bg-off-white rounded-lg p-4 border border-border">
-              {project.description || "Aucune description"}
-            </p>
-          </div>
+          {project.description && (
+            <div className="mt-6 pt-6 border-t border-border">
+              <p className="text-xs uppercase text-muted mb-2">Description</p>
+              <p className="text-secondary leading-relaxed">
+                {project.description}
+              </p>
+            </div>
+          )}
         </section>
 
-        {/* Chef de Projet */}
+        {/* ── Chef de projet ────────────────────────────────────────────────── */}
         {project.chef && (
           <section className="bg-white rounded-2xl shadow-sm border border-border p-6">
             <h2 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
-              <HiUserGroup className="w-6 h-6 text-primary" />
+              <HiUserGroup className="w-6 h-6" />
               Chef de projet
             </h2>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="flex items-start gap-4 p-4 bg-off-white rounded-xl border border-border">
-                <div className="w-14 h-14 rounded-full bg-gradient-primary flex items-center justify-center text-white text-xl font-bold shadow-md">
-                  {project.chef.name?.charAt(0).toUpperCase()}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-primary text-lg">
-                    {project.chef.name}
-                  </p>
-                  <p className="text-sm text-muted">
-                    Matricule:{" "}
-                    <code className="bg-white px-1 rounded">
-                      {project.chef.matricule || "N/A"}
-                    </code>
-                  </p>
-                </div>
+            <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl border border-border">
+              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white text-2xl font-bold flex-shrink-0">
+                {project.chef.name?.charAt(0).toUpperCase()}
               </div>
-
-              <div className="p-4 bg-off-white rounded-xl border border-border space-y-3">
-                <div className="mt-3 space-y-2">
+              <div>
+                <p className="font-semibold text-lg">{project.chef.name}</p>
+                <p className="text-sm text-muted">
+                  Matricule : {project.chef.matricule || "N/A"}
+                </p>
+                <div className="flex flex-wrap gap-4 mt-3">
                   <a
                     href={`mailto:${project.chef.email}`}
-                    className="flex items-center gap-2 text-sm text-secondary hover:text-primary transition-colors"
+                    className="flex items-center gap-1.5 text-sm text-muted hover:text-primary transition-colors"
                   >
-                    <HiEnvelope className="w-4 h-4 text-primary" />
+                    <HiEnvelope className="w-4 h-4" />
                     {project.chef.email}
                   </a>
-                  <a
-                    href={`tel:${project.chef.phone}`}
-                    className="flex items-center gap-2 text-sm text-secondary hover:text-primary transition-colors"
-                  >
-                    <HiPhone className="w-4 h-4 text-primary" />
-                    {project.chef.phone}
-                  </a>
+                  {project.chef.phone && (
+                    <a
+                      href={`tel:${project.chef.phone}`}
+                      className="flex items-center gap-1.5 text-sm text-muted hover:text-primary transition-colors"
+                    >
+                      <HiPhone className="w-4 h-4" />
+                      {project.chef.phone}
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
           </section>
         )}
 
-        {/* Client */}
-        {project.client && (
-          <section className="bg-white rounded-2xl shadow-sm border border-border p-6">
-            <h2 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
-              <HiUser className="w-6 h-6 text-primary" />
-              Client
-            </h2>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="flex items-start gap-4 p-4 bg-off-white rounded-xl border border-border">
-                <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xl font-bold">
-                  {project.client.name?.charAt(0).toUpperCase()}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-primary text-lg">
-                    {project.client.name}
-                  </p>
-
-                  <div className="mt-3 space-y-2">
-                    <a
-                      href={`mailto:${project.client.email}`}
-                      className="flex items-center gap-2 text-sm text-secondary hover:text-primary transition-colors"
-                    >
-                      <HiEnvelope className="w-4 h-4 text-primary" />
-                      {project.client.email}
-                    </a>
-                    <a
-                      href={`tel:${project.client.phone}`}
-                      className="flex items-center gap-2 text-sm text-secondary hover:text-primary transition-colors"
-                    >
-                      <HiPhone className="w-4 h-4 text-primary" />
-                      {project.client.phone}
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-4 bg-off-white rounded-xl border border-border space-y-3">
-                <div>
-                  <p className="text-xs font-medium text-muted uppercase">
-                    Entreprise
-                  </p>
-                  <p className="text-secondary">
-                    {project.client.companyName || "Particulier"}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs font-medium text-muted uppercase">
-                    Adresse
-                  </p>
-                  <p className="text-secondary">
-                    {project.client.address || "Non renseignée"}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs font-medium text-muted uppercase">
-                    ID Client
-                  </p>
-                  <p
-                    className="text-xs font-mono text-secondary truncate"
-                    title={project.client.id}
-                  >
-                    {project.client.id}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* Updates */}
+        {/* ── Documents & Historique (onglets) ─────────────────────────────── */}
         <section className="bg-white rounded-2xl shadow-sm border border-border p-6">
-          <h2 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
-            <HiArrowPath className="w-6 h-6 text-primary" />
-            Mises à jour
-            {project.updates?.length > 0 && (
-              <span className="ml-2 px-2 py-0.5 bg-off-white text-secondary text-xs font-medium rounded-full border border-border">
-                {project.updates.length}
-              </span>
-            )}
-          </h2>
-          {project.updates?.length > 0 ? (
-            <ul className="space-y-4">
-              {project.updates.map((update, index) => {
-                const typeConfig = getUpdateTypeConfig(update.updateType);
-                // FIX: handle progress as string or number
-                const progressValue =
-                  update.progress !== null && update.progress !== undefined
-                    ? Number(update.progress)
-                    : null;
 
-                return (
-                  <li
-                    key={update.id || index}
-                    className="p-4 bg-off-white rounded-xl border border-border"
-                  >
-                    <div className="flex flex-wrap items-center justify-between gap-2 mb-3 pb-3 border-b border-border">
-                      <div className="flex items-center gap-3">
-                        <span className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm">
-                          {index + 1}
+          {/* Onglets */}
+          <div className="flex gap-1 bg-gray-100 p-1 rounded-xl mb-6 w-fit">
+            <button
+              onClick={() => setActiveTab("documents")}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                activeTab === "documents"
+                  ? "bg-white shadow text-primary"
+                  : "text-muted hover:text-primary"
+              }`}
+            >
+              <HiClipboardDocumentList className="w-4 h-4" />
+              Documents
+              {documents.length > 0 && (
+                <span className="px-1.5 py-0.5 bg-primary/10 text-primary text-xs rounded-full">
+                  {documents.length}
+                </span>
+              )}
+            </button>
+            <button
+              onClick={() => setActiveTab("updates")}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                activeTab === "updates"
+                  ? "bg-white shadow text-primary"
+                  : "text-muted hover:text-primary"
+              }`}
+            >
+              <HiClock className="w-4 h-4" />
+              Historique
+              {updates.length > 0 && (
+                <span className="px-1.5 py-0.5 bg-primary/10 text-primary text-xs rounded-full">
+                  {updates.length}
+                </span>
+              )}
+            </button>
+          </div>
+
+          {/* ── Onglet : Documents ─────────────────────────────────────────── */}
+          {activeTab === "documents" && (
+            <>
+              {/* Bouton upload */}
+              <div className="flex justify-end mb-4">
+                <label
+                  className={`cursor-pointer flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-xl text-sm font-medium transition-all ${
+                    uploading ? "opacity-60 pointer-events-none" : ""
+                  }`}
+                >
+                  <HiArrowUpTray className="w-5 h-5" />
+                  {uploading ? "Envoi en cours..." : "Ajouter un document"}
+                  <input
+                    type="file"
+                    className="hidden"
+                    onChange={handleFileUpload}
+                    disabled={uploading}
+                  />
+                </label>
+              </div>
+
+              {/* Erreur upload */}
+              {uploadError && (
+                <div className="flex items-start gap-3 text-red-600 bg-red-50 border border-red-200 p-3 rounded-lg mb-4 text-sm">
+                  <HiExclamationTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                  {uploadError}
+                </div>
+              )}
+
+              {/* Liste des documents */}
+              {documents.length > 0 ? (
+                <ul className="space-y-3">
+                  {documents.map((doc) => (
+                    <li
+                      key={doc.id}
+                      className="flex items-center justify-between bg-gray-50 p-4 rounded-xl border border-border hover:border-primary/40 transition-colors"
+                    >
+                      <div className="min-w-0">
+                        <p className="font-medium text-primary truncate">
+                          {doc.fileName}
+                        </p>
+                        <p className="text-xs text-muted mt-0.5">
+                          {doc.fileType} &bull; {formatDate(doc.timestamp)}
+                        </p>
+                      </div>
+                      <a
+                         href={
+    doc.fileUrl.startsWith("http")
+      ? doc.fileUrl.replace("http://localhost:3000", "http://localhost:5000")
+      : `http://localhost:5000${doc.fileUrl}`
+  }
+  target="_blank"
+  rel="noopener noreferrer"
+  download={doc.fileName}
+  className="ml-4 flex-shrink-0 text-primary hover:underline font-medium text-sm"
+>
+  Télécharger
+</a>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="text-center py-14 text-muted">
+                  <HiInbox className="w-12 h-12 mx-auto mb-3 opacity-40" />
+                  <p className="font-medium">Aucun document pour le moment</p>
+                  <p className="text-sm mt-1">
+                    Ajoutez un fichier via le bouton ci-dessus
+                  </p>
+                </div>
+              )}
+            </>
+          )}
+
+          {/* ── Onglet : Historique des updates ───────────────────────────── */}
+          {activeTab === "updates" && (
+            <>
+              {updates.length > 0 ? (
+                <ol className="relative border-l-2 border-gray-200 pl-6 space-y-6">
+                  {updates.map((upd, idx) => {
+                    const typeConfig = getUpdateTypeConfig(upd.updateType);
+                    return (
+                      <li key={upd.id} className="relative">
+                        {/* Point de la timeline */}
+                        <span
+                          className={`absolute -left-[1.6rem] top-1 w-4 h-4 rounded-full border-2 border-white ${typeConfig.bg} flex items-center justify-center`}
+                          style={{ boxShadow: "0 0 0 2px #e5e7eb" }}
+                        >
+                          {upd.updateType === "COMPLETED" ? (
+                            <HiCheckCircle className="w-3 h-3 text-green-600" />
+                          ) : (
+                            <HiWrenchScrewdriver className={`w-3 h-3 ${typeConfig.color}`} />
+                          )}
                         </span>
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span
-                            className={`px-2.5 py-1 text-xs font-semibold rounded-full border ${typeConfig.class}`}
-                          >
-                            {typeConfig.label}
-                          </span>
 
-                          {update.services && (
-                            <span className="text-xs text-muted bg-white px-2 py-1 rounded border border-border">
-                              {getServiceLabel(update.services)}
+                        <div
+                          className={`${typeConfig.bg} rounded-xl p-4 border border-gray-100`}
+                        >
+                          <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
+                            <span
+                              className={`text-xs font-semibold uppercase tracking-wide ${typeConfig.color}`}
+                            >
+                              {typeConfig.label}
                             </span>
+                            <span className="text-xs text-muted">
+                              {formatDate(upd.timestamp)}
+                            </span>
+                          </div>
+
+                          {upd.details && (
+                            <p className="text-sm text-secondary leading-relaxed">
+                              {upd.details}
+                            </p>
+                          )}
+
+                          {/* Progression si présente */}
+                          {upd.progress !== null &&
+                            upd.progress !== undefined && (
+                              <div className="mt-3">
+                                <div className="flex items-center justify-between mb-1">
+                                  <span className="text-xs text-muted">
+                                    Progression
+                                  </span>
+                                  <span
+                                    className="text-xs font-bold"
+                                    style={{
+                                      color: getProgressColor(upd.progress),
+                                    }}
+                                  >
+                                    {upd.progress}%
+                                  </span>
+                                </div>
+                                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                                  <div
+                                    className="h-2 rounded-full"
+                                    style={{
+                                      width: `${upd.progress}%`,
+                                      backgroundColor: getProgressColor(
+                                        upd.progress
+                                      ),
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            )}
+
+                          {upd.updatedBy && (
+                            <p className="text-xs text-muted mt-2">
+                              Par : {upd.updatedBy}
+                            </p>
                           )}
                         </div>
-                      </div>
-                      <span className="text-xs text-muted bg-white px-2 py-1 rounded">
-                        {formatDate(update.timestamp || update.createdAt)}
-                      </span>
-                    </div>
-
-                    <div className="space-y-3">
-                      {(update.message || update.content || update.details) && (
-                        <p className="text-secondary pl-1">
-                          {update.message || update.content || update.details}
-                        </p>
-                      )}
-
-                      {/* FIX: use progressValue instead of typeof check */}
-                      {progressValue !== null && !isNaN(progressValue) && (
-                        <div className="pl-1">
-                          <div className="flex justify-between text-xs text-muted mb-1">
-                            <span>Progression</span>
-                            <span className="font-semibold text-primary">
-                              {progressValue}%
-                            </span>
-                          </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                            <div
-                              className="bg-gradient-to-r from-primary to-primary-light h-2 rounded-full transition-all duration-300"
-                              style={{ width: `${progressValue}%` }}
-                            />
-                          </div>
-                        </div>
-                      )}
-
-                      <div className="flex flex-wrap gap-3 pt-3 border-t border-border text-xs text-muted">
-                        {update.updatedBy && (
-                          <span className="flex items-center gap-1">
-                            <HiUser className="w-3.5 h-3.5 text-primary" />
-                            <code className="bg-white px-1.5 py-0.5 rounded">
-                              {update.updatedBy.slice(0, 8)}...
-                            </code>
-                          </span>
-                        )}
-                        {update.id && (
-                          <span className="flex items-center gap-1">
-                            <HiHashtag className="w-3.5 h-3.5 text-primary" />
-                            <code className="bg-white px-1.5 py-0.5 rounded">
-                              {update.id.slice(0, 6)}...
-                            </code>
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          ) : (
-            <div className="text-center py-8">
-              <HiInbox className="w-12 h-12 text-primary mx-auto mb-3" />
-              <p className="text-secondary">
-                Aucune mise à jour pour le moment.
-              </p>
-            </div>
-          )}
-        </section>
-        {/* Documents */}
-        <section className="bg-white rounded-2xl shadow-sm border border-border p-6 mt-6">
-          <h2 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
-            <HiClipboardDocumentList className="w-6 h-6 text-primary" />
-            Documents
-            {project.documents?.length > 0 && (
-              <span className="ml-2 px-2 py-0.5 bg-off-white text-secondary text-xs font-medium rounded-full border border-border">
-                {project.documents.length}
-              </span>
-            )}
-          </h2>
-          {project.documents?.length > 0 ? (
-            <ul className="space-y-3">
-              {project.documents.map((doc) => (
-                <li
-                  key={doc.id}
-                  className="flex items-center justify-between bg-off-white p-3 rounded-lg border border-border"
-                >
-                  <div>
-                    <p className="font-medium text-primary">{doc.fileName}</p>
-                    <p className="text-xs text-muted">
-                      {doc.fileType} • {formatDate(doc.timestamp)}
-                    </p>
-                  </div>
-                  <a
-                    href={doc.fileUrl}
-                    download={doc.fileName}
-                    className="text-primary hover:underline text-sm font-medium"
-                  >
-                    Télécharger
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <div className="text-center py-6">
-              <HiInbox className="w-10 h-10 text-primary mx-auto mb-2" />
-              <p className="text-secondary">Aucun document disponible.</p>
-            </div>
+                      </li>
+                    );
+                  })}
+                </ol>
+              ) : (
+                <div className="text-center py-14 text-muted">
+                  <HiClock className="w-12 h-12 mx-auto mb-3 opacity-40" />
+                  <p className="font-medium">Aucune mise à jour pour le moment</p>
+                  <p className="text-sm mt-1">
+                    L'historique des changements apparaîtra ici
+                  </p>
+                </div>
+              )}
+            </>
           )}
         </section>
       </main>
-
-      {/* Barre d'actions mobile */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-border p-4 sm:hidden z-20">
-        <div className="flex gap-3">
-          <button
-            className="flex-1 px-4 py-3 bg-primary hover:bg-primary-light text-white font-medium rounded-xl transition-colors flex items-center justify-center gap-2"
-            aria-label="Contacter le chef de projet"
-          >
-            <HiChatBubbleLeft className="w-5 h-5 text-white" />
-            Contacter
-          </button>
-          <button
-            className="flex-1 px-4 py-3 bg-off-white hover:bg-gray-200 text-secondary font-medium rounded-xl transition-colors flex items-center justify-center gap-2 border border-border"
-            aria-label="Modifier le projet"
-          >
-            <HiPencilSquare className="w-5 h-5 text-primary" />
-            Modifier
-          </button>
-        </div>
-      </div>
-
-      {/* Barre d'actions desktop */}
     </div>
   );
 };

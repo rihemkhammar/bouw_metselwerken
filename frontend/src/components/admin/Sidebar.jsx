@@ -16,6 +16,7 @@ import {
   MailQuestion,
   UserCog,
   UserSquare,
+  Briefcase ,
 } from "lucide-react";
 
 const defaultMenuItems = [
@@ -78,13 +79,19 @@ const defaultMenuItems = [
     icon: <MailQuestion size={18} />,
     link: "/admin/guests/demandes",
   },
-
+  {
+  id: "service",
+  label: "Services",
+  icon: <Briefcase size={20} />,
+  link: "/admin/service",
+},
   {
     id: "settings",
     label: "Paramètres",
     icon: <Settings size={20} />,
     link: "/admin/profile",
   },
+  
 ];
 
 export default function Sidebar({ menuItems = defaultMenuItems, onToggle }) {

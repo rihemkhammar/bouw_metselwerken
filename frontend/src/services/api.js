@@ -496,3 +496,92 @@ export const createProject = async (projectData) => {
   });
   return handleResponse(res);
 };
+
+export const deleteClient = async (clientId) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/clients/${clientId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return handleResponse(res);
+};
+export const updateClient = async (clientId, clientData) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/clients/${clientId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(clientData),
+  });
+  return handleResponse(res);
+};
+export const deleteChef = async (chefId) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/chefs/${chefId}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+  });
+  return handleResponse(res);
+};
+
+export const updateChef = async (chefId, chefData) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/chefs/${chefId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify(chefData),
+  });
+  return handleResponse(res);
+};
+export const updateProject = async (projectId, projectData) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/projects/${projectId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify(projectData),
+  });
+  return handleResponse(res);
+};
+export const getServicesList = async () => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/services`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return handleResponse(res);
+};
+
+export const assignChefToService = async (service, chefId) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/services/${service}/chefs`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ chefId }),
+  });
+  return handleResponse(res);
+};
+
+export const removeChefFromService = async (service, chefId) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/services/${service}/chefs/${chefId}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return handleResponse(res);
+};
+
+// ─── GET updates du projet (côté client) 
+
+export const getClientProjectUpdates = async (userId, projectId) => {  const token = localStorage.getItem("token");  const res = await fetch(    `${API_URL}/client/${userId}/projects/${projectId}/updates`,    {      method: "GET",      headers: {        "Content-Type": "application/json",        Authorization: `Bearer ${token}`,      },    }  );  return handleResponse(res);};
+
+// ─── POST upload document (client)
+
+export const uploadProjectDocument = async (userId, projectId, file) => {  const token = localStorage.getItem("token");  const formData = new FormData();  formData.append("file", file);
+  const res = await fetch(    `${API_URL}/client/${userId}/projects/${projectId}/documents`,    {      method: "POST",      headers: {   Authorization: `Bearer ${token}`,      },      body: formData,    }  );  return handleResponse(res);};

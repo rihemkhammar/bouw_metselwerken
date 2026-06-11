@@ -1,14 +1,19 @@
+// services/clientProjectDetailService.js
 import prisma from "../../configs/prisma.js";
 
 export const clientProjectDetailService = {
+  //Détail complet du projet
   async getProjectDetail(projectId, clientId) {
+    if (!projectId || !clientId) {
+      throw new Error("projectId et clientId sont requis.");
+    }
+
     const project = await prisma.project.findFirst({
       where: {
         id: projectId,
         clientId,
       },
       include: {
-        // Détails du chef de projet
         chef: {
           select: {
             id: true,
@@ -20,7 +25,6 @@ export const clientProjectDetailService = {
             address: true,
           },
         },
-        // Détails du client
         client: {
           select: {
             id: true,
@@ -31,11 +35,8 @@ export const clientProjectDetailService = {
             address: true,
           },
         },
-        // Mises à jour avec tous les détails
         updates: {
-          orderBy: {
-            timestamp: "desc",
-          },
+          orderBy: { timestamp: "desc" },
           select: {
             id: true,
             updateType: true,
@@ -47,6 +48,7 @@ export const clientProjectDetailService = {
           },
         },
         documents: {
+          orderBy: { timestamp: "desc" },
           select: {
             id: true,
             fileName: true,
@@ -59,7 +61,66 @@ export const clientProjectDetailService = {
     });
 
     if (!project) return null;
-
     return project;
+  },
+
+  //  Upload document
+  async uploadDocument(projectId, clientId, file) {
+    if (!projectId || !clientId || !file) {
+      throw new Error("Paramètres manquants pour l'upload.");
+    }
+
+    // Vérifier que le projet appartient bien au client
+    const project = await prisma.project.findFirst({
+      where: { id: projectId, clientId },
+    });
+
+    if (!project) {
+      throw new Error("Projet introuvable ou accès refusé.");
+    }
+
+   const document = await prisma.projectDocument.create({
+  data: {
+    projectId,
+    fileName: file.originalname,
+    fileType: file.mimetype,
+    fileUrl: `/uploads/${file.filename}`,
+  },
+});
+
+    return document;
+  },
+
+  // Liste des updates du projet (lecture seule pour le client) 
+  async getProjectUpdates(projectId, clientId) {
+    if (!projectId || !clientId) {
+      throw new Error("projectId et clientId sont requis.");
+    }
+
+    // Vérifier l'appartenance avant d'exposer les updates
+    const project = await prisma.project.findFirst({
+      where: { id: projectId, clientId },
+      select: { id: true },
+    });
+
+    if (!project) {
+      throw new Error("Projet introuvable ou accès refusé.");
+    }
+
+    const updates = await prisma.projectUpdate.findMany({
+      where: { projectId },
+      orderBy: { timestamp: "desc" },
+      select: {
+        id: true,
+        updateType: true,
+        details: true,
+        updatedBy: true,
+        services: true,
+        progress: true,
+        timestamp: true,
+      },
+    });
+
+    return updates;
   },
 };
