@@ -2,7 +2,7 @@ import { Router } from "express";
 import { chefController } from "../controllers/chefController.js";
 import { authenticate } from "../middleware/auth.js";
 import { authorizeRoles } from "../middleware/role.js";
-
+import { upload } from "../configs/multer.js";
 const router = Router();
 
 
@@ -121,6 +121,13 @@ router.patch(
   chefController.updatePassword
 );
  
+router.post(
+  "/:userId/projects/:projectId/documents",
+  authenticate,
+  authorizeRoles("CHEF"),
+  upload.single("file"),
+  chefController.uploadProjectDocument
+);
 
 
 export default router;

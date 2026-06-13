@@ -175,6 +175,21 @@ const handleUpdateProjectProgress = async (req, res) => {
     return res.status(isAccess ? 403 : 500).json({ message: error.message });
   }
 };
+const handleUploadProjectDocument = async (req, res) => {
+  try {
+    const { userId, projectId } = req.params;
+    if (req.user.id !== userId)
+      return res.status(403).json({ message: "Accès refusé" });
+
+    if (!req.file)
+      return res.status(400).json({ message: "Aucun fichier reçu." });
+
+    const doc = await chefService.uploadProjectDocument(userId, projectId, req.file);
+    return res.status(201).json({ success: true, document: doc });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
 
 
 export const chefProjectController = {
@@ -186,4 +201,5 @@ export const chefProjectController = {
   handleGetProjectProgressStats,
   handleDeleteProjectUpdate,
   handleUpdateProjectProgress,
+  handleUploadProjectDocument ,
 };

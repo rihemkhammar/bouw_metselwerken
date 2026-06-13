@@ -658,3 +658,18 @@ export const resetClientPassword = async (clientId, newPassword) => {
   });
   return handleResponse(res);
 };
+export const uploadProjectDocumentChef  = async (userId, projectId, file) => {
+  const token = localStorage.getItem("token");
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const res = await fetch(
+    `${API_URL}/chef/${userId}/projects/${projectId}/documents`,
+    {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData,
+    }
+  );
+  return handleResponse(res);
+};

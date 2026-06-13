@@ -25,7 +25,7 @@ export const chefService = {
   getProjectDetailFull: chefProjectDetailService.getProjectDetailFull,
   // Récupère l'historique des mises à jour
   getProjectUpdatesHistory: chefProjectService.getProjectUpdatesHistory,
- 
+ uploadProjectDocument: chefProjectService.uploadProjectDocument,
   // Récupère les statistiques de progression
   getProjectProgressStats: chefProjectService.getProjectProgressStats,
   

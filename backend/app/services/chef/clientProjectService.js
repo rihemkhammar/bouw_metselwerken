@@ -202,6 +202,21 @@ const updateProjectProgress = async (chefId, projectId, progress) => {
 
   return updated;
 };
+const uploadProjectDocument = async (chefId, projectId, file) => {
+  const project = await prisma.project.findFirst({
+    where: { id: projectId, chefId },
+  });
+  if (!project) throw new Error("Projet introuvable ou accès refusé.");
+
+  return await prisma.projectDocument.create({
+    data: {
+      projectId,
+      fileUrl: `/uploads/${file.filename}`,
+      fileName: file.originalname,
+      fileType: file.mimetype,
+    },
+  });
+};
 
 export const chefProjectService = {
   getChefProjects,
@@ -209,7 +224,7 @@ export const chefProjectService = {
   addProjectUpdate,
   updateProjectStatus,
 updateProjectProgress,
- 
+ uploadProjectDocument,
   getProjectUpdatesHistory,
   getProjectProgressStats,
 };

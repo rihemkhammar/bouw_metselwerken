@@ -44,6 +44,7 @@ handleUpdateProjectProgress: chefProjectController.handleUpdateProjectProgress,
   // Récupère tous les détails du projet
   getProjectDetailFull: chefProjectDetailController.handleGetProjectDetailFull,
 
+  uploadProjectDocument: chefProjectController.handleUploadProjectDocument,
  getChefServices: serviceController.getChefServices,
    
 

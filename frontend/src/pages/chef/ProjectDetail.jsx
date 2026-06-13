@@ -8,6 +8,7 @@ import {
   updateProjectProgress,
   getProjectUpdatesHistory,
   getProjectProgressStats,
+  uploadProjectDocumentChef,
 } from '../../services/api';
 
 import {
@@ -189,24 +190,44 @@ const DocModal = ({ projectId, userId, onClose, onSuccess }) => {
   const [feedback,   setFeedback]   = useState(null);
   const inputRef = useRef(null);
 
-  const handleSubmit = async () => {
-    if (!note.trim() && !file) {
-      setFeedback({ type: 'error', message: 'Ajoutez une note ou sélectionnez un fichier.' });
-      return;
+ const handleSubmit = async () => {
+  if (!note.trim() && !file) {
+    setFeedback({ type: 'error', message: 'Ajoutez une note ou sélectionnez un fichier.' });
+    return;
+  }
+  try {
+    setSubmitting(true);
+    setFeedback(null);
+
+    // 1. Upload le fichier si présent
+    if (file) {
+      await uploadProjectDocumentChef(userId, projectId, file);
     }
-    try {
-      setSubmitting(true); setFeedback(null);
+
+    // 2. Ajoute une entrée dans l'historique si note présente
+    if (note.trim()) {
       await addProjectUpdate(userId, projectId, {
         updateType: 'document',
-        details: note.trim() || (file ? `Document ajouté : ${file.name}` : 'Document ajouté'),
+        details: note.trim(),
         progress: 0,
       });
-      setFeedback({ type: 'success', message: 'Document enregistré !' });
-      setTimeout(() => { onSuccess(); onClose(); }, 900);
-    } catch (err) {
-      setFeedback({ type: 'error', message: err.message || "Erreur lors de l'ajout." });
-    } finally { setSubmitting(false); }
-  };
+    } else if (file) {
+      // Note automatique si pas de texte
+      await addProjectUpdate(userId, projectId, {
+        updateType: 'document',
+        details: `Document ajouté : ${file.name}`,
+        progress: 0,
+      });
+    }
+
+    setFeedback({ type: 'success', message: 'Document enregistré !' });
+    setTimeout(() => { onSuccess(); onClose(); }, 900);
+  } catch (err) {
+    setFeedback({ type: 'error', message: err.message || "Erreur lors de l'ajout." });
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-0 sm:p-4"
