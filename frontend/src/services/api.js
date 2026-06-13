@@ -585,3 +585,39 @@ export const getClientProjectUpdates = async (userId, projectId) => {  const tok
 
 export const uploadProjectDocument = async (userId, projectId, file) => {  const token = localStorage.getItem("token");  const formData = new FormData();  formData.append("file", file);
   const res = await fetch(    `${API_URL}/client/${userId}/projects/${projectId}/documents`,    {      method: "POST",      headers: {   Authorization: `Bearer ${token}`,      },      body: formData,    }  );  return handleResponse(res);};
+
+  // À ajouter dans ton fichier api.js existant
+
+/**
+ * PUT /chef/:userId/profile
+ * Modifie les infos du profil chef (nom, email, téléphone, spécialité)
+ */
+export const updateChefProfile = async (userId, profileData) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/chef/${userId}/profile`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(profileData),
+  });
+  return handleResponse(res);
+};
+
+/**
+ * PATCH /chef/:userId/profile/password
+ * Change le mot de passe du chef
+ */
+export const updateChefPassword = async (userId, { currentPassword, newPassword }) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/chef/${userId}/profile/password`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ currentPassword, newPassword }),
+  });
+  return handleResponse(res);
+};

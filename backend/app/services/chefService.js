@@ -2,11 +2,14 @@ import { chefProfileService } from "./chef/ChefprofileService.js";
 import { chefProjectService } from "./chef/clientProjectService.js"; 
 import { chefProjectDetailService } from "./chef/chefProjectDetailService.js";
 import { serviceService} from "./chef/Serviceservice.js";
-
+import { chefProfileUpdateService } from "./chef/Chefprofileupdateservice.js";
 export const chefService = {
   // Profil
   getProfileById: chefProfileService.getProfileById,
     getChefServices: serviceService.getChefServices,
+      updateProfile:   chefProfileUpdateService.updateProfile,
+  updatePassword:  chefProfileUpdateService.updatePassword,
+
   // Projets
   getChefProjects:     chefProjectService.getChefProjects,
   getChefProjectById:  chefProjectService.getChefProjectById,   

@@ -12,6 +12,7 @@ export default function ChefLayout() {
     "/chef/projetes": { title: "Mes Projets", parent: "Espace Chef" },
     "/chef/Service": { title: "Nos service", parent: "Espace Chef" },
     "/chef/Contact":  {title: "Contact" , parent: "Espace Chef" },
+    "/chef/edit-profile": {title: "Modifier Compte" , parent: "Espace Chef" },
   };
 
   // Routes qui gèrent leur propre header

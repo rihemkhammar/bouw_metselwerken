@@ -2,11 +2,14 @@ import { chefProfileController } from "./chef/chefProfileController.js";
 import { chefProjectController } from "./chef/chefProjectController.js";
 import { chefProjectDetailController } from "./chef/chefProjectDetailController.js";
 import { serviceController } from "./chef/Servicecontroller.js";
-
+import {chefProfileUpdateController } from "./chef/Chefprofileupdatecontroller.js";
 
 export const chefController = {
   // ========== PROFIL ==========
   getProfile: chefProfileController.getProfile,
+     updateProfile:   chefProfileUpdateController.updateProfile,
+  updatePassword:  chefProfileUpdateController.updatePassword,
+
 
   // ========== PROJETS ==========
   // Récupère tous les projets
@@ -42,6 +45,7 @@ handleUpdateProjectProgress: chefProjectController.handleUpdateProjectProgress,
   getProjectDetailFull: chefProjectDetailController.handleGetProjectDetailFull,
 
  getChefServices: serviceController.getChefServices,
- 
+   
+
 
 };

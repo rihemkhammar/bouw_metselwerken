@@ -34,7 +34,7 @@ import ProjectsListPage from "./pages/admin/ProjectsListPage";
 import ProjectDetailPage from "./pages/admin/ProjectDetailPage";
 
 import ServicesPage from "./pages/admin/Servicespage";
-
+import  ChefEditProfile from "./pages/chef/Chefeditprofile";
 export default function AppRoutes() {
   return (
     <Routes>
@@ -71,10 +71,10 @@ export default function AppRoutes() {
         <Route path="/chef/projeteDetail/:projectId" element={<ChefProjectDetail/>}/>
         <Route path="/chef/Service" element={<ChefService/>}/>
 
+         <Route path="/chef/edit-profile" element={<ChefEditProfile />}/>
         </Route>
         
-          
-          
+         
        
 
         

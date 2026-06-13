@@ -106,5 +106,21 @@ router.get(
   chefController.getChefServices   
 );
 
+router.put(
+  "/:userId/profile",
+  authenticate,
+  authorizeRoles("CHEF"),
+  chefController.updateProfile
+);
+ 
+// PATCH /chef/:userId/profile/password → changer le mot de passe
+router.patch(
+  "/:userId/profile/password",
+  authenticate,
+  authorizeRoles("CHEF"),
+  chefController.updatePassword
+);
+ 
+
 
 export default router;
