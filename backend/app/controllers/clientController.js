@@ -13,6 +13,8 @@ export const clientController = {
   getProjectDetail: clientProjectDetailController.getProjectDetail, 
   getAllServices: serviceController.getAllServices,
   uploadDocument: uploadDocumentController.uploadDocument,
-  getProjectUpdates: clientProjectDetailController.getProjectUpdates
+  getProjectUpdates: clientProjectDetailController.getProjectUpdates,
+  updateProfile: clientProfileController.updateProfile,
+  updatePassword:   clientProfileController.updatePassword,  
   
 };

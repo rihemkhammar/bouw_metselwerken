@@ -621,3 +621,40 @@ export const updateChefPassword = async (userId, { currentPassword, newPassword 
   });
   return handleResponse(res);
 };
+
+
+export const updateClientProfile = async (userId, token, data) => {
+  const res = await fetch(`${API_URL}/client/${userId}/profile`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return handleResponse(res);
+};
+
+export const updateClientPassword = async (userId, token, data) => {
+  const res = await fetch(`${API_URL}/client/${userId}/password`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return handleResponse(res);
+};
+export const resetClientPassword = async (clientId, newPassword) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/admin/clients/${clientId}/password`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ newPassword }),
+  });
+  return handleResponse(res);
+};

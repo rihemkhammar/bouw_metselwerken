@@ -51,6 +51,22 @@ router.post(
   upload.single("file"),
   clientController.uploadDocument
 );
+router.put(
+  "/:userId/profile",
+  authenticate,
+  authorizeRoles("CLIENT"),
+  clientController.updateProfile
+);
+ 
+router.put(
+  "/:userId/password",               
+  authenticate,
+  authorizeRoles("CLIENT"),
+  clientController.updatePassword
+);
+ 
+
+
 
 
 export default router;

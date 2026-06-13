@@ -1,6 +1,7 @@
 import express from "express";
 import {  getServicesListController,
   assignChefToServiceController,
+   resetClientPasswordController,
   removeChefFromServiceController, updateProjectController, updateChefController, deleteChefController,updateClientController , getAdminDashboard,getProjectsByServiceController,deleteProjectController, createProjectController, createChef, fetchChefs , fetchClients , fetchGuests , approveRequestController , deleteClientController, fetchClientRequestsController , markClientRequestViewedController ,markGuestRequestViewedController , getProfileSettings , updateProfileSettings ,getAllProjectsController, getProjectByIdController, getServicesWithChefsController } from "../controllers/adminController.js";
 import { authenticate } from "../middleware/auth.js";
 import { authorizeRoles } from "../middleware/role.js";
@@ -25,6 +26,12 @@ router.get(
   authenticate,
   authorizeRoles("ADMIN"),
   fetchClients
+);
+router.put(
+  "/clients/:id/password",
+  authenticate,
+  authorizeRoles("ADMIN"),
+  resetClientPasswordController
 );
 router.get(
 "/guests/demandes",

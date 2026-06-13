@@ -24,7 +24,8 @@ import {
   updateProjectService,
   getServicesListService,
   assignChefToServiceService,
-  removeChefFromServiceService
+  removeChefFromServiceService,
+  resetClientPasswordService,
 } from "../services/adminService.js";
 
 export const createChef = async (req, res) => {
@@ -341,5 +342,21 @@ export const removeChefFromServiceController = async (req, res) => {
   } catch (err) {
     console.error("Erreur removeChefFromService:", err);
     res.status(500).json({ error: err.message });
+  }
+};
+export const resetClientPasswordController = async (req, res) => {
+  const { id } = req.params;
+  const { newPassword } = req.body;
+
+  if (!newPassword) {
+    return res.status(400).json({ error: "Le nouveau mot de passe est requis" });
+  }
+
+  try {
+    const result = await resetClientPasswordService(id, newPassword);
+    res.json(result);
+  } catch (err) {
+    console.error("Erreur resetClientPassword:", err);
+    res.status(400).json({ error: err.message || "Impossible de modifier le mot de passe" });
   }
 };

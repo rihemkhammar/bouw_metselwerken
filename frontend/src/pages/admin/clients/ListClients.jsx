@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { getClients, deleteClient, updateClient } from "../../../services/api";
+import { getClients, deleteClient, updateClient, resetClientPassword } from "../../../services/api";
 import AdminLayout from "../../../components/layout/admin/AdminLayout";
-import { Link } from "react-router-dom";
 
 const ListClients = () => {
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [editClient, setEditClient] = useState(null); // client en cours d'édition
+  const [editClient, setEditClient] = useState(null);
   const [formData, setFormData] = useState({});
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+
+  // --- état mot de passe ---
+  const [showPwdForm, setShowPwdForm] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [pwdError, setPwdError] = useState("");
+  const [pwdSuccess, setPwdSuccess] = useState("");
+  const [savingPwd, setSavingPwd] = useState(false);
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -45,12 +51,20 @@ const ListClients = () => {
       address: client.address || "",
     });
     setError("");
+    setShowPwdForm(false);
+    setNewPassword("");
+    setPwdError("");
+    setPwdSuccess("");
   };
 
   const closeEdit = () => {
     setEditClient(null);
     setFormData({});
     setError("");
+    setShowPwdForm(false);
+    setNewPassword("");
+    setPwdError("");
+    setPwdSuccess("");
   };
 
   const handleChange = (e) => {
@@ -70,6 +84,26 @@ const ListClients = () => {
       setError("Erreur lors de la modification");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleResetPassword = async () => {
+    setPwdError("");
+    setPwdSuccess("");
+    if (!newPassword || newPassword.length < 8) {
+      setPwdError("Le mot de passe doit contenir au moins 8 caractères");
+      return;
+    }
+    setSavingPwd(true);
+    try {
+      await resetClientPassword(editClient.id, newPassword);
+      setPwdSuccess("Mot de passe mis à jour avec succès");
+      setNewPassword("");
+      setShowPwdForm(false);
+    } catch (err) {
+      setPwdError(err.message || "Erreur lors de la réinitialisation");
+    } finally {
+      setSavingPwd(false);
     }
   };
 
@@ -161,6 +195,7 @@ const ListClients = () => {
               </div>
             )}
 
+            {/* Champs info client */}
             <div className="flex flex-col gap-3">
               {[
                 { label: "Nom", name: "name" },
@@ -182,6 +217,57 @@ const ListClients = () => {
               ))}
             </div>
 
+            {/* Section mot de passe */}
+            <div className="mt-5 pt-4 border-t border-gray-200">
+              <p className="text-sm font-medium text-gray-600 mb-2">Mot de passe</p>
+
+              {pwdSuccess && (
+                <div className="mb-2 text-sm text-green-700 bg-green-50 border border-green-200 rounded px-3 py-2">
+                  {pwdSuccess}
+                </div>
+              )}
+
+              {!showPwdForm ? (
+                <button
+                  onClick={() => { setShowPwdForm(true); setPwdError(""); setPwdSuccess(""); }}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium border border-gray-300 text-gray-600 hover:bg-gray-50 transition"
+                >
+                  🔒 Changer le mot de passe
+                </button>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  {pwdError && (
+                    <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded px-3 py-2">
+                      {pwdError}
+                    </div>
+                  )}
+                  <input
+                    type="password"
+                    placeholder="Nouveau mot de passe (min. 8 caractères)"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  />
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => { setShowPwdForm(false); setNewPassword(""); setPwdError(""); }}
+                      className="flex-1 px-3 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition"
+                    >
+                      Annuler
+                    </button>
+                    <button
+                      onClick={handleResetPassword}
+                      disabled={savingPwd}
+                      className="flex-1 px-3 py-2 rounded-lg text-sm font-medium bg-orange-500 text-white hover:bg-orange-600 transition disabled:opacity-50"
+                    >
+                      {savingPwd ? "Enregistrement..." : "Confirmer"}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Actions */}
             <div className="flex justify-end gap-3 mt-6">
               <button
                 onClick={closeEdit}

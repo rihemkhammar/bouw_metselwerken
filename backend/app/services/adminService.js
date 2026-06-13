@@ -514,3 +514,20 @@ export const removeChefFromServiceService = async (chefId, service) => {
     data: { services: chef.services.filter((s) => s !== service) },
   });
 };
+export const resetClientPasswordService = async (id, newPassword) => {
+  if (!newPassword || newPassword.length < 8) {
+    throw new Error("Le mot de passe doit contenir au moins 8 caractères");
+  }
+
+  const user = await prisma.user.findUnique({ where: { id } });
+  if (!user) throw new Error("Client introuvable");
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  await prisma.user.update({
+    where: { id },
+    data: { password: hashedPassword },
+  });
+
+  return { success: true, message: "Mot de passe mis à jour avec succès" };
+};
